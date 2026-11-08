@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS measurements (
 
 CREATE TABLE IF NOT EXISTS factors (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    kategorie TEXT NOT NULL,
+    kategorie TEXT NOT NULL UNIQUE,
     einheit TEXT NOT NULL,
     faktor_kg_co2e_pro_einheit REAL NOT NULL,
     quelle TEXT NOT NULL,
