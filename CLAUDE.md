@@ -40,7 +40,7 @@ Regel: Nur trennen, wo ein Tausch realistisch ist (Frontend, SQLite→DuckDB in 
 Quelle: UBA, Liste "Emissionsfaktoren zur Treibhausgasbilanzierung", Version 2.1 vom 28.02.2026, Bezugsjahr 2024.
 - Strom DE 2025: 344 g CO₂/kWh (Schätzung, Stand 23.03.2026; 2024 vorläufig 353). Strom ist CO₂, Verkehr ist CO₂e (im Bericht erwähnen).
 - Personenverkehr 2024 (TREMOD 6.71B, inkl. Vorkette, g CO₂e/Pkm): Pkw 164 (1,4 Pers.), Bahn Fernverkehr 26, Linienbus 30, Flug Inland 290.
-- Erdgas: 240 g CO₂e/kWh (GEG Anlage 9). **Offen:** Der Wert und die Frage der Vorkette stehen nur in der herunterladbaren UBA-Liste (xlsx/csv), nicht auf der Webseite. Lukas legt die Datei ins Repo (`data/uba_emissionsfaktoren_v2_1.xlsx`), du liest den Wert dort nach und trägst Wert, Quelle und Stand ein. Nichts aus dem Gedächtnis übernehmen.
+- Erdgas: **183,3 g CO₂e/kWh** (nicht 240 g wie zuerst vermutet – das war nur ein ungeprüfter Platzhalter, da die Datei dem ersten Chat nicht vorlag). Geprüft in `data/uba_liste_ef_für_thg_bilanzierung_v2.1.xlsx`, Blatt "01_Stationäre_Verbrennung" (Titel dort: "ohne Vorketten"), ID `01_10_02_005_01` "Erdgas (Brennwert)", Bezugsjahr 2024, Veröffentlichung 2025. Brennwert statt Heizwert gewählt, weil Versorger-Abrechnungen (unsere Messdaten) auf Brennwert basieren (Heizwert-Variante läge bei 202,9 g, ID `01_10_02_004_01`). Ohne Vorkette, laut Blatt-Titel.
 
 ## 6. KPIs (Stufe 1)
 1. **CO₂e im Monat** = Summe aller Messungen.
