@@ -45,3 +45,14 @@ def veraenderung_zum_vormonat(aktuell_kg, vormonat_kg) -> float | None:
 
     veraenderung = (aktuell_kg - vormonat_kg) / vormonat_kg
     return veraenderung
+
+
+def zielerreichung(ist_kg: float | None, jahresziel_kg: float | None) -> float | None:
+    if ist_kg is None or jahresziel_kg is None:
+        return None
+
+    if ist_kg == 0:
+        return 1.0
+
+    monatsziel_kg = jahresziel_kg / 12
+    return min(monatsziel_kg / ist_kg, 1.0)
