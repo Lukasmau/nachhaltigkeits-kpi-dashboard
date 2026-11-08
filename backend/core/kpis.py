@@ -34,3 +34,14 @@ def anteil_je_kategorie(messungen: list[dict]) -> dict:
         if messung["co2e_kg"] is not None
     }
     return {"anteile": anteile, "warnungen": warnungen}
+
+
+def veraenderung_zum_vormonat(aktuell_kg, vormonat_kg) -> float | None:
+    if aktuell_kg is None or vormonat_kg is None:
+        return None
+
+    if vormonat_kg == 0:
+        return None
+
+    veraenderung = (aktuell_kg - vormonat_kg) / vormonat_kg
+    return veraenderung

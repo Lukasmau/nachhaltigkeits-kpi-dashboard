@@ -1,4 +1,4 @@
-from backend.core.kpis import anteil_je_kategorie, co2e_im_monat
+from backend.core.kpis import anteil_je_kategorie, co2e_im_monat, veraenderung_zum_vormonat
 
 
 def test_co2e_im_monat_summiert_mehrere_kategorien():
@@ -74,3 +74,22 @@ def test_anteil_je_kategorie_fehlender_faktor_taucht_nicht_im_anteil_auf():
     ergebnis = anteil_je_kategorie(messungen)
     assert ergebnis["anteile"] == {"Strom": 1.0}
     assert any("Dienstreisen" in warnung for warnung in ergebnis["warnungen"])
+
+
+def test_veraenderung_zum_vormonat_normalfall():
+    # 120 kg jetzt, 100 kg im Vormonat -> 20 % mehr, also 0.2
+    assert veraenderung_zum_vormonat(120, 100) == 0.2
+
+
+def test_veraenderung_zum_vormonat_ohne_vormonat_nicht_berechenbar():
+    assert veraenderung_zum_vormonat(120, None) is None
+
+
+def test_veraenderung_zum_vormonat_bei_vormonat_null_nicht_berechenbar():
+    assert veraenderung_zum_vormonat(120, 0) is None
+    assert veraenderung_zum_vormonat(120, 0.0) is None
+
+
+def test_veraenderung_zum_vormonat_bewusste_null_ist_ein_echter_ruckgang():
+    # aktuell 0 kg, Vormonat 100 kg -> echter Rückgang um 100 %, kein "nicht angegeben"
+    assert veraenderung_zum_vormonat(0, 100) == -1.0
