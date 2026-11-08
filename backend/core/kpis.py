@@ -19,3 +19,18 @@ def co2e_im_monat(messungen: list[dict]) -> dict:
         warnungen.append("Alle Werte sind 0 - bitte Plausibilität prüfen")
 
     return {"wert_kg": summe, "warnungen": warnungen}
+
+
+def anteil_je_kategorie(messungen: list[dict]) -> dict:
+    gesamt = co2e_im_monat(messungen)
+    warnungen = gesamt["warnungen"]
+
+    if gesamt["wert_kg"] is None or gesamt["wert_kg"] == 0:
+        return {"anteile": None, "warnungen": warnungen}
+
+    anteile = {
+        messung["kategorie"]: messung["co2e_kg"] / gesamt["wert_kg"]
+        for messung in messungen
+        if messung["co2e_kg"] is not None
+    }
+    return {"anteile": anteile, "warnungen": warnungen}
