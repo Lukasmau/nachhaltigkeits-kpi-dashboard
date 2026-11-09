@@ -10,7 +10,19 @@ const monatsNamen = [
   'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez',
 ]
 
-export function VerlaufDiagramm({ verlauf }: Props) {
+// Schneidet nur leere Monate am ENDE ab (Zukunft, noch nicht passiert).
+// Eine Luecke mittendrin (Monat ist vorbei, aber keine Daten eingetragen)
+// bleibt stehen - das ist ein echter Hinweis, kein Darstellungsfehler.
+function ohneZukunft(verlauf: VerlaufEintrag[]): VerlaufEintrag[] {
+  let ende = verlauf.length
+  while (ende > 0 && verlauf[ende - 1].wert_kg === null) {
+    ende -= 1
+  }
+  return verlauf.slice(0, ende)
+}
+
+export function VerlaufDiagramm({ verlauf: rohVerlauf }: Props) {
+  const verlauf = ohneZukunft(rohVerlauf)
   const option = {
     backgroundColor: 'transparent',
     grid: { left: 70, right: 20, top: 20, bottom: 30 },
