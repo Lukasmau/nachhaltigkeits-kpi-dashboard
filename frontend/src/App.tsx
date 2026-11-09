@@ -78,16 +78,16 @@ function App() {
         </div>
       )}
       <div className="app__diagramme">
-        {anteile && (
-          <div className="app__diagramm">
-            <h2>Anteil je Kategorie</h2>
-            <AnteilDiagramm anteile={anteile} />
-          </div>
-        )}
         {verlauf && (
-          <div className="app__diagramm">
+          <div className="app__diagramm app__diagramm--gross">
             <h2>Verlauf {JAHR}</h2>
             <VerlaufDiagramm verlauf={verlauf.monate} einheit={verlauf.einheit} />
+          </div>
+        )}
+        {anteile && (
+          <div className="app__diagramm app__diagramm--klein">
+            <h2>Anteil je Kategorie</h2>
+            <AnteilDiagramm anteile={anteile} />
           </div>
         )}
       </div>
