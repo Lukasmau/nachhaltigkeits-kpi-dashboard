@@ -75,3 +75,35 @@
   font-size: 16px;
   margin: 0 0 8px;
 }
+
+.anteil-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 8px;
+}
+
+.anteil-zeile__kopf {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.anteil-zeile__prozent {
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+}
+
+.anteil-zeile__spur {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--linie);
+  overflow: hidden;
+}
+
+.anteil-zeile__balken {
+  height: 100%;
+  border-radius: 999px;
+}
