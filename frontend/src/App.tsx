@@ -4,6 +4,11 @@ import { holeKpis, holeVerlauf, type KpiAntwort, type VerlaufAntwort } from './a
 import { AnteilDiagramm } from './components/AnteilDiagramm'
 import { KpiKarte } from './components/KpiKarte'
 import { VerlaufDiagramm } from './components/VerlaufDiagramm'
+import { monatsLang } from './monate'
+
+// Noch fest verdrahtet, bis es eine Monats-/Jahresauswahl im Frontend gibt.
+const JAHR = 2026
+const MONAT = 10
 
 function App() {
   const [daten, setDaten] = useState<KpiAntwort | null>(null)
@@ -11,10 +16,10 @@ function App() {
   const [fehler, setFehler] = useState<string | null>(null)
 
   useEffect(() => {
-    holeKpis(2026, 1)
+    holeKpis(JAHR, MONAT)
       .then(setDaten)
       .catch((e: Error) => setFehler(e.message))
-    holeVerlauf(2026)
+    holeVerlauf(JAHR)
       .then(setVerlauf)
       .catch((e: Error) => setFehler(e.message))
   }, [])
@@ -33,7 +38,7 @@ function App() {
       {daten && (
         <div className="app__karten">
           <KpiKarte
-            titel="CO2e im Monat"
+            titel={`CO2e im ${monatsLang[MONAT - 1]}`}
             wert={daten.co2e_im_monat.wert}
             einheit={daten.co2e_im_monat.einheit}
             hinweis={daten.co2e_im_monat.warnungen[0] ?? 'Keine Werte angegeben'}
@@ -47,6 +52,13 @@ function App() {
             }
             einheit="%"
             hinweis="Vormonat fehlt oder ist 0"
+            farbe={
+              daten.veraenderung_zum_vormonat === null
+                ? 'neutral'
+                : daten.veraenderung_zum_vormonat < 0
+                  ? 'gut'
+                  : 'schlecht'
+            }
           />
           <KpiKarte
             titel="Zielerreichung"
@@ -73,7 +85,7 @@ function App() {
         )}
         {verlauf && (
           <div className="app__diagramm">
-            <h2>Verlauf {2026}</h2>
+            <h2>Verlauf {JAHR}</h2>
             <VerlaufDiagramm verlauf={verlauf.monate} einheit={verlauf.einheit} />
           </div>
         )}
