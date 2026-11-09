@@ -16,7 +16,7 @@ Lukas muss jedes Modul verstehen und vor dem Kurs erklären können. Das Lernen 
 
 ## 2. Stack (entschieden)
 - **Backend:** FastAPI + Pydantic. **Kern:** reines Python (`units.py`, `kpis.py`), keine Fremd-Imports, bekommt einfache Python-Daten. **Tests:** pytest.
-- **Daten:** SQLite (`db.py`, nur SQL). **Import/CSV:** Polars (`importer.py`, nur Polars/CSV). Polars fängt nur Typfehler früh ab: **Fachprüfungen (Datum, Wert, Kategorie, Einheit, Duplikate) schreiben wir selbst.**
+- **Daten:** SQLite (`db.py`, nur SQL). **Import/CSV:** Polars (`importer.py`, nur Polars/CSV). Polars fängt nur Typfehler früh ab: **Fachprüfungen (Datum, Wert, Datenart, Kategorie, Einheit, Duplikate) schreiben wir selbst.**
 - **Frontend:** React + Vite, Diagramme mit **ECharts** über `echarts-for-react` (Teilimport, Theme pro Modus registriert). Ein Befehl zum Starten (FastAPI liefert das gebaute Frontend aus).
 - **Plan B:** NiceGUI, nur wenn das Frontend nicht trägt.
 - Warum so (kurz): moderner und ansehnlicher als Streamlit/Dash; ECharts passt zum Look; Polars strenger bei Typen; SQLite reicht (lokal, wenig Schreibkonkurrenz).
