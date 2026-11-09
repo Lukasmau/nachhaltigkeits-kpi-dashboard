@@ -42,6 +42,7 @@ function App() {
             wert={daten.co2e_im_monat.wert}
             einheit={daten.co2e_im_monat.einheit}
             hinweis={daten.co2e_im_monat.warnungen[0] ?? 'Keine Werte angegeben'}
+            sparklineWerte={verlauf?.monate.map((m) => m.wert)}
           />
           <KpiKarte
             titel="Veränderung zum Vormonat"

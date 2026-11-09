@@ -1,3 +1,5 @@
+import { Sparkline } from './Sparkline'
+
 type Props = {
   titel: string
   wert: number | null
@@ -5,6 +7,7 @@ type Props = {
   hinweis: string
   farbe?: 'neutral' | 'gut' | 'schlecht'
   mitVorzeichen?: boolean
+  sparklineWerte?: (number | null)[]
 }
 
 export function KpiKarte({
@@ -14,6 +17,7 @@ export function KpiKarte({
   hinweis,
   farbe = 'neutral',
   mitVorzeichen = false,
+  sparklineWerte,
 }: Props) {
   return (
     <div className="kpi-karte">
@@ -21,13 +25,16 @@ export function KpiKarte({
       {wert === null ? (
         <div className="kpi-karte__hinweis">{hinweis}</div>
       ) : (
-        <div className={`kpi-karte__wert kpi-karte__wert--${farbe}`}>
-          {wert.toLocaleString('de-DE', {
-            maximumFractionDigits: 1,
-            signDisplay: mitVorzeichen ? 'exceptZero' : 'auto',
-          })}
-          <span className="kpi-karte__einheit">{einheit}</span>
-        </div>
+        <>
+          <div className={`kpi-karte__wert kpi-karte__wert--${farbe}`}>
+            {wert.toLocaleString('de-DE', {
+              maximumFractionDigits: 1,
+              signDisplay: mitVorzeichen ? 'exceptZero' : 'auto',
+            })}
+            <span className="kpi-karte__einheit">{einheit}</span>
+          </div>
+          {sparklineWerte && <Sparkline werte={sparklineWerte} />}
+        </>
       )}
     </div>
   )
