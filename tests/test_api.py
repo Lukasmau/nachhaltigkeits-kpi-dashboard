@@ -95,6 +95,25 @@ def test_api_verlauf_hat_zwoelf_monate(client):
     assert daten["monate"][-1]["monat"] == 12
 
 
+def test_api_verlauf_liefert_veraenderung_zielerreichung_und_groesste_kategorie(client):
+    csv_inhalt = (
+        "datum,datenart,kategorie,wert,einheit,person\n"
+        "2026-01-01,verbrauch,Strom,1000,kWh,\n"
+        "2026-02-01,verbrauch,Strom,2000,kWh,\n"
+    )
+    client.post("/api/import", files={"datei": ("test.csv", csv_inhalt, "text/csv")})
+
+    antwort = client.get("/api/verlauf", params={"jahr": 2026})
+    daten = antwort.json()
+
+    assert daten["groesste_kategorie"] == "Strom"
+    jan, feb = daten["monate"][0], daten["monate"][1]
+    assert jan["veraenderung"] is None  # kein Vormonat in diesem Jahr
+    # 2000 kWh ist doppelt so viel wie 1000 kWh -> 100 % Veraenderung
+    assert feb["veraenderung"] == pytest.approx(1.0)
+    assert jan["anteil_groesste_kategorie"] == pytest.approx(1.0)  # nur Strom vorhanden
+
+
 def test_api_verlauf_waehlt_tonnen_wenn_ein_monat_drueber_liegt(client):
     csv_inhalt = (
         "datum,datenart,kategorie,wert,einheit,person\n"

@@ -70,20 +70,58 @@ def api_kpis(jahr: int, monat: int, conn: sqlite3.Connection = Depends(get_conn)
 
 @app.get("/api/verlauf")
 def api_verlauf(jahr: int, conn: sqlite3.Connection = Depends(get_conn)):
+    alle_messungen = [messungen_mit_co2e(conn, jahr, monat) for monat in range(1, 13)]
+    monatsergebnisse = [kpis.co2e_im_monat(m) for m in alle_messungen]
+    anteilsergebnisse = [kpis.anteil_je_kategorie(m) for m in alle_messungen]
+
     # ein Diagramm nutzt nur eine Einheit (CLAUDE.md §4): die Einheit wird
     # einmal fuer die ganze Reihe bestimmt, nicht pro Monat einzeln.
-    monatsergebnisse = [
-        kpis.co2e_im_monat(messungen_mit_co2e(conn, jahr, monat)) for monat in range(1, 13)
-    ]
     werte_kg = [ergebnis["wert_kg"] for ergebnis in monatsergebnisse]
     einheit = units.einheit_fuer_reihe(werte_kg)
     werte = units.reihe_in_einheit(werte_kg, einheit)
+    jahresziel = jahresziel_gesamt(conn, jahr)
+
+    veraenderungen = [None] + [
+        kpis.veraenderung_zum_vormonat(werte_kg[i], werte_kg[i - 1]) for i in range(1, 12)
+    ]
+    zielerreichungen = [kpis.zielerreichung(w, jahresziel) for w in werte_kg]
+
+    # groesste Kategorie aus dem letzten Monat mit echten Anteilen bestimmen,
+    # damit die Sparkline durchgehend dieselbe Kategorie zeigt statt jeden
+    # Monat eine andere.
+    groesste_kategorie = None
+    for ergebnis in reversed(anteilsergebnisse):
+        if ergebnis["anteile"]:
+            groesste_kategorie = max(ergebnis["anteile"], key=ergebnis["anteile"].get)
+            break
+
+    anteile_groesste = [
+        ergebnis["anteile"].get(groesste_kategorie)
+        if ergebnis["anteile"] and groesste_kategorie
+        else None
+        for ergebnis in anteilsergebnisse
+    ]
 
     return {
         "einheit": einheit,
+        "groesste_kategorie": groesste_kategorie,
         "monate": [
-            {"monat": monat, "wert": wert, "warnungen": ergebnis["warnungen"]}
-            for monat, wert, ergebnis in zip(range(1, 13), werte, monatsergebnisse)
+            {
+                "monat": monat,
+                "wert": wert,
+                "veraenderung": veraenderung,
+                "zielerreichung": zielerreichung,
+                "anteil_groesste_kategorie": anteil,
+                "warnungen": ergebnis["warnungen"],
+            }
+            for monat, wert, veraenderung, zielerreichung, anteil, ergebnis in zip(
+                range(1, 13),
+                werte,
+                veraenderungen,
+                zielerreichungen,
+                anteile_groesste,
+                monatsergebnisse,
+            )
         ],
     }
 
