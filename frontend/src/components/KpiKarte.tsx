@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { Sparkline } from './Sparkline'
 
 type Props = {
@@ -10,6 +11,14 @@ type Props = {
   sparklineWerte?: (number | null)[]
 }
 
+// Die Kartenfarbe bestimmt auch die Glow-Farbe (CLAUDE.md §8: Glow in der
+// Diagrammfarbe) - keine zweite, unabhaengige Farbwahl noetig.
+const GLOW_FARBEN: Record<string, string> = {
+  neutral: 'var(--akzent)',
+  gut: 'var(--gut)',
+  schlecht: 'var(--abweichung)',
+}
+
 export function KpiKarte({
   titel,
   wert,
@@ -19,8 +28,10 @@ export function KpiKarte({
   mitVorzeichen = false,
   sparklineWerte,
 }: Props) {
+  const style = { '--glow-farbe': GLOW_FARBEN[farbe] } as CSSProperties
+
   return (
-    <div className="kpi-karte">
+    <div className="kpi-karte" style={style}>
       <div className="kpi-karte__titel">{titel}</div>
       {wert === null ? (
         <div className="kpi-karte__hinweis">{hinweis}</div>

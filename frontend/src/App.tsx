@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import './App.css'
 import { holeKpis, holeVerlauf, type KpiAntwort, type VerlaufAntwort } from './api'
 import { AnteilDiagramm } from './components/AnteilDiagramm'
@@ -88,7 +88,10 @@ function App() {
       )}
       <div className="app__grid app__grid--diagramme">
         {verlauf && (
-          <div className="app__diagramm app__diagramm--gross">
+          <div
+            className="app__diagramm app__diagramm--gross"
+            style={{ '--glow-farbe': 'var(--akzent)' } as CSSProperties}
+          >
             <h2>Verlauf {JAHR}</h2>
             <VerlaufDiagramm
               verlauf={verlauf.monate}
@@ -98,7 +101,10 @@ function App() {
           </div>
         )}
         {anteile && (
-          <div className="app__diagramm app__diagramm--klein">
+          <div
+            className="app__diagramm app__diagramm--klein"
+            style={{ '--glow-farbe': 'var(--gut)' } as CSSProperties}
+          >
             <h2>Anteil je Kategorie</h2>
             <AnteilDiagramm anteile={anteile} />
           </div>

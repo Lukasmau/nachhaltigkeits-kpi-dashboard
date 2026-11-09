@@ -24,6 +24,33 @@
   border: 1px solid var(--linie);
   border-radius: 16px;
   padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glow in der Diagrammfarbe (CLAUDE.md §8): color-mix radial-gradient pro
+   Karte, Farbe kommt ueber die --glow-farbe Custom Property von aussen. */
+.kpi-karte::before,
+.app__diagramm::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -15%;
+  width: 60%;
+  height: 130%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--glow-farbe, var(--akzent)) 35%, transparent) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.kpi-karte > *,
+.app__diagramm > * {
+  position: relative;
+  z-index: 1;
 }
 
 .kpi-karte__titel {
@@ -110,18 +137,13 @@
   color: var(--abweichung);
 }
 
-.app__diagramme {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 24px;
-}
-
 .app__diagramm {
   background: var(--karte);
   border: 1px solid var(--linie);
   border-radius: 16px;
   padding: 24px;
+  position: relative;
+  overflow: hidden;
 }
 
 /* Verlauf nimmt 3 der 4 Rasterspalten, Anteil die letzte - dadurch
