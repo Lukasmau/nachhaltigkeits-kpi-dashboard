@@ -91,7 +91,11 @@ function App() {
         {verlauf && (
           <div className="app__diagramm app__diagramm--gross">
             <h2>Verlauf {JAHR}</h2>
-            <VerlaufDiagramm verlauf={verlauf.monate} einheit={verlauf.einheit} />
+            <VerlaufDiagramm
+              verlauf={verlauf.monate}
+              einheit={verlauf.einheit}
+              monatsziel={verlauf.monatsziel}
+            />
           </div>
         )}
         {anteile && (

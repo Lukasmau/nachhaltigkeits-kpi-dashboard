@@ -114,6 +114,33 @@ def test_api_verlauf_liefert_veraenderung_zielerreichung_und_groesste_kategorie(
     assert jan["anteil_groesste_kategorie"] == pytest.approx(1.0)  # nur Strom vorhanden
 
 
+def test_api_verlauf_monatsziel_ist_jahresziel_durch_zwoelf(tmp_path):
+    db_pfad = str(tmp_path / "test.db")
+    init_db(db_pfad)
+    conn = verbindung(db_pfad)
+    seed_faktoren(conn)
+    conn.execute(
+        "INSERT INTO targets (kategorie, jahr, ziel_kg_co2e) VALUES ('Gesamt', 2026, 12000)"
+    )
+    conn.commit()
+    conn.close()
+
+    def override_get_conn():
+        conn = verbindung(db_pfad)
+        try:
+            yield conn
+        finally:
+            conn.close()
+
+    app.dependency_overrides[get_conn] = override_get_conn
+    try:
+        antwort = TestClient(app).get("/api/verlauf", params={"jahr": 2026})
+    finally:
+        app.dependency_overrides.clear()
+
+    assert antwort.json()["monatsziel"] == pytest.approx(1000.0)
+
+
 def test_api_verlauf_waehlt_tonnen_wenn_ein_monat_drueber_liegt(client):
     csv_inhalt = (
         "datum,datenart,kategorie,wert,einheit,person\n"

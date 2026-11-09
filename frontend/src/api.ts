@@ -24,6 +24,7 @@ export type VerlaufEintrag = {
 export type VerlaufAntwort = {
   einheit: string
   groesste_kategorie: string | null
+  monatsziel: number | null
   monate: VerlaufEintrag[]
 }
 

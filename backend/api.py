@@ -80,6 +80,12 @@ def api_verlauf(jahr: int, conn: sqlite3.Connection = Depends(get_conn)):
     einheit = units.einheit_fuer_reihe(werte_kg)
     werte = units.reihe_in_einheit(werte_kg, einheit)
     jahresziel = jahresziel_gesamt(conn, jahr)
+    monatsziel_kg = jahresziel / 12 if jahresziel is not None else None
+    monatsziel = (
+        units.reihe_in_einheit([monatsziel_kg], einheit)[0]
+        if monatsziel_kg is not None
+        else None
+    )
 
     veraenderungen = [None] + [
         kpis.veraenderung_zum_vormonat(werte_kg[i], werte_kg[i - 1]) for i in range(1, 12)
@@ -105,6 +111,7 @@ def api_verlauf(jahr: int, conn: sqlite3.Connection = Depends(get_conn)):
     return {
         "einheit": einheit,
         "groesste_kategorie": groesste_kategorie,
+        "monatsziel": monatsziel,
         "monate": [
             {
                 "monat": monat,
