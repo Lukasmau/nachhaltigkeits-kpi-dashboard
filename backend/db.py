@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS measurements (
     datenart TEXT NOT NULL,
     kategorie TEXT NOT NULL,
     wert REAL NOT NULL,
-    einheit TEXT NOT NULL
+    einheit TEXT NOT NULL,
+    person TEXT
 );
 
 CREATE TABLE IF NOT EXISTS factors (
