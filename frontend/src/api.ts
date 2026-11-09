@@ -13,8 +13,19 @@ export async function holeKpis(jahr: number, monat: number): Promise<KpiAntwort>
   return antwort.json()
 }
 
-export type VerlaufEintrag = { monat: number; wert: number | null; warnungen: string[] }
-export type VerlaufAntwort = { einheit: string; monate: VerlaufEintrag[] }
+export type VerlaufEintrag = {
+  monat: number
+  wert: number | null
+  veraenderung: number | null
+  zielerreichung: number | null
+  anteil_groesste_kategorie: number | null
+  warnungen: string[]
+}
+export type VerlaufAntwort = {
+  einheit: string
+  groesste_kategorie: string | null
+  monate: VerlaufEintrag[]
+}
 
 export async function holeVerlauf(jahr: number): Promise<VerlaufAntwort> {
   const antwort = await fetch(`/api/verlauf?jahr=${jahr}`)

@@ -31,6 +31,10 @@ function App() {
       )
     : null
 
+  // Verhaeltnis (0 bis 1) in Prozent fuer die Sparklines, null bleibt null.
+  const alsProzentReihe = (werte: (number | null)[] | undefined) =>
+    werte?.map((w) => (w === null ? null : w * 100))
+
   return (
     <div className="app">
       <h1>Nachhaltigkeits-KPI-Dashboard</h1>
@@ -61,12 +65,16 @@ function App() {
                   : 'schlecht'
             }
             mitVorzeichen
+            sparklineWerte={alsProzentReihe(verlauf?.monate.map((m) => m.veraenderung))}
           />
           <KpiKarte
             titel={groessterEintrag ? `Größter Posten: ${groessterEintrag[0]}` : 'Größter Posten'}
             wert={groessterEintrag ? groessterEintrag[1] * 100 : null}
             einheit="%"
             hinweis="Keine Werte angegeben"
+            sparklineWerte={alsProzentReihe(
+              verlauf?.monate.map((m) => m.anteil_groesste_kategorie)
+            )}
           />
           <KpiKarte
             titel="Zielerreichung"
@@ -75,6 +83,7 @@ function App() {
             }
             einheit="%"
             hinweis="Ziel fehlt oder nicht berechenbar"
+            sparklineWerte={alsProzentReihe(verlauf?.monate.map((m) => m.zielerreichung))}
           />
         </div>
       )}
