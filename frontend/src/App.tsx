@@ -13,6 +13,13 @@ function App() {
       .catch((e: Error) => setFehler(e.message))
   }, [])
 
+  const anteile = daten?.anteil_je_kategorie.anteile
+  const groessterEintrag = anteile
+    ? Object.entries(anteile).reduce((groesste, aktuell) =>
+        aktuell[1] > groesste[1] ? aktuell : groesste
+      )
+    : null
+
   return (
     <div className="app">
       <h1>Nachhaltigkeits-KPI-Dashboard</h1>
@@ -42,6 +49,12 @@ function App() {
             }
             einheit="%"
             hinweis="Ziel fehlt oder nicht berechenbar"
+          />
+          <KpiKarte
+            titel={groessterEintrag ? `Größter Posten: ${groessterEintrag[0]}` : 'Größter Posten'}
+            wert={groessterEintrag ? groessterEintrag[1] * 100 : null}
+            einheit="%"
+            hinweis="Keine Werte angegeben"
           />
         </div>
       )}
