@@ -1,0 +1,11 @@
+datum,datenart,kategorie,wert,einheit,person
+2026-01-15,verbrauch,Strom,1800,kWh,
+2026-01-15,verbrauch,Erdgas,2200,kWh,
+2026-01-20,fahrt,Dienstreisen Bahn,340,Pkm,Lukas
+2026-01-22,fahrt,Dienstreisen Pkw,180,Pkm,Anna
+2026-02-15,verbrauch,Strom,1750,kWh,
+2026-02-15,verbrauch,Erdgas,2600,kWh,
+2026-02-10,fahrt,Dienstreisen Flug,850,Pkm,Lukas
+2026-03-15,verbrauch,Strom,1600,kWh,
+2026-03-15,verbrauch,Erdgas,1400,kWh,
+2026-03-05,fahrt,Dienstreisen Bahn,340,Pkm,Anna
