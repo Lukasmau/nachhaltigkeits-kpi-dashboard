@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { holeKpis, type KpiAntwort } from './api'
+import { AnteilDiagramm } from './components/AnteilDiagramm'
 import { KpiKarte } from './components/KpiKarte'
 
 function App() {
@@ -56,6 +57,12 @@ function App() {
             einheit="%"
             hinweis="Keine Werte angegeben"
           />
+        </div>
+      )}
+      {anteile && (
+        <div className="app__diagramm">
+          <h2>Anteil je Kategorie</h2>
+          <AnteilDiagramm anteile={anteile} />
         </div>
       )}
     </div>
