@@ -30,7 +30,7 @@ Frontend ──► API (FastAPI) ──► Kern (units.py, kpis.py)
 Regel: Nur trennen, wo ein Tausch realistisch ist (Frontend, SQLite→DuckDB in `db.py`, Polars→pandas in `importer.py`, Datenquelle CSV→Sensor später). Keine Schnittstellen für alles.
 
 ## 4. Datenmodell
-- `measurements(id, datum, datenart, kategorie, wert, einheit)`. Fahrten brauchen eine eigene Zeilen-ID (zwei Fahrten am selben Tag sind gültig).
+- `measurements(id, datum, datenart, kategorie, wert, einheit, person)`. Fahrten brauchen eine eigene Zeilen-ID (zwei Fahrten am selben Tag sind gültig). `person` ist optional (nur bei Fahrten genutzt) und dient nur der Duplikat-Warnung beim Import (gleicher Name + Datum + Kategorie bereits vorhanden): löst **nie** ein Blockieren aus, nur eine Warnung, weil zwei Personen zufällig gleich heißen können.
 - `factors(id, kategorie, einheit, faktor_kg_co2e_pro_einheit, quelle, stand)`. Faktor je Kategorie mit Quelle und Stand.
 - `targets(kategorie, jahr, ziel_kg_co2e)`.
 - **Rechnung:** kg CO₂e = Messwert × Faktor. Intern immer kg. Anzeige: unter 1.000 kg ganze kg, ab 1.000 kg Tonnen, **ein Diagramm nutzt nur eine Einheit**.
@@ -53,7 +53,7 @@ Quelle: UBA, Liste "Emissionsfaktoren zur Treibhausgasbilanzierung", Version 2.1
 
 ## 7. Import-Regeln
 - **Teil-Import:** gültige Zeilen übernehmen, fehlerhafte nicht, am Ende Tabelle mit **Zeile, Spalte, Grund, Tipp** (Beispiel: "Zeile 14, Datum: 31.02.2026 gibt es nicht, erwartet JJJJ-MM-TT").
-- Bereits vorhandene Daten überspringen und melden.
+- Bereits vorhandene Daten überspringen und melden. Gilt so nur für Strom/Erdgas (ein Wert pro Monat und Kategorie ist eindeutig, zweiter Wert = Fehler). Bei Fahrten nur warnen statt überspringen (gleicher Name + Datum + Kategorie bereits vorhanden), die Zeile wird trotzdem importiert, weil zwei echte Fahrten am selben Tag gültig sind und Namensgleichheit zwischen zwei Personen vorkommen kann.
 - Beispieldaten: ein Skript erzeugt 24 Monate einer fiktiven Firma (Saison, Optimierung, Rückfall), klar als Beispiel gekennzeichnet. Dazu ein Datensatz mit absichtlichen Fehlern für den Import-Test. Erst nach R1 nötig.
 
 ## 8. Look (Design-Tokens als einzige Quelle für CSS-Variablen und ECharts-Theme)
