@@ -4,6 +4,7 @@ import { dunkel } from '../tokens'
 
 type Props = {
   verlauf: VerlaufEintrag[]
+  einheit: string
 }
 
 const monatsNamen = [
@@ -15,13 +16,17 @@ const monatsNamen = [
 // bleibt stehen - das ist ein echter Hinweis, kein Darstellungsfehler.
 function ohneZukunft(verlauf: VerlaufEintrag[]): VerlaufEintrag[] {
   let ende = verlauf.length
-  while (ende > 0 && verlauf[ende - 1].wert_kg === null) {
+  while (ende > 0 && verlauf[ende - 1].wert === null) {
     ende -= 1
   }
   return verlauf.slice(0, ende)
 }
 
-export function VerlaufDiagramm({ verlauf: rohVerlauf }: Props) {
+function formatiereWert(wert: number): string {
+  return wert.toLocaleString('de-DE', { maximumFractionDigits: 1 })
+}
+
+export function VerlaufDiagramm({ verlauf: rohVerlauf, einheit }: Props) {
   const verlauf = ohneZukunft(rohVerlauf)
   const option = {
     backgroundColor: 'transparent',
@@ -34,17 +39,20 @@ export function VerlaufDiagramm({ verlauf: rohVerlauf }: Props) {
     },
     yAxis: {
       type: 'value',
-      axisLabel: { color: dunkel.gedaempft, formatter: '{value} kg' },
+      axisLabel: {
+        color: dunkel.gedaempft,
+        formatter: (wert: number) => `${formatiereWert(wert)} ${einheit}`,
+      },
       splitLine: { lineStyle: { color: dunkel.linie } },
     },
     tooltip: {
       trigger: 'axis',
-      valueFormatter: (wert: number) => `${wert} kg`,
+      valueFormatter: (wert: number) => `${formatiereWert(wert)} ${einheit}`,
     },
     series: [
       {
         type: 'line',
-        data: verlauf.map((v) => v.wert_kg),
+        data: verlauf.map((v) => v.wert),
         connectNulls: false,
         lineStyle: { color: dunkel.akzent, width: 2 },
         itemStyle: { color: dunkel.akzent },

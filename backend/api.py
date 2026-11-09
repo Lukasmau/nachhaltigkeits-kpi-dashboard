@@ -6,7 +6,7 @@ from pathlib import Path
 
 from fastapi import Depends, FastAPI, UploadFile
 
-from backend.core import kpis
+from backend.core import kpis, units
 from backend.db import init_db, jahresziel_gesamt, messungen_mit_co2e, verbindung
 from backend.importer import importiere_csv
 from backend.seed.faktoren import seed_faktoren
@@ -52,8 +52,14 @@ def api_kpis(jahr: int, monat: int, conn: sqlite3.Connection = Depends(get_conn)
     vormonat_gesamt = kpis.co2e_im_monat(vormonat_messungen)
     jahresziel = jahresziel_gesamt(conn, jahr)
 
+    if gesamt["wert_kg"] is None:
+        co2e_anzeige = {"wert": None, "einheit": "kg", "warnungen": gesamt["warnungen"]}
+    else:
+        wert, einheit = units.anzeige_einheit(gesamt["wert_kg"])
+        co2e_anzeige = {"wert": wert, "einheit": einheit, "warnungen": gesamt["warnungen"]}
+
     return {
-        "co2e_im_monat": gesamt,
+        "co2e_im_monat": co2e_anzeige,
         "anteil_je_kategorie": kpis.anteil_je_kategorie(aktuelle_messungen),
         "veraenderung_zum_vormonat": kpis.veraenderung_zum_vormonat(
             gesamt["wert_kg"], vormonat_gesamt["wert_kg"]
@@ -64,10 +70,22 @@ def api_kpis(jahr: int, monat: int, conn: sqlite3.Connection = Depends(get_conn)
 
 @app.get("/api/verlauf")
 def api_verlauf(jahr: int, conn: sqlite3.Connection = Depends(get_conn)):
-    return [
-        {"monat": monat, **kpis.co2e_im_monat(messungen_mit_co2e(conn, jahr, monat))}
-        for monat in range(1, 13)
+    # ein Diagramm nutzt nur eine Einheit (CLAUDE.md §4): die Einheit wird
+    # einmal fuer die ganze Reihe bestimmt, nicht pro Monat einzeln.
+    monatsergebnisse = [
+        kpis.co2e_im_monat(messungen_mit_co2e(conn, jahr, monat)) for monat in range(1, 13)
     ]
+    werte_kg = [ergebnis["wert_kg"] for ergebnis in monatsergebnisse]
+    einheit = units.einheit_fuer_reihe(werte_kg)
+    werte = units.reihe_in_einheit(werte_kg, einheit)
+
+    return {
+        "einheit": einheit,
+        "monate": [
+            {"monat": monat, "wert": wert, "warnungen": ergebnis["warnungen"]}
+            for monat, wert, ergebnis in zip(range(1, 13), werte, monatsergebnisse)
+        ],
+    }
 
 
 @app.post("/api/import")

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { holeKpis, holeVerlauf, type KpiAntwort, type VerlaufEintrag } from './api'
+import { holeKpis, holeVerlauf, type KpiAntwort, type VerlaufAntwort } from './api'
 import { AnteilDiagramm } from './components/AnteilDiagramm'
 import { KpiKarte } from './components/KpiKarte'
 import { VerlaufDiagramm } from './components/VerlaufDiagramm'
 
 function App() {
   const [daten, setDaten] = useState<KpiAntwort | null>(null)
-  const [verlauf, setVerlauf] = useState<VerlaufEintrag[] | null>(null)
+  const [verlauf, setVerlauf] = useState<VerlaufAntwort | null>(null)
   const [fehler, setFehler] = useState<string | null>(null)
 
   useEffect(() => {
@@ -34,8 +34,8 @@ function App() {
         <div className="app__karten">
           <KpiKarte
             titel="CO2e im Monat"
-            wert={daten.co2e_im_monat.wert_kg}
-            einheit="kg"
+            wert={daten.co2e_im_monat.wert}
+            einheit={daten.co2e_im_monat.einheit}
             hinweis={daten.co2e_im_monat.warnungen[0] ?? 'Keine Werte angegeben'}
           />
           <KpiKarte
@@ -74,7 +74,7 @@ function App() {
         {verlauf && (
           <div className="app__diagramm">
             <h2>Verlauf {2026}</h2>
-            <VerlaufDiagramm verlauf={verlauf} />
+            <VerlaufDiagramm verlauf={verlauf.monate} einheit={verlauf.einheit} />
           </div>
         )}
       </div>
