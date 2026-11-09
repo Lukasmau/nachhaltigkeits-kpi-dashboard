@@ -30,7 +30,11 @@ CREATE TABLE IF NOT EXISTS targets (
 
 
 def verbindung(db_pfad: str) -> sqlite3.Connection:
-    conn = sqlite3.connect(db_pfad)
+    # check_same_thread=False: FastAPI fuehrt synchrone Endpunkte und ihre
+    # Depends()-Funktionen im selben Request manchmal in verschiedenen
+    # Threadpool-Threads aus. Jede Anfrage bekommt trotzdem ihre eigene,
+    # neue Verbindung (siehe api.py get_conn) - nie zwei Requests dieselbe.
+    conn = sqlite3.connect(db_pfad, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     return conn
 
