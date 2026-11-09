@@ -59,6 +59,13 @@ function App() {
                   ? 'gut'
                   : 'schlecht'
             }
+            mitVorzeichen
+          />
+          <KpiKarte
+            titel={groessterEintrag ? `Größter Posten: ${groessterEintrag[0]}` : 'Größter Posten'}
+            wert={groessterEintrag ? groessterEintrag[1] * 100 : null}
+            einheit="%"
+            hinweis="Keine Werte angegeben"
           />
           <KpiKarte
             titel="Zielerreichung"
@@ -67,12 +74,6 @@ function App() {
             }
             einheit="%"
             hinweis="Ziel fehlt oder nicht berechenbar"
-          />
-          <KpiKarte
-            titel={groessterEintrag ? `Größter Posten: ${groessterEintrag[0]}` : 'Größter Posten'}
-            wert={groessterEintrag ? groessterEintrag[1] * 100 : null}
-            einheit="%"
-            hinweis="Keine Werte angegeben"
           />
         </div>
       )}
