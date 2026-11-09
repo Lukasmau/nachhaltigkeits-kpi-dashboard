@@ -1,0 +1,194 @@
+datum,datenart,kategorie,wert,einheit,person
+2024-11-05,verbrauch,Strom,1834,kWh,
+2024-11-05,verbrauch,Erdgas,2418,kWh,
+2024-11-06,fahrt,Dienstreisen Flug,499,Pkm,Sarah
+2024-11-03,fahrt,Dienstreisen Pkw,157,Pkm,Mia
+2024-11-25,fahrt,Dienstreisen Pkw,86,Pkm,David
+2024-11-24,fahrt,Dienstreisen Pkw,139,Pkm,Lena
+2024-11-16,fahrt,Dienstreisen Pkw,307,Pkm,Mia
+2024-12-05,verbrauch,Strom,1800,kWh,
+2024-12-05,verbrauch,Erdgas,2998,kWh,
+2024-12-06,fahrt,Dienstreisen Bahn,448,Pkm,Felix
+2024-12-03,fahrt,Dienstreisen Bahn,377,Pkm,Felix
+2024-12-02,fahrt,Dienstreisen Pkw,189,Pkm,Felix
+2024-12-24,fahrt,Dienstreisen Flug,435,Pkm,Mia
+2024-12-22,fahrt,Dienstreisen Flug,705,Pkm,Sarah
+2024-12-16,fahrt,Dienstreisen Bahn,245,Pkm,Mia
+2025-01-05,verbrauch,Strom,1810,kWh,
+2025-01-05,verbrauch,Erdgas,3055,kWh,
+2025-01-16,fahrt,Dienstreisen Flug,801,Pkm,Sarah
+2025-01-11,fahrt,Dienstreisen Pkw,325,Pkm,Jonas
+2025-01-26,fahrt,Dienstreisen Pkw,147,Pkm,David
+2025-01-17,fahrt,Dienstreisen Pkw,195,Pkm,Jonas
+2025-01-05,fahrt,Dienstreisen Flug,533,Pkm,Felix
+2025-02-05,verbrauch,Strom,1823,kWh,
+2025-02-05,verbrauch,Erdgas,2929,kWh,
+2025-02-10,fahrt,Dienstreisen Flug,606,Pkm,Tobias
+2025-02-27,fahrt,Dienstreisen Pkw,246,Pkm,Mia
+2025-02-24,fahrt,Dienstreisen Pkw,374,Pkm,Nora
+2025-02-08,fahrt,Dienstreisen Flug,863,Pkm,Felix
+2025-02-28,fahrt,Dienstreisen Flug,630,Pkm,Felix
+2025-02-26,fahrt,Dienstreisen Pkw,125,Pkm,Lena
+2025-02-11,fahrt,Dienstreisen Flug,764,Pkm,Nora
+2025-03-05,verbrauch,Strom,1850,kWh,
+2025-03-05,verbrauch,Erdgas,2358,kWh,
+2025-03-28,fahrt,Dienstreisen Pkw,282,Pkm,Jonas
+2025-03-12,fahrt,Dienstreisen Flug,550,Pkm,Sarah
+2025-03-03,fahrt,Dienstreisen Flug,808,Pkm,Lena
+2025-03-18,fahrt,Dienstreisen Bahn,107,Pkm,Nora
+2025-03-13,fahrt,Dienstreisen Pkw,229,Pkm,Mia
+2025-03-22,fahrt,Dienstreisen Pkw,270,Pkm,Felix
+2025-03-01,fahrt,Dienstreisen Bahn,303,Pkm,Lena
+2025-03-26,fahrt,Dienstreisen Pkw,114,Pkm,Sarah
+2025-04-05,verbrauch,Strom,1846,kWh,
+2025-04-05,verbrauch,Erdgas,1669,kWh,
+2025-04-19,fahrt,Dienstreisen Pkw,189,Pkm,David
+2025-04-27,fahrt,Dienstreisen Flug,424,Pkm,Tobias
+2025-04-02,fahrt,Dienstreisen Bahn,220,Pkm,Lena
+2025-04-23,fahrt,Dienstreisen Pkw,330,Pkm,Lena
+2025-04-11,fahrt,Dienstreisen Flug,806,Pkm,Mia
+2025-04-06,fahrt,Dienstreisen Flug,456,Pkm,Sarah
+2025-04-25,fahrt,Dienstreisen Pkw,120,Pkm,David
+2025-04-10,fahrt,Dienstreisen Pkw,210,Pkm,David
+2025-05-05,verbrauch,Strom,1794,kWh,
+2025-05-05,verbrauch,Erdgas,826,kWh,
+2025-05-07,fahrt,Dienstreisen Flug,671,Pkm,Sarah
+2025-05-15,fahrt,Dienstreisen Flug,895,Pkm,Felix
+2025-05-28,fahrt,Dienstreisen Flug,834,Pkm,Jonas
+2025-05-05,fahrt,Dienstreisen Pkw,207,Pkm,Tobias
+2025-05-24,fahrt,Dienstreisen Flug,726,Pkm,Jonas
+2025-06-05,verbrauch,Strom,2117,kWh,
+2025-06-05,verbrauch,Erdgas,293,kWh,
+2025-06-20,fahrt,Dienstreisen Flug,688,Pkm,David
+2025-06-25,fahrt,Dienstreisen Pkw,313,Pkm,Sarah
+2025-06-06,fahrt,Dienstreisen Bahn,186,Pkm,Jonas
+2025-06-08,fahrt,Dienstreisen Pkw,86,Pkm,Jonas
+2025-06-16,fahrt,Dienstreisen Flug,747,Pkm,Jonas
+2025-07-05,verbrauch,Strom,2113,kWh,
+2025-07-05,verbrauch,Erdgas,103,kWh,
+2025-07-18,fahrt,Dienstreisen Bahn,244,Pkm,Lena
+2025-07-21,fahrt,Dienstreisen Flug,705,Pkm,Mia
+2025-07-12,fahrt,Dienstreisen Bahn,216,Pkm,Nora
+2025-07-03,fahrt,Dienstreisen Flug,583,Pkm,David
+2025-07-15,fahrt,Dienstreisen Bahn,282,Pkm,David
+2025-07-14,fahrt,Dienstreisen Pkw,201,Pkm,Lena
+2025-08-05,verbrauch,Strom,1987,kWh,
+2025-08-05,verbrauch,Erdgas,305,kWh,
+2025-08-18,fahrt,Dienstreisen Pkw,115,Pkm,Felix
+2025-08-23,fahrt,Dienstreisen Bahn,490,Pkm,Jonas
+2025-08-04,fahrt,Dienstreisen Flug,730,Pkm,Jonas
+2025-08-20,fahrt,Dienstreisen Pkw,269,Pkm,Sarah
+2025-08-28,fahrt,Dienstreisen Flug,629,Pkm,Mia
+2025-08-06,fahrt,Dienstreisen Bahn,245,Pkm,Sarah
+2025-09-05,verbrauch,Strom,1781,kWh,
+2025-09-05,verbrauch,Erdgas,753,kWh,
+2025-09-01,fahrt,Dienstreisen Flug,526,Pkm,David
+2025-09-25,fahrt,Dienstreisen Bahn,348,Pkm,Sarah
+2025-09-24,fahrt,Dienstreisen Bahn,217,Pkm,Felix
+2025-09-20,fahrt,Dienstreisen Bahn,426,Pkm,Tobias
+2025-10-05,verbrauch,Strom,1775,kWh,
+2025-10-05,verbrauch,Erdgas,1646,kWh,
+2025-10-08,fahrt,Dienstreisen Bahn,396,Pkm,Jonas
+2025-10-20,fahrt,Dienstreisen Flug,615,Pkm,Jonas
+2025-10-09,fahrt,Dienstreisen Bahn,343,Pkm,Nora
+2025-10-15,fahrt,Dienstreisen Pkw,356,Pkm,Felix
+2025-10-16,fahrt,Dienstreisen Flug,830,Pkm,Jonas
+2025-10-06,fahrt,Dienstreisen Bahn,374,Pkm,Lena
+2025-10-22,fahrt,Dienstreisen Bahn,170,Pkm,Tobias
+2025-10-17,fahrt,Dienstreisen Pkw,396,Pkm,Jonas
+2025-11-05,verbrauch,Strom,1838,kWh,
+2025-11-05,verbrauch,Erdgas,2417,kWh,
+2025-11-06,fahrt,Dienstreisen Pkw,80,Pkm,Felix
+2025-11-25,fahrt,Dienstreisen Pkw,323,Pkm,Lena
+2025-11-06,fahrt,Dienstreisen Flug,575,Pkm,Mia
+2025-11-07,fahrt,Dienstreisen Pkw,143,Pkm,Jonas
+2025-11-28,fahrt,Dienstreisen Pkw,398,Pkm,Mia
+2025-11-25,fahrt,Dienstreisen Bahn,465,Pkm,Jonas
+2025-12-05,verbrauch,Strom,1796,kWh,
+2025-12-05,verbrauch,Erdgas,2843,kWh,
+2025-12-17,fahrt,Dienstreisen Pkw,368,Pkm,Jonas
+2025-12-17,fahrt,Dienstreisen Pkw,139,Pkm,Mia
+2025-12-01,fahrt,Dienstreisen Flug,464,Pkm,Felix
+2025-12-26,fahrt,Dienstreisen Pkw,291,Pkm,Sarah
+2025-12-12,fahrt,Dienstreisen Pkw,400,Pkm,Sarah
+2025-12-10,fahrt,Dienstreisen Pkw,150,Pkm,Mia
+2026-01-05,verbrauch,Strom,1875,kWh,
+2026-01-05,verbrauch,Erdgas,3041,kWh,
+2026-01-26,fahrt,Dienstreisen Bahn,254,Pkm,Sarah
+2026-01-24,fahrt,Dienstreisen Bahn,149,Pkm,Jonas
+2026-01-08,fahrt,Dienstreisen Bahn,182,Pkm,David
+2026-01-24,fahrt,Dienstreisen Bahn,116,Pkm,Tobias
+2026-02-05,verbrauch,Strom,1819,kWh,
+2026-02-05,verbrauch,Erdgas,2991,kWh,
+2026-02-16,fahrt,Dienstreisen Bahn,150,Pkm,Mia
+2026-02-20,fahrt,Dienstreisen Bahn,409,Pkm,Nora
+2026-02-06,fahrt,Dienstreisen Bahn,174,Pkm,Mia
+2026-02-04,fahrt,Dienstreisen Bahn,340,Pkm,Lena
+2026-02-28,fahrt,Dienstreisen Bahn,172,Pkm,Lena
+2026-02-25,fahrt,Dienstreisen Bahn,431,Pkm,David
+2026-02-02,fahrt,Dienstreisen Bahn,230,Pkm,Tobias
+2026-03-05,verbrauch,Strom,1827,kWh,
+2026-03-05,verbrauch,Erdgas,2369,kWh,
+2026-03-04,fahrt,Dienstreisen Pkw,375,Pkm,Mia
+2026-03-12,fahrt,Dienstreisen Pkw,343,Pkm,Felix
+2026-03-22,fahrt,Dienstreisen Bahn,428,Pkm,Felix
+2026-03-05,fahrt,Dienstreisen Bahn,443,Pkm,Jonas
+2026-03-28,fahrt,Dienstreisen Bahn,173,Pkm,Jonas
+2026-03-13,fahrt,Dienstreisen Bahn,308,Pkm,Tobias
+2026-03-13,fahrt,Dienstreisen Bahn,125,Pkm,Mia
+2026-04-05,verbrauch,Strom,1862,kWh,
+2026-04-05,verbrauch,Erdgas,1695,kWh,
+2026-04-09,fahrt,Dienstreisen Pkw,146,Pkm,Jonas
+2026-04-28,fahrt,Dienstreisen Bahn,423,Pkm,Felix
+2026-04-21,fahrt,Dienstreisen Pkw,369,Pkm,Lena
+2026-04-06,fahrt,Dienstreisen Pkw,380,Pkm,Felix
+2026-04-22,fahrt,Dienstreisen Bahn,186,Pkm,Tobias
+2026-04-18,fahrt,Dienstreisen Bahn,491,Pkm,Jonas
+2026-04-07,fahrt,Dienstreisen Bahn,469,Pkm,Felix
+2026-05-05,verbrauch,Strom,1868,kWh,
+2026-05-05,verbrauch,Erdgas,864,kWh,
+2026-05-25,fahrt,Dienstreisen Bahn,223,Pkm,David
+2026-05-10,fahrt,Dienstreisen Bahn,447,Pkm,Jonas
+2026-05-18,fahrt,Dienstreisen Bahn,306,Pkm,Lena
+2026-05-11,fahrt,Dienstreisen Flug,470,Pkm,Sarah
+2026-05-26,fahrt,Dienstreisen Pkw,284,Pkm,Sarah
+2026-06-05,verbrauch,Strom,2003,kWh,
+2026-06-05,verbrauch,Erdgas,223,kWh,
+2026-06-16,fahrt,Dienstreisen Pkw,208,Pkm,Felix
+2026-06-05,fahrt,Dienstreisen Flug,568,Pkm,Lena
+2026-06-17,fahrt,Dienstreisen Pkw,300,Pkm,David
+2026-06-27,fahrt,Dienstreisen Bahn,260,Pkm,Sarah
+2026-06-05,fahrt,Dienstreisen Bahn,488,Pkm,Mia
+2026-06-03,fahrt,Dienstreisen Flug,601,Pkm,Nora
+2026-07-05,verbrauch,Strom,2038,kWh,
+2026-07-05,verbrauch,Erdgas,82,kWh,
+2026-07-09,fahrt,Dienstreisen Flug,863,Pkm,Sarah
+2026-07-05,fahrt,Dienstreisen Flug,433,Pkm,Sarah
+2026-07-26,fahrt,Dienstreisen Flug,503,Pkm,Tobias
+2026-07-03,fahrt,Dienstreisen Pkw,198,Pkm,Nora
+2026-07-21,fahrt,Dienstreisen Bahn,237,Pkm,Nora
+2026-07-23,fahrt,Dienstreisen Flug,462,Pkm,Tobias
+2026-07-21,fahrt,Dienstreisen Flug,591,Pkm,Mia
+2026-07-15,fahrt,Dienstreisen Bahn,344,Pkm,Sarah
+2026-08-05,verbrauch,Strom,2099,kWh,
+2026-08-05,verbrauch,Erdgas,224,kWh,
+2026-08-11,fahrt,Dienstreisen Flug,485,Pkm,Mia
+2026-08-15,fahrt,Dienstreisen Flug,884,Pkm,Sarah
+2026-08-13,fahrt,Dienstreisen Pkw,128,Pkm,Mia
+2026-08-01,fahrt,Dienstreisen Bahn,459,Pkm,Mia
+2026-08-15,fahrt,Dienstreisen Flug,754,Pkm,Sarah
+2026-08-07,fahrt,Dienstreisen Bahn,434,Pkm,Tobias
+2026-09-05,verbrauch,Strom,1757,kWh,
+2026-09-05,verbrauch,Erdgas,909,kWh,
+2026-09-25,fahrt,Dienstreisen Pkw,90,Pkm,David
+2026-09-19,fahrt,Dienstreisen Bahn,459,Pkm,Felix
+2026-09-19,fahrt,Dienstreisen Bahn,117,Pkm,Jonas
+2026-09-01,fahrt,Dienstreisen Pkw,113,Pkm,Lena
+2026-10-05,verbrauch,Strom,1724,kWh,
+2026-10-05,verbrauch,Erdgas,1580,kWh,
+2026-10-04,fahrt,Dienstreisen Bahn,289,Pkm,Sarah
+2026-10-01,fahrt,Dienstreisen Bahn,154,Pkm,Jonas
+2026-10-02,fahrt,Dienstreisen Bahn,235,Pkm,Felix
+2026-10-28,fahrt,Dienstreisen Bahn,266,Pkm,Sarah
+2026-10-06,fahrt,Dienstreisen Flug,621,Pkm,Jonas
+2026-10-07,fahrt,Dienstreisen Bahn,204,Pkm,Mia
