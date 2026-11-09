@@ -1,0 +1,35 @@
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.kpi-karte {
+  background: var(--karte);
+  border: 1px solid var(--linie);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 280px;
+}
+
+.kpi-karte__titel {
+  color: var(--gedaempft);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.kpi-karte__wert {
+  font-family: 'Sora', sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--akzent);
+}
+
+.kpi-karte__hinweis {
+  color: var(--gedaempft);
+  font-size: 16px;
+}
+
+.app__fehler {
+  color: var(--abweichung);
+}
