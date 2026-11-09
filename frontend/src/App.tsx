@@ -35,6 +35,14 @@ function App() {
             einheit="%"
             hinweis="Vormonat fehlt oder ist 0"
           />
+          <KpiKarte
+            titel="Zielerreichung"
+            wert={
+              daten.zielerreichung === null ? null : daten.zielerreichung * 100
+            }
+            einheit="%"
+            hinweis="Ziel fehlt oder nicht berechenbar"
+          />
         </div>
       )}
     </div>
