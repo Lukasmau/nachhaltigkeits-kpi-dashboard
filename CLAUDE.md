@@ -64,8 +64,19 @@ Quelle: UBA, Liste "Emissionsfaktoren zur Treibhausgasbilanzierung", Version 2.1
 
 ## 9. Releases (feste Reihenfolge, Muss/Soll/Kann)
 - **R0 Kern (Muss, bis So):** `units.py`, `kpis.py` mit allen 4 KPIs, Tests. *Lukas schreibt selbst (begleitet):* KPI "Veränderung zum Vormonat".
-- **R1 Läuft (Muss, bis Mi 11.11. Abend):** Datenbank mit Faktoren und Quelle, CSV-Import mit Teil-Import und Fehlertabelle, API, Dashboard mit 4 KPI-Karten und 2 Diagrammen (Anteil, Verlauf), Beispieldaten, Dunkelmodus.
-- **R2 Schön (Soll, bis Do):** Hellmodus, "?" mit Schalter, Glow, Vormonat mit kombinierbaren Kategorien und Hinweisen, Fahrten per Formular, **Export der KPI-Tabelle als CSV**.
+- **R1 Läuft (Muss, bis Mi 11.11. Abend):** Datenbank mit Faktoren und Quelle, CSV-Import mit Teil-Import und Fehlertabelle, API, Dashboard mit 4 KPI-Karten und 2 Diagrammen (Anteil, Verlauf), Beispieldaten, Dunkelmodus. **Fertig am 09.11.2026**, 2 Tage vor Frist.
+- **R2 Schön (Soll, bis Do), in dieser Reihenfolge:**
+  1. Glow (bewusst zuerst, sichtbarer Zwischenschritt, motiviert)
+  2. Sidebar/Seitenstruktur (Werkzeug für mehrere Bildschirme statt überladener Hauptseite — Grundlage für 3 bis 5)
+  3. CSV-Upload im Frontend (Drag & Drop oder Datei wählen) — Kernfunktion, auch fürs Live-Demo am Samstag statt Swagger-UI
+  4. Fahrten-Eingabeformular (eigener Endpunkt, nutzt dieselben Prüf-Funktionen aus `importer.py` wie der CSV-Import — keine doppelte Logik)
+  5. Jahresziel-Eingabe (schließt eine Lücke: bisher nur manueller DB-Eintrag, siehe README)
+  6. "?" Erklärmodus mit Schalter — wichtig für die Präsi, erklärt Formeln dem Publikum
+  7. Vormonat mit kombinierbaren Kategorien und Hinweisen
+  8. Export der KPI-Tabelle als CSV
+  9. Hellmodus — "nice to have", fällt bei Zeitnot notfalls auf R3
+
+  09.11.2026 (Lukas, Umstellung): ursprüngliche Reihenfolge hatte Kernfunktionen (Dateneingabe) hinter Kosmetik (Hellmodus) einsortiert — das war ein Fehler. Kernfunktionen sind wichtiger, Sidebar ist das Werkzeug dafür, nicht nur Optik. Glow bleibt bewusst vorne, weil es Lukas' Haupt-Wunsch-Feature war.
 - **R3 Bonus (Kann):** Publikum schätzt vorab, Zielkurve, weitere Diagramme.
 - **Kassensturz Mi Abend:** Läuft R1 nicht, erst kürzen (z. B. ein Diagramm), Plan B nur wenn das Frontend klemmt.
 
