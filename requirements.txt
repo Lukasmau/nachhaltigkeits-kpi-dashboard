@@ -1,2 +1,6 @@
 pytest
 polars
+fastapi
+uvicorn[standard]
+httpx
+python-multipart

@@ -32,7 +32,7 @@ Regel: Nur trennen, wo ein Tausch realistisch ist (Frontend, SQLite→DuckDB in 
 ## 4. Datenmodell
 - `measurements(id, datum, datenart, kategorie, wert, einheit, person)`. Fahrten brauchen eine eigene Zeilen-ID (zwei Fahrten am selben Tag sind gültig). `person` ist optional (nur bei Fahrten genutzt) und dient nur der Duplikat-Warnung beim Import (gleicher Name + Datum + Kategorie bereits vorhanden): löst **nie** ein Blockieren aus, nur eine Warnung, weil zwei Personen zufällig gleich heißen können.
 - `factors(id, kategorie, einheit, faktor_kg_co2e_pro_einheit, quelle, stand)`. Faktor je Kategorie mit Quelle und Stand.
-- `targets(kategorie, jahr, ziel_kg_co2e)`.
+- `targets(kategorie, jahr, ziel_kg_co2e)`. Aktuell nur ein Gesamt-Jahresziel pro Jahr (Zeile mit `kategorie = "Gesamt"`), Monatsziel = Jahresziel / 12 für die Summe aller Kategorien. API summiert alle `targets`-Zeilen eines Jahres, statt nur die eine Gesamt-Zeile zu lesen — **Ausbau-Stelle:** einzelne Kategorie-Ziele addieren sich dann automatisch zum Gesamtziel, ohne die Abfrage zu ändern.
 - **Rechnung:** kg CO₂e = Messwert × Faktor. Intern immer kg. Anzeige: unter 1.000 kg ganze kg, ab 1.000 kg Tonnen, **ein Diagramm nutzt nur eine Einheit**.
 - Kategorien: Strom, Erdgas, Dienstreisen (Bahn, Pkw, Bus, Flug). Papier ist gestrichen (kein belegter Faktor).
 
