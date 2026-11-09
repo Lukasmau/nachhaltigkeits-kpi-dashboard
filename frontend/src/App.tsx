@@ -18,12 +18,24 @@ function App() {
       <h1>Nachhaltigkeits-KPI-Dashboard</h1>
       {fehler && <p className="app__fehler">{fehler}</p>}
       {daten && (
-        <KpiKarte
-          titel="CO2e im Monat"
-          wert={daten.co2e_im_monat.wert_kg}
-          einheit="kg"
-          warnungen={daten.co2e_im_monat.warnungen}
-        />
+        <div className="app__karten">
+          <KpiKarte
+            titel="CO2e im Monat"
+            wert={daten.co2e_im_monat.wert_kg}
+            einheit="kg"
+            hinweis={daten.co2e_im_monat.warnungen[0] ?? 'Keine Werte angegeben'}
+          />
+          <KpiKarte
+            titel="Veränderung zum Vormonat"
+            wert={
+              daten.veraenderung_zum_vormonat === null
+                ? null
+                : daten.veraenderung_zum_vormonat * 100
+            }
+            einheit="%"
+            hinweis="Vormonat fehlt oder ist 0"
+          />
+        </div>
       )}
     </div>
   )
