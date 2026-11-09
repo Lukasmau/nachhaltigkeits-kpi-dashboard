@@ -12,3 +12,13 @@ export async function holeKpis(jahr: number, monat: number): Promise<KpiAntwort>
   }
   return antwort.json()
 }
+
+export type VerlaufEintrag = { monat: number; wert_kg: number | null; warnungen: string[] }
+
+export async function holeVerlauf(jahr: number): Promise<VerlaufEintrag[]> {
+  const antwort = await fetch(`/api/verlauf?jahr=${jahr}`)
+  if (!antwort.ok) {
+    throw new Error(`API-Fehler: ${antwort.status}`)
+  }
+  return antwort.json()
+}

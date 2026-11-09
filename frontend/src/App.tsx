@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { holeKpis, type KpiAntwort } from './api'
+import { holeKpis, holeVerlauf, type KpiAntwort, type VerlaufEintrag } from './api'
 import { AnteilDiagramm } from './components/AnteilDiagramm'
 import { KpiKarte } from './components/KpiKarte'
+import { VerlaufDiagramm } from './components/VerlaufDiagramm'
 
 function App() {
   const [daten, setDaten] = useState<KpiAntwort | null>(null)
+  const [verlauf, setVerlauf] = useState<VerlaufEintrag[] | null>(null)
   const [fehler, setFehler] = useState<string | null>(null)
 
   useEffect(() => {
     holeKpis(2026, 1)
       .then(setDaten)
+      .catch((e: Error) => setFehler(e.message))
+    holeVerlauf(2026)
+      .then(setVerlauf)
       .catch((e: Error) => setFehler(e.message))
   }, [])
 
@@ -59,12 +64,20 @@ function App() {
           />
         </div>
       )}
-      {anteile && (
-        <div className="app__diagramm">
-          <h2>Anteil je Kategorie</h2>
-          <AnteilDiagramm anteile={anteile} />
-        </div>
-      )}
+      <div className="app__diagramme">
+        {anteile && (
+          <div className="app__diagramm">
+            <h2>Anteil je Kategorie</h2>
+            <AnteilDiagramm anteile={anteile} />
+          </div>
+        )}
+        {verlauf && (
+          <div className="app__diagramm">
+            <h2>Verlauf {2026}</h2>
+            <VerlaufDiagramm verlauf={verlauf} />
+          </div>
+        )}
+      </div>
     </div>
   )
 }

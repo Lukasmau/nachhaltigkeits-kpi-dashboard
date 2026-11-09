@@ -40,13 +40,20 @@
   color: var(--abweichung);
 }
 
+.app__diagramme {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 24px;
+}
+
 .app__diagramm {
   background: var(--karte);
   border: 1px solid var(--linie);
   border-radius: 16px;
   padding: 24px;
   max-width: 520px;
-  margin-top: 24px;
+  flex: 1 1 420px;
 }
 
 .app__diagramm h2 {
