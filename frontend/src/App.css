@@ -59,6 +59,46 @@
   font-size: 16px;
 }
 
+/* Bewusst feste Hell-Farben (CLAUDE.md §8), nicht die dunklen Tokens -
+   diese Karte soll immer hell bleiben, als starker Kontrast. */
+.ziel-karte {
+  background: #ffffff;
+  border: 1px solid #cfe0ea;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.ziel-karte__titel {
+  color: #4b6475;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.ziel-karte__inhalt {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ziel-karte__wert {
+  font-family: 'Sora', sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: #0a1f2e;
+}
+
+.ziel-karte__einheit {
+  font-size: 16px;
+  font-weight: 500;
+  color: #4b6475;
+  margin-left: 4px;
+}
+
+.ziel-karte__hinweis {
+  color: #4b6475;
+  font-size: 16px;
+}
+
 .sparkline {
   width: 100%;
   height: 32px;

@@ -4,6 +4,7 @@ import { holeKpis, holeVerlauf, type KpiAntwort, type VerlaufAntwort } from './a
 import { AnteilDiagramm } from './components/AnteilDiagramm'
 import { KpiKarte } from './components/KpiKarte'
 import { VerlaufDiagramm } from './components/VerlaufDiagramm'
+import { ZielerreichungKarte } from './components/ZielerreichungKarte'
 import { monatsLang } from './monate'
 
 // Noch fest verdrahtet, bis es eine Monats-/Jahresauswahl im Frontend gibt.
@@ -76,14 +77,12 @@ function App() {
               verlauf?.monate.map((m) => m.anteil_groesste_kategorie)
             )}
           />
-          <KpiKarte
+          <ZielerreichungKarte
             titel="Zielerreichung"
-            wert={
+            prozent={
               daten.zielerreichung === null ? null : daten.zielerreichung * 100
             }
-            einheit="%"
             hinweis="Ziel fehlt oder nicht berechenbar"
-            sparklineWerte={alsProzentReihe(verlauf?.monate.map((m) => m.zielerreichung))}
           />
         </div>
       )}
