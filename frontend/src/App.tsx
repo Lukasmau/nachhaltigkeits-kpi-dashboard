@@ -36,7 +36,7 @@ function App() {
       <h1>Nachhaltigkeits-KPI-Dashboard</h1>
       {fehler && <p className="app__fehler">{fehler}</p>}
       {daten && (
-        <div className="app__karten">
+        <div className="app__grid">
           <KpiKarte
             titel={`CO2e im ${monatsLang[MONAT - 1]}`}
             wert={daten.co2e_im_monat.wert}
@@ -77,7 +77,7 @@ function App() {
           />
         </div>
       )}
-      <div className="app__diagramme">
+      <div className="app__grid app__grid--diagramme">
         {verlauf && (
           <div className="app__diagramm app__diagramm--gross">
             <h2>Verlauf {JAHR}</h2>

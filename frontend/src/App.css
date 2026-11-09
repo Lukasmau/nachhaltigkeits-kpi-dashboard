@@ -4,10 +4,19 @@
   padding: 32px 16px;
 }
 
-.app__karten {
-  display: flex;
-  flex-wrap: wrap;
+/* Ein gemeinsames Raster fuer Karten- und Diagramm-Zeile, damit beide
+   Zeilen an derselben Kante enden - nicht zwei unabhaengige Flex-Zeilen.
+   4 Spalten, Elemente spannen per grid-column so viele Spalten wie noetig.
+   Bleibt modular: wenn spaeter eine Sidebar dazukommt, aendert sich nur
+   die verfuegbare Breite des umgebenden Containers, nicht dieses Raster. */
+.app__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
+}
+
+.app__grid--diagramme {
+  margin-top: 24px;
 }
 
 .kpi-karte {
@@ -15,7 +24,6 @@
   border: 1px solid var(--linie);
   border-radius: 16px;
   padding: 24px;
-  max-width: 280px;
 }
 
 .kpi-karte__titel {
@@ -67,18 +75,27 @@
   border: 1px solid var(--linie);
   border-radius: 16px;
   padding: 24px;
-  min-width: 320px;
 }
 
-/* Verlauf dominant (~3/4 der Breite), Anteil kleiner (~1/4) - passt sich
-   responsiv an den verfuegbaren Platz an, auch wenn spaeter die Sidebar
-   dazukommt und den Platz einschraenkt. */
+/* Verlauf nimmt 3 der 4 Rasterspalten, Anteil die letzte - dadurch
+   immer im Verhaeltnis 3:1, exakt auf die Kartenzeile ausgerichtet. */
 .app__diagramm--gross {
-  flex: 3 1 600px;
+  grid-column: span 3;
 }
 
 .app__diagramm--klein {
-  flex: 1 1 320px;
+  grid-column: span 1;
+}
+
+@media (max-width: 900px) {
+  .app__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .app__diagramm--gross,
+  .app__diagramm--klein {
+    grid-column: span 2;
+  }
 }
 
 .app__diagramm h2 {
