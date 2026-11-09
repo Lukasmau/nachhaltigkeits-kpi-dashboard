@@ -6,6 +6,30 @@ type Props = {
 const BREITE = 100
 const HOEHE = 30
 
+// Glatter Pfad statt eckiger Linie: jedes Segment faehrt als quadratische
+// Bezier-Kurve zum Mittelpunkt zum naechsten Punkt, die Datenpunkte selbst
+// dienen als Kurven-Steuerpunkte. Gaengige Technik fuer kleine Sparklines,
+// braucht keine extra Bibliothek.
+function glatterPfad(punkte: [number, number][]): string {
+  if (punkte.length === 1) {
+    const [x, y] = punkte[0]
+    return `M ${x} ${y}`
+  }
+
+  let pfad = `M ${punkte[0][0]} ${punkte[0][1]}`
+  for (let i = 1; i < punkte.length - 1; i++) {
+    const [x, y] = punkte[i]
+    const [naechstesX, naechstesY] = punkte[i + 1]
+    const mitteX = (x + naechstesX) / 2
+    const mitteY = (y + naechstesY) / 2
+    pfad += ` Q ${x} ${y} ${mitteX} ${mitteY}`
+  }
+  const vorletzter = punkte[punkte.length - 2]
+  const letzter = punkte[punkte.length - 1]
+  pfad += ` Q ${vorletzter[0]} ${vorletzter[1]} ${letzter[0]} ${letzter[1]}`
+  return pfad
+}
+
 export function Sparkline({ werte, farbe = 'var(--akzent)' }: Props) {
   const vorhandene = werte.filter((w): w is number => w !== null)
   if (vorhandene.length < 2) {
@@ -38,9 +62,9 @@ export function Sparkline({ werte, farbe = 'var(--akzent)' }: Props) {
   return (
     <svg className="sparkline" viewBox={`0 0 ${BREITE} ${HOEHE}`} preserveAspectRatio="none">
       {segmente.map((segment, i) => (
-        <polyline
+        <path
           key={i}
-          points={segment.map(([x, y]) => `${x},${y}`).join(' ')}
+          d={glatterPfad(segment)}
           fill="none"
           stroke={farbe}
           strokeWidth="2"
