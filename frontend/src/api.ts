@@ -145,6 +145,16 @@ export async function holeAlleMessungen(): Promise<MessungRoh[]> {
   return antwort.json()
 }
 
+export type FruehesterMonat = { jahr: number | null; monat: number | null }
+
+export async function holeFruehestenMonat(): Promise<FruehesterMonat> {
+  const antwort = await fetch('/api/messungen/fruehester-monat')
+  if (!antwort.ok) {
+    throw new Error(`API-Fehler: ${antwort.status}`)
+  }
+  return antwort.json()
+}
+
 export type FahrtFehler = { spalte: string; grund: string; tipp: string }
 export type FahrtEingabe = { datum: string; kategorie: string; wert: number; person?: string }
 export type FahrtErgebnis = { gespeichert: true; warnung: string | null }

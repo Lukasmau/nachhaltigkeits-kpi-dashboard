@@ -13,6 +13,7 @@ from backend.core import kpis, units
 from backend.db import (
     alle_jahresziele,
     alle_messungen_roh,
+    fruehester_monat,
     init_db,
     jahresziel_gesamt,
     letzte_messungen,
@@ -223,6 +224,15 @@ def api_jahresziel_setzen(
 ):
     setze_jahresziel(conn, eingabe.jahr, eingabe.ziel_kg_co2e)
     return {"gespeichert": True}
+
+
+@app.get("/api/messungen/fruehester-monat")
+def api_fruehester_monat(conn: sqlite3.Connection = Depends(get_conn)):
+    ergebnis = fruehester_monat(conn)
+    if ergebnis is None:
+        return {"jahr": None, "monat": None}
+    jahr, monat = ergebnis
+    return {"jahr": jahr, "monat": monat}
 
 
 @app.get("/api/messungen/export")

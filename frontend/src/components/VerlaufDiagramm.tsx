@@ -121,7 +121,11 @@ export function VerlaufDiagramm({ verlauf: rohVerlauf, einheit, monatsziel }: Pr
           </span>
         )}
       </div>
-      <ReactECharts option={option} style={{ height: 260 }} />
+      {/* notMerge: ECharts behaelt sonst Serien aus der vorherigen Option
+          (z. B. die Ziel-Linie eines Jahres mit Jahresziel), auch wenn die
+          neue Option sie gar nicht mehr enthaelt - vollstaendig ersetzen
+          statt zusammenfuehren. */}
+      <ReactECharts option={option} notMerge style={{ height: 260 }} />
     </>
   )
 }

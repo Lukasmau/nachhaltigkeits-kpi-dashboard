@@ -131,6 +131,14 @@ def alle_messungen_roh(conn: sqlite3.Connection) -> list[dict]:
     return [dict(row) for row in rows]
 
 
+def fruehester_monat(conn: sqlite3.Connection) -> tuple[int, int] | None:
+    row = conn.execute("SELECT MIN(datum) AS frueheste FROM measurements").fetchone()
+    if row["frueheste"] is None:
+        return None
+    jahr, monat = row["frueheste"].split("-")[:2]
+    return int(jahr), int(monat)
+
+
 def alle_jahresziele(conn: sqlite3.Connection) -> list[dict]:
     rows = conn.execute(
         "SELECT jahr, SUM(ziel_kg_co2e) AS ziel_kg_co2e FROM targets GROUP BY jahr ORDER BY jahr DESC"

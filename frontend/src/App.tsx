@@ -1,6 +1,13 @@
 import { useEffect, useState, type CSSProperties } from 'react'
 import './App.css'
-import { holeKpis, holeVerlauf, type KpiAntwort, type VerlaufAntwort, type VerlaufEintrag } from './api'
+import {
+  holeFruehestenMonat,
+  holeKpis,
+  holeVerlauf,
+  type KpiAntwort,
+  type VerlaufAntwort,
+  type VerlaufEintrag,
+} from './api'
 import { AnteilDiagramm, gruppiereDienstreisen } from './components/AnteilDiagramm'
 import { CsvImport } from './components/CsvImport'
 import { ErklaerIcon } from './components/ErklaerIcon'
@@ -14,9 +21,18 @@ import { ZielerreichungKarte } from './components/ZielerreichungKarte'
 import { csvHerunterladen, csvZahl } from './csvExport'
 import { monatsLang } from './monate'
 
-// Noch fest verdrahtet, bis es eine Monats-/Jahresauswahl im Frontend gibt.
-const JAHR = 2026
-const MONAT = 10
+// "Heute" in der Demo-Zeitachse - weiter als bis hierher kann man nicht
+// vorblaettern, das waere eine Zukunft, die es noch nicht gibt.
+const HEUTE_JAHR = 2026
+const HEUTE_MONAT = 10
+
+function naechsterMonat(jahr: number, monat: number): [number, number] {
+  return monat === 12 ? [jahr + 1, 1] : [jahr, monat + 1]
+}
+
+function vorherigerMonat(jahr: number, monat: number): [number, number] {
+  return monat === 1 ? [jahr - 1, 12] : [jahr, monat - 1]
+}
 
 // Feste Reihenfolge fuer bekannte Kategorien, Rest (sollte es ihn geben) alphabetisch hinten an.
 const KATEGORIEN_REIHENFOLGE = ['Strom', 'Erdgas', 'Dienstreisen']
@@ -33,18 +49,54 @@ function alleKategorien(monate: VerlaufEintrag[]): string[] {
 
 function App() {
   const [seite, setSeite] = useState<Seite>('uebersicht')
+  const [jahr, setJahr] = useState(HEUTE_JAHR)
+  const [monat, setMonat] = useState(HEUTE_MONAT)
   const [daten, setDaten] = useState<KpiAntwort | null>(null)
   const [verlauf, setVerlauf] = useState<VerlaufAntwort | null>(null)
   const [fehler, setFehler] = useState<string | null>(null)
+  const [fruehestesJahr, setFruehestesJahr] = useState<number | null>(null)
+  const [fruehesterMonat, setFruehesterMonat] = useState<number | null>(null)
 
   useEffect(() => {
-    holeKpis(JAHR, MONAT)
-      .then(setDaten)
-      .catch((e: Error) => setFehler(e.message))
-    holeVerlauf(JAHR)
-      .then(setVerlauf)
+    holeFruehestenMonat()
+      .then((f) => {
+        setFruehestesJahr(f.jahr)
+        setFruehesterMonat(f.monat)
+      })
       .catch((e: Error) => setFehler(e.message))
   }, [])
+
+  useEffect(() => {
+    holeKpis(jahr, monat)
+      .then(setDaten)
+      .catch((e: Error) => setFehler(e.message))
+  }, [jahr, monat])
+
+  useEffect(() => {
+    holeVerlauf(jahr)
+      .then(setVerlauf)
+      .catch((e: Error) => setFehler(e.message))
+  }, [jahr])
+
+  const kannZurueck =
+    fruehestesJahr !== null &&
+    fruehesterMonat !== null &&
+    (jahr > fruehestesJahr || (jahr === fruehestesJahr && monat > fruehesterMonat))
+  const kannVor = jahr < HEUTE_JAHR || (jahr === HEUTE_JAHR && monat < HEUTE_MONAT)
+
+  function zurueck() {
+    if (!kannZurueck) return
+    const [j, m] = vorherigerMonat(jahr, monat)
+    setJahr(j)
+    setMonat(m)
+  }
+
+  function vor() {
+    if (!kannVor) return
+    const [j, m] = naechsterMonat(jahr, monat)
+    setJahr(j)
+    setMonat(m)
+  }
 
   const anteile = daten?.anteil_je_kategorie.anteile
   const groessterEintrag = anteile
@@ -106,12 +158,34 @@ function App() {
       <Sidebar aktuelleSeite={seite} aufSeiteWechseln={setSeite} />
       <div className="layout__inhalt">
         <div className="app">
-          <h1>Übersicht {monatsLang[MONAT - 1]}</h1>
+          <div className="monats-navigation">
+            <button
+              type="button"
+              className="monats-navigation__pfeil"
+              onClick={zurueck}
+              disabled={!kannZurueck}
+              aria-label="Vormonat"
+            >
+              ←
+            </button>
+            <h1>
+              Übersicht {monatsLang[monat - 1]} {jahr}
+            </h1>
+            <button
+              type="button"
+              className="monats-navigation__pfeil"
+              onClick={vor}
+              disabled={!kannVor}
+              aria-label="Nächster Monat"
+            >
+              →
+            </button>
+          </div>
           {fehler && <p className="app__fehler">{fehler}</p>}
           {daten && (
             <div className="app__grid">
               <KpiKarte
-                titel={`CO2e im ${monatsLang[MONAT - 1]}`}
+                titel={`CO2e im ${monatsLang[monat - 1]}`}
                 wert={daten.co2e_im_monat.wert}
                 einheit={daten.co2e_im_monat.einheit}
                 hinweis={daten.co2e_im_monat.warnungen[0] ?? 'Keine Werte angegeben'}
@@ -165,7 +239,7 @@ function App() {
               >
                 <div className="app__diagramm-kopf">
                   <h2>
-                    Verlauf {JAHR}
+                    Verlauf {jahr}
                     <ErklaerIcon schluessel="verlauf" />
                   </h2>
                   <button
@@ -174,7 +248,7 @@ function App() {
                     onClick={() => {
                       const kategorien = alleKategorien(verlauf.monate)
                       csvHerunterladen(
-                        `verlauf_${JAHR}.csv`,
+                        `verlauf_${jahr}.csv`,
                         [
                           'Monat',
                           `Gesamt (${verlauf.einheit})`,
