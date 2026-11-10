@@ -3,6 +3,7 @@ import './App.css'
 import { holeKpis, holeVerlauf, type KpiAntwort, type VerlaufAntwort } from './api'
 import { AnteilDiagramm } from './components/AnteilDiagramm'
 import { CsvImport } from './components/CsvImport'
+import { ErklaerIcon } from './components/ErklaerIcon'
 import { FahrtFormular } from './components/FahrtFormular'
 import { JahreszielFormular } from './components/JahreszielFormular'
 import { KpiKarte } from './components/KpiKarte'
@@ -89,6 +90,7 @@ function App() {
                 einheit={daten.co2e_im_monat.einheit}
                 hinweis={daten.co2e_im_monat.warnungen[0] ?? 'Keine Werte angegeben'}
                 sparklineWerte={verlauf?.monate.map((m) => m.wert)}
+                erklaerung="co2e_im_monat"
               />
               <KpiKarte
                 titel="Veränderung zum Vormonat"
@@ -108,6 +110,7 @@ function App() {
                 }
                 mitVorzeichen
                 sparklineWerte={alsProzentReihe(verlauf?.monate.map((m) => m.veraenderung))}
+                erklaerung="veraenderung_zum_vormonat"
               />
               <KpiKarte
                 titel={groessterEintrag ? `Größter Posten: ${groessterEintrag[0]}` : 'Größter Posten'}
@@ -117,6 +120,7 @@ function App() {
                 sparklineWerte={alsProzentReihe(
                   verlauf?.monate.map((m) => m.anteil_groesste_kategorie)
                 )}
+                erklaerung="groesster_posten"
               />
               <ZielerreichungKarte
                 titel="Zielerreichung"
@@ -133,7 +137,10 @@ function App() {
                 className="app__diagramm"
                 style={{ '--glow-farbe': 'var(--akzent)' } as CSSProperties}
               >
-                <h2>Verlauf {JAHR}</h2>
+                <h2>
+                  Verlauf {JAHR}
+                  <ErklaerIcon schluessel="verlauf" />
+                </h2>
                 <VerlaufDiagramm
                   verlauf={verlauf.monate}
                   einheit={verlauf.einheit}
@@ -146,7 +153,10 @@ function App() {
                 className="app__diagramm"
                 style={{ '--glow-farbe': 'var(--gut)' } as CSSProperties}
               >
-                <h2>Anteil je Kategorie</h2>
+                <h2>
+                  Anteil je Kategorie
+                  <ErklaerIcon schluessel="anteil" />
+                </h2>
                 <AnteilDiagramm anteile={anteile} />
               </div>
             )}

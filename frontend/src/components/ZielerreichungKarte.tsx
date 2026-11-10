@@ -1,3 +1,4 @@
+import { ErklaerIcon } from './ErklaerIcon'
 import { ZielRing } from './ZielRing'
 
 type Props = {
@@ -9,7 +10,10 @@ type Props = {
 export function ZielerreichungKarte({ titel, prozent, hinweis }: Props) {
   return (
     <div className="ziel-karte">
-      <div className="ziel-karte__titel">{titel}</div>
+      <div className="ziel-karte__titel">
+        {titel}
+        <ErklaerIcon schluessel="zielerreichung" />
+      </div>
       {prozent === null ? (
         <div className="ziel-karte__hinweis">{hinweis}</div>
       ) : (

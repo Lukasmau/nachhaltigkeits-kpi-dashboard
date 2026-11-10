@@ -1,0 +1,38 @@
+{
+  "co2e_im_monat": {
+    "text": "Summiert alle Messungen des Monats, nachdem jeder Wert mit seinem Emissionsfaktor in kg CO2e umgerechnet wurde.",
+    "formel": "CO2e = Σ (Messwert × Faktor)",
+    "beispiel": "1.000 kWh Strom × 0,344 kg CO2/kWh = 344 kg CO2e",
+    "quelle": "Faktoren aus der Tabelle „factors“, Quelle UBA (siehe CLAUDE.md §5)"
+  },
+  "veraenderung_zum_vormonat": {
+    "text": "Vergleicht die Monatssumme mit der des Vormonats. Fehlt der Vormonat oder ist er 0, lässt sich die Veränderung nicht berechnen.",
+    "formel": "(Aktuell − Vormonat) / Vormonat",
+    "beispiel": "400 kg gegen 320 kg im Vormonat → (400 − 320) / 320 = +25 %",
+    "quelle": "backend/core/kpis.py, veraenderung_zum_vormonat"
+  },
+  "groesster_posten": {
+    "text": "Zeigt die Kategorie mit dem größten Anteil an der Monatssumme.",
+    "formel": "Anteil = Kategorie-Summe / Monatssumme",
+    "beispiel": "Dienstreisen 210 kg von 400 kg gesamt → 52,5 %",
+    "quelle": "backend/core/kpis.py, anteil_je_kategorie"
+  },
+  "zielerreichung": {
+    "text": "Vergleicht das Monatsziel (Jahresziel ÷ 12) mit dem Ist-Wert des Monats. Mehr als 100 % wird auf 100 % gedeckelt.",
+    "formel": "min(Monatsziel / Ist, 100 %)",
+    "beispiel": "Monatsziel 1.000 kg, Ist 800 kg → 1.000 / 800 = 125 % → gedeckelt auf 100 %",
+    "quelle": "backend/core/kpis.py, zielerreichung"
+  },
+  "verlauf": {
+    "text": "Zeigt die Monatssummen des Jahres als Linie, dazu das Monatsziel als gestrichelte Linie. Eine Lücke bedeutet eine fehlende Messung, nicht 0.",
+    "formel": "wie „CO2e im Monat“, einmal je Monat berechnet",
+    "beispiel": "Juni 320 kg, Juli keine Messung (Lücke), August 410 kg",
+    "quelle": "backend/core/kpis.py, co2e_im_monat"
+  },
+  "anteil": {
+    "text": "Zeigt alle Kategorien des Monats als Balken, größte zuerst – eine Farbe pro Kategorie.",
+    "formel": "Anteil je Kategorie = Kategorie-Summe / Monatssumme",
+    "beispiel": "z. B. Dienstreisen 52 %, Strom 30 %, Erdgas 18 %",
+    "quelle": "backend/core/kpis.py, anteil_je_kategorie"
+  }
+}

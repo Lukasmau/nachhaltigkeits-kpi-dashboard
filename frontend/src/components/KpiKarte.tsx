@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { ErklaerIcon, type ErklaerSchluessel } from './ErklaerIcon'
 import { Sparkline } from './Sparkline'
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
   farbe?: 'neutral' | 'gut' | 'schlecht'
   mitVorzeichen?: boolean
   sparklineWerte?: (number | null)[]
+  erklaerung?: ErklaerSchluessel
 }
 
 // Die Kartenfarbe bestimmt auch die Glow-Farbe (CLAUDE.md §8: Glow in der
@@ -27,12 +29,16 @@ export function KpiKarte({
   farbe = 'neutral',
   mitVorzeichen = false,
   sparklineWerte,
+  erklaerung,
 }: Props) {
   const style = { '--glow-farbe': GLOW_FARBEN[farbe] } as CSSProperties
 
   return (
     <div className="kpi-karte" style={style}>
-      <div className="kpi-karte__titel">{titel}</div>
+      <div className="kpi-karte__titel">
+        {titel}
+        {erklaerung && <ErklaerIcon schluessel={erklaerung} />}
+      </div>
       {wert === null ? (
         <div className="kpi-karte__hinweis">{hinweis}</div>
       ) : (

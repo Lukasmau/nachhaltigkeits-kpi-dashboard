@@ -261,6 +261,75 @@
   cursor: default;
 }
 
+/* Erklaermodus (CLAUDE.md §8): kleines, gedaempftes "?" an jeder Karte,
+   Klartext erst beim Hover/Fokus - kein Dauertext auf der Karte. */
+.erklaer-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: var(--linie);
+  color: var(--gedaempft);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: help;
+  vertical-align: middle;
+}
+
+.erklaer-icon__tooltip {
+  display: block;
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 8px);
+  left: 50%;
+  width: 260px;
+  max-width: calc(100vw - 32px);
+  background: var(--karte2);
+  border: 1px solid var(--linie);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: left;
+  white-space: normal;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(-4px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.erklaer-icon:hover .erklaer-icon__tooltip,
+.erklaer-icon:focus-visible .erklaer-icon__tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.erklaer-icon__tooltip p {
+  margin: 0 0 6px;
+}
+
+.erklaer-icon__tooltip p:last-child {
+  margin-bottom: 0;
+}
+
+.erklaer-icon__formel {
+  font-family: 'Sora', sans-serif;
+  color: var(--akzent);
+}
+
+.erklaer-icon__beispiel,
+.erklaer-icon__quelle {
+  color: var(--gedaempft);
+  font-size: 12px;
+}
+
 @media (max-width: 700px) {
   .layout {
     flex-direction: column;
