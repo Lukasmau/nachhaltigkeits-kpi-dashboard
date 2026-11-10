@@ -1,7 +1,91 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  flex: none;
+  padding: 24px 16px;
+  border-right: 1px solid var(--linie);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar__logo {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 16.8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 16px;
+}
+
+.sidebar__logo-punkt {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  background: var(--akzent);
+  display: block;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar__eintrag {
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: var(--gedaempft);
+  font-size: 15.2px;
+  font-family: 'DM Sans', sans-serif;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sidebar__eintrag--aktiv {
+  background: var(--akzent);
+  color: var(--hintergrund);
+  font-weight: 600;
+}
+
+.layout__inhalt {
+  flex: 1;
+  min-width: 0;
+}
+
+.app__hinweis-text {
+  color: var(--gedaempft);
+}
+
+@media (max-width: 700px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-right: none;
+    border-bottom: 1px solid var(--linie);
+  }
+
+  .sidebar__logo {
+    padding: 4px 10px;
+  }
+}
+
 .app {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 32px 16px;
+  padding: 32px 28px;
 }
 
 .app h1 {
