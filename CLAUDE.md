@@ -71,7 +71,7 @@ Quelle: UBA, Liste "Emissionsfaktoren zur Treibhausgasbilanzierung", Version 2.1
   2. ✅ **Sidebar/Seitenstruktur** — fertig
   3. ✅ **CSV-Upload im Frontend** — fertig (Drag & Drop + Datei wählen). Offener Punkt: Ergebnis-Ansicht zeigt bisher keine Zeile-für-Zeile-Liste der übernommenen Zeilen, nur die Zahl (zurückgestellt)
   4. ✅ **Fahrten-Eingabeformular** — fertig (`POST /api/fahrt`, nutzt `pruefe_zeile`/`pruefe_duplikat` aus `importer.py`, keine doppelte Logik). Dazu gebaut: `GET /api/messungen/letzte` (eine gemeinsame Funktion für "zuletzt hinzugefügt", genutzt von Fahrt-Formular und CSV-Seite, sortiert nach Datenbank-ID = Einfüge-Reihenfolge, nicht nach Datum) sowie die Spalte `measurements.quelle_datei` (CSV-Import schreibt den echten Upload-Dateinamen mit, bei Fahrten bleibt sie leer). Zurückgestellte Ideen (11.11.2026, Lukas): "Von/Nach"-Felder bei Fahrten nur als Text ohne automatische km-Berechnung (eine Distanz-API wäre eine neue Abhängigkeit, nicht ohne Rückfrage); Hin-/Rückfahrt-Checkbox vorerst nicht gebaut.
-  5. ⬜ Jahresziel-Eingabe (schließt eine Lücke: bisher nur manueller DB-Eintrag, siehe README)
+  5. ✅ **Jahresziel-Eingabe** — fertig (`GET`/`POST /api/jahresziel`, Upsert pro Jahr, schließt die Lücke aus dem README)
   6. ⬜ "?" Erklärmodus mit Schalter — wichtig für die Präsi, erklärt Formeln dem Publikum
   7. ⬜ Vormonat mit kombinierbaren Kategorien und Hinweisen
   8. ⬜ Export der KPI-Tabelle als CSV
