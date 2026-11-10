@@ -4,6 +4,7 @@ import { holeKpis, holeVerlauf, type KpiAntwort, type VerlaufAntwort } from './a
 import { AnteilDiagramm } from './components/AnteilDiagramm'
 import { CsvImport } from './components/CsvImport'
 import { FahrtFormular } from './components/FahrtFormular'
+import { JahreszielFormular } from './components/JahreszielFormular'
 import { KpiKarte } from './components/KpiKarte'
 import { Sidebar, type Seite } from './components/Sidebar'
 import { VerlaufDiagramm } from './components/VerlaufDiagramm'
@@ -13,15 +14,6 @@ import { monatsLang } from './monate'
 // Noch fest verdrahtet, bis es eine Monats-/Jahresauswahl im Frontend gibt.
 const JAHR = 2026
 const MONAT = 10
-
-function BaldVerfuegbar({ titel }: { titel: string }) {
-  return (
-    <div className="app">
-      <h1>{titel}</h1>
-      <p className="app__hinweis-text">Kommt in einem der nächsten Schritte.</p>
-    </div>
-  )
-}
 
 function App() {
   const [seite, setSeite] = useState<Seite>('uebersicht')
@@ -71,12 +63,12 @@ function App() {
     )
   }
 
-  if (seite !== 'uebersicht') {
+  if (seite === 'jahresziel') {
     return (
       <div className="layout">
         <Sidebar aktuelleSeite={seite} aufSeiteWechseln={setSeite} />
         <div className="layout__inhalt">
-          <BaldVerfuegbar titel="Jahresziel" />
+          <JahreszielFormular />
         </div>
       </div>
     )

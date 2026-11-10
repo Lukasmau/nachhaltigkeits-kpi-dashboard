@@ -78,7 +78,7 @@ export function FahrtFormular() {
         className="app__diagramm"
         style={{ '--glow-farbe': 'var(--akzent)' } as CSSProperties}
       >
-        <form className="fahrt-formular" onSubmit={speichern}>
+        <form className="eingabe-formular" onSubmit={speichern}>
           <div>
             <label htmlFor="f-datum">Datum</label>
             <input

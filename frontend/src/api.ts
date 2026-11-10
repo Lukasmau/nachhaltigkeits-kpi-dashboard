@@ -77,6 +77,27 @@ export async function holeLetzteMessungen(
   return antwort.json()
 }
 
+export type Jahresziel = { jahr: number; ziel_kg_co2e: number }
+
+export async function holeJahresziele(): Promise<Jahresziel[]> {
+  const antwort = await fetch('/api/jahresziel')
+  if (!antwort.ok) {
+    throw new Error(`API-Fehler: ${antwort.status}`)
+  }
+  return antwort.json()
+}
+
+export async function speichereJahresziel(eingabe: Jahresziel): Promise<void> {
+  const antwort = await fetch('/api/jahresziel', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(eingabe),
+  })
+  if (!antwort.ok) {
+    throw new Error(`API-Fehler: ${antwort.status}`)
+  }
+}
+
 export type FahrtFehler = { spalte: string; grund: string; tipp: string }
 export type FahrtEingabe = { datum: string; kategorie: string; wert: number; person?: string }
 export type FahrtErgebnis = { gespeichert: true; warnung: string | null }

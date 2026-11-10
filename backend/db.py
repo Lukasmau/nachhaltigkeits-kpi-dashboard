@@ -94,3 +94,22 @@ def jahresziel_gesamt(conn: sqlite3.Connection, jahr: int) -> float | None:
         (jahr,),
     ).fetchone()
     return row["summe"]
+
+
+def setze_jahresziel(conn: sqlite3.Connection, jahr: int, ziel_kg_co2e: float) -> None:
+    conn.execute(
+        """
+        INSERT INTO targets (kategorie, jahr, ziel_kg_co2e)
+        VALUES ('Gesamt', ?, ?)
+        ON CONFLICT(kategorie, jahr) DO UPDATE SET ziel_kg_co2e = excluded.ziel_kg_co2e
+        """,
+        (jahr, ziel_kg_co2e),
+    )
+    conn.commit()
+
+
+def alle_jahresziele(conn: sqlite3.Connection) -> list[dict]:
+    rows = conn.execute(
+        "SELECT jahr, SUM(ziel_kg_co2e) AS ziel_kg_co2e FROM targets GROUP BY jahr ORDER BY jahr DESC"
+    ).fetchall()
+    return [dict(row) for row in rows]

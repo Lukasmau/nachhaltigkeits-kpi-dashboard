@@ -255,6 +255,42 @@ def test_api_letzte_messungen_ohne_eintraege_ist_leer(client):
     assert antwort.json() == []
 
 
+def test_api_jahresziel_setzen_und_abfragen(client):
+    antwort = client.post("/api/jahresziel", json={"jahr": 2026, "ziel_kg_co2e": 12000})
+    assert antwort.status_code == 200
+
+    liste = client.get("/api/jahresziel").json()
+    assert liste == [{"jahr": 2026, "ziel_kg_co2e": 12000.0}]
+
+
+def test_api_jahresziel_ueberschreibt_bestehendes_jahr(client):
+    client.post("/api/jahresziel", json={"jahr": 2026, "ziel_kg_co2e": 12000})
+    client.post("/api/jahresziel", json={"jahr": 2026, "ziel_kg_co2e": 9000})
+
+    liste = client.get("/api/jahresziel").json()
+    assert liste == [{"jahr": 2026, "ziel_kg_co2e": 9000.0}]
+
+
+def test_api_jahresziel_lehnt_negativen_wert_ab(client):
+    antwort = client.post("/api/jahresziel", json={"jahr": 2026, "ziel_kg_co2e": -500})
+    assert antwort.status_code == 422
+
+
+def test_api_jahresziel_liste_sortiert_neuestes_jahr_zuerst(client):
+    client.post("/api/jahresziel", json={"jahr": 2025, "ziel_kg_co2e": 12000})
+    client.post("/api/jahresziel", json={"jahr": 2026, "ziel_kg_co2e": 10800})
+
+    liste = client.get("/api/jahresziel").json()
+    assert [z["jahr"] for z in liste] == [2026, 2025]
+
+
+def test_api_jahresziel_wirkt_sich_auf_verlauf_aus(client):
+    client.post("/api/jahresziel", json={"jahr": 2026, "ziel_kg_co2e": 12000})
+
+    antwort = client.get("/api/verlauf", params={"jahr": 2026})
+    assert antwort.json()["monatsziel"] == pytest.approx(1000.0)
+
+
 def test_api_verlauf_waehlt_tonnen_wenn_ein_monat_drueber_liegt(client):
     csv_inhalt = (
         "datum,datenart,kategorie,wert,einheit,person\n"

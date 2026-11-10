@@ -209,22 +209,22 @@
   border-bottom: 1px solid var(--linie);
 }
 
-.fahrt-formular {
+.eingabe-formular {
   display: flex;
   flex-direction: column;
   gap: 14px;
   margin-top: 16px;
 }
 
-.fahrt-formular label {
+.eingabe-formular label {
   display: block;
   font-size: 13px;
   color: var(--gedaempft);
   margin-bottom: 6px;
 }
 
-.fahrt-formular input,
-.fahrt-formular select {
+.eingabe-formular input,
+.eingabe-formular select {
   width: 100%;
   box-sizing: border-box;
   background: var(--karte2);
@@ -236,7 +236,13 @@
   padding: 10px 12px;
 }
 
-.fahrt-formular button {
+.eingabe-formular input.eingabe-formular__wert-gross {
+  font-family: 'Sora', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.eingabe-formular button {
   margin-top: 6px;
   background: var(--akzent);
   color: var(--hintergrund);
@@ -250,7 +256,7 @@
   align-self: flex-start;
 }
 
-.fahrt-formular button:disabled {
+.eingabe-formular button:disabled {
   opacity: 0.6;
   cursor: default;
 }

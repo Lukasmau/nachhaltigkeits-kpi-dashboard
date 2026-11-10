@@ -7,10 +7,18 @@ from pathlib import Path
 from typing import Literal
 
 from fastapi import Depends, FastAPI, HTTPException, UploadFile
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from backend.core import kpis, units
-from backend.db import init_db, jahresziel_gesamt, letzte_messungen, messungen_mit_co2e, verbindung
+from backend.db import (
+    alle_jahresziele,
+    init_db,
+    jahresziel_gesamt,
+    letzte_messungen,
+    messungen_mit_co2e,
+    setze_jahresziel,
+    verbindung,
+)
 from backend.importer import gueltige_kategorien, importiere_csv, pruefe_duplikat, pruefe_zeile
 from backend.seed.faktoren import seed_faktoren
 
@@ -24,6 +32,11 @@ class FahrtEingabe(BaseModel):
     kategorie: FAHRT_KATEGORIEN
     wert: float
     person: str | None = None
+
+
+class JahreszielEingabe(BaseModel):
+    jahr: int
+    ziel_kg_co2e: float = Field(ge=0)
 
 DB_PFAD = str(Path(__file__).resolve().parent.parent / "dashboard.db")
 
@@ -145,6 +158,19 @@ def api_verlauf(jahr: int, conn: sqlite3.Connection = Depends(get_conn)):
             )
         ],
     }
+
+
+@app.get("/api/jahresziel")
+def api_jahresziele(conn: sqlite3.Connection = Depends(get_conn)):
+    return alle_jahresziele(conn)
+
+
+@app.post("/api/jahresziel")
+def api_jahresziel_setzen(
+    eingabe: JahreszielEingabe, conn: sqlite3.Connection = Depends(get_conn)
+):
+    setze_jahresziel(conn, eingabe.jahr, eingabe.ziel_kg_co2e)
+    return {"gespeichert": True}
 
 
 @app.get("/api/messungen/letzte")
