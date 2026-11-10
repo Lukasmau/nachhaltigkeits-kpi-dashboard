@@ -73,7 +73,7 @@ Quelle: UBA, Liste "Emissionsfaktoren zur Treibhausgasbilanzierung", Version 2.1
   4. ✅ **Fahrten-Eingabeformular** — fertig (`POST /api/fahrt`, nutzt `pruefe_zeile`/`pruefe_duplikat` aus `importer.py`, keine doppelte Logik). Dazu gebaut: `GET /api/messungen/letzte` (eine gemeinsame Funktion für "zuletzt hinzugefügt", genutzt von Fahrt-Formular und CSV-Seite, sortiert nach Datenbank-ID = Einfüge-Reihenfolge, nicht nach Datum) sowie die Spalte `measurements.quelle_datei` (CSV-Import schreibt den echten Upload-Dateinamen mit, bei Fahrten bleibt sie leer). Zurückgestellte Ideen (11.11.2026, Lukas): "Von/Nach"-Felder bei Fahrten nur als Text ohne automatische km-Berechnung (eine Distanz-API wäre eine neue Abhängigkeit, nicht ohne Rückfrage); Hin-/Rückfahrt-Checkbox vorerst nicht gebaut.
   5. ✅ **Jahresziel-Eingabe** — fertig (`GET`/`POST /api/jahresziel`, Upsert pro Jahr, schließt die Lücke aus dem README)
   6. ✅ **"?" Erklärmodus** — fertig, als Hover-Tooltip statt Klick+Schalter (siehe §8)
-  7. ⬜ Vormonat mit kombinierbaren Kategorien und Hinweisen
+  7. ✅ **Vormonat mit kombinierbaren Kategorien und Hinweisen** — fertig als eigene Seite "Vergleichen" (Monat- oder Jahr-Modus, `GET /api/vergleich`), statt Checkboxen in der kleinen KPI-Karte (passte dort nicht ins Bento-Raster)
   8. ⬜ Export der KPI-Tabelle als CSV
   9. ⬜ Hellmodus — "nice to have", fällt bei Zeitnot notfalls auf R3
 
