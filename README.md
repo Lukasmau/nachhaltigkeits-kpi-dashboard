@@ -12,38 +12,52 @@ Emissionsdatenbanken (siehe CLAUDE.md für die Begründung).
 - Python 3.12 oder neuer
 - Node.js 18 oder neuer
 
-## Backend starten
+## Starten
+
+Einmalig einrichten:
 
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
+cd frontend
+npm install
+cd ..
+```
+
+Danach reicht ein Doppelklick auf `start.bat` im Projekt-Hauptverzeichnis:
+öffnet zwei Fenster, eins für Backend, eins für Frontend. Schließt man die
+Fenster, laufen beide Server nicht mehr.
+
+Von Hand (z. B. um die Ausgabe in einem Terminal zu sehen) geht es auch
+einzeln:
+
+```bash
+# Backend, läuft unter http://localhost:8000
+.venv\Scripts\activate
 uvicorn backend.api:app --reload
 ```
 
-Läuft unter <http://localhost:8000>. Beim ersten Start wird `dashboard.db`
-automatisch angelegt und mit den Emissionsfaktoren befüllt (siehe
-`backend/seed/faktoren.py`, Quelle und Stand je Faktor in CLAUDE.md §5).
-
-## Frontend starten
-
-In einem zweiten Terminal, bei laufendem Backend:
+Beim ersten Start wird `dashboard.db` automatisch angelegt und mit den
+Emissionsfaktoren befüllt (siehe `backend/seed/faktoren.py`, Quelle und
+Stand je Faktor in CLAUDE.md §5).
 
 ```bash
+# Frontend, läuft unter http://localhost:5173, in einem zweiten Terminal
 cd frontend
-npm install
 npm run dev
 ```
 
-Läuft unter <http://localhost:5173> (Vite leitet `/api`-Anfragen an das
-Backend auf Port 8000 weiter, siehe `frontend/vite.config.ts`).
+Vite leitet `/api`-Anfragen an das Backend auf Port 8000 weiter (siehe
+`frontend/vite.config.ts`).
 
 ## Testdaten einspielen (optional)
 
 Das Dashboard ist ohne Daten leer. Kleiner Testdatensatz (3 Monate) unter
-`data/testdaten_minimal.csv`:
+`data/testdaten_minimal.csv`. Am einfachsten über die Import-Seite im
+Frontend (Drag & Drop oder Datei wählen). Geht auch über die Backend-Doku:
 
-1. Backend-Doku öffnen: <http://localhost:8000/docs>
+1. <http://localhost:8000/docs> öffnen
 2. Endpunkt `POST /api/import` aufklappen, "Try it out"
 3. `data/testdaten_minimal.csv` als Datei hochladen, ausführen
 
@@ -52,14 +66,9 @@ Warnungen gab (siehe `backend/importer.py` für die Prüfregeln).
 
 ## Jahresziel setzen
 
-Dafür gibt es aktuell noch keinen eigenen Endpunkt — ein Ziel muss direkt in
-die Datenbank eingetragen werden, zum Beispiel:
-
-```bash
-python -c "from backend.db import verbindung; conn = verbindung('dashboard.db'); conn.execute(\"INSERT INTO targets (kategorie, jahr, ziel_kg_co2e) VALUES ('Gesamt', 2026, 12000)\"); conn.commit()"
-```
-
-(`kategorie = 'Gesamt'` ist eine bewusste Vereinfachung, siehe CLAUDE.md §4.)
+Über die Jahresziel-Seite im Frontend (`GET`/`POST /api/jahresziel`,
+ein Wert pro Jahr, siehe CLAUDE.md §4 zur Vereinfachung auf ein
+Gesamtziel).
 
 ## Tests
 
