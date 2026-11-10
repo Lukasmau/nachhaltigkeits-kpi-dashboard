@@ -68,9 +68,9 @@ Quelle: UBA, Liste "Emissionsfaktoren zur Treibhausgasbilanzierung", Version 2.1
   - Danach noch 2 echte Bugs gefunden und behoben (nicht beim ersten Bau aufgefallen): Tooltip im Verlauf-Diagramm zeigte ungerundete Fließkommazahlen; die kg/Tonnen-Schwelle aus `units.py` (seit R0 fertig) wurde nie aufgerufen, API/Frontend zeigten immer kg. Beide Fixes am 09.11.2026, siehe Vault-Log für Details.
 - **R2 Schön (Soll, bis Do), Stand 10.11.2026 (abends aktualisiert):**
   1. ✅ **Glow** — fertig inkl. Feinschliff (Farbe/Größe/Position jetzt als CSS-Tokens in `App.css`, siehe `--glow-*`)
-  2. ⬜ Sidebar/Seitenstruktur (Werkzeug für mehrere Bildschirme statt überladener Hauptseite — Grundlage für 3 bis 5)
-  3. ⬜ CSV-Upload im Frontend (Drag & Drop oder Datei wählen) — Kernfunktion, auch fürs Live-Demo am Samstag statt Swagger-UI
-  4. ⬜ Fahrten-Eingabeformular (eigener Endpunkt, nutzt dieselben Prüf-Funktionen aus `importer.py` wie der CSV-Import — keine doppelte Logik)
+  2. ✅ **Sidebar/Seitenstruktur** — fertig
+  3. ✅ **CSV-Upload im Frontend** — fertig (Drag & Drop + Datei wählen). Offener Punkt: Ergebnis-Ansicht zeigt bisher keine Zeile-für-Zeile-Liste der übernommenen Zeilen, nur die Zahl (zurückgestellt)
+  4. ✅ **Fahrten-Eingabeformular** — fertig (`POST /api/fahrt`, nutzt `pruefe_zeile`/`pruefe_duplikat` aus `importer.py`, keine doppelte Logik). Dazu gebaut: `GET /api/messungen/letzte` (eine gemeinsame Funktion für "zuletzt hinzugefügt", genutzt von Fahrt-Formular und CSV-Seite, sortiert nach Datenbank-ID = Einfüge-Reihenfolge, nicht nach Datum). Zurückgestellte Ideen (11.11.2026, Lukas): CSV-Zeile zeigt künftig den Quell-Dateinamen (nächstes kleines Modul); "Von/Nach"-Felder bei Fahrten nur als Text ohne automatische km-Berechnung (eine Distanz-API wäre eine neue Abhängigkeit, nicht ohne Rückfrage); Hin-/Rückfahrt-Checkbox vorerst nicht gebaut.
   5. ⬜ Jahresziel-Eingabe (schließt eine Lücke: bisher nur manueller DB-Eintrag, siehe README)
   6. ⬜ "?" Erklärmodus mit Schalter — wichtig für die Präsi, erklärt Formeln dem Publikum
   7. ⬜ Vormonat mit kombinierbaren Kategorien und Hinweisen
