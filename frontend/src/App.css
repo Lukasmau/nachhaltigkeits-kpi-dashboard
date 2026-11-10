@@ -596,10 +596,19 @@
 }
 
 /* Bewusst feste Hell-Farben (CLAUDE.md §8), nicht die dunklen Tokens -
-   diese Karte soll immer hell bleiben, als starker Kontrast. */
+   diese Karte soll immer hell bleiben, als starker Kontrast. Trotzdem
+   derselbe Glow wie alle anderen Karten (nur niedrigere Deckkraft, weil
+   Farbe auf Weiss staerker wirkt als auf Dunkel) - sonst wirkt die Karte
+   wie ein Stilbruch statt bewusster Kontrast (Lukas' Hinweis 11.11.2026). */
 .ziel-karte {
-  background: #ffffff;
-  border: 1px solid #cfe0ea;
+  background:
+    radial-gradient(
+      var(--glow-groesse) at var(--glow-position),
+      color-mix(in srgb, #0369a1 10%, transparent),
+      transparent var(--glow-auslauf)
+    ),
+    #ffffff;
+  border: 1px solid color-mix(in srgb, #0369a1 18%, #cfe0ea);
   border-radius: 16px;
   padding: 16px;
 }
@@ -624,10 +633,12 @@
   font-weight: 700;
   line-height: 1.1;
   color: #0a1f2e;
+  text-shadow: 0 0 18px rgba(3, 105, 161, 0.35);
 }
 
 .ziel-karte__wert--ueber {
   color: #be123c;
+  text-shadow: 0 0 18px rgba(190, 18, 60, 0.35);
 }
 
 .ziel-karte__einheit {

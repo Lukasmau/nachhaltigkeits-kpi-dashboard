@@ -17,6 +17,25 @@ export function ZielRing({ prozent }: Props) {
 
   return (
     <svg width="108" height="108" viewBox="0 0 108 108">
+      <defs>
+        {/* Eigener Filter mit grosszuegiger Region statt CSS drop-shadow -
+            drop-shadow schneidet sich sonst an der engen Standard-Filterbox
+            des duennen Rings ab und wirkt eckig statt weich. */}
+        <filter id="ring-glow-blau" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        <filter id="ring-glow-rot" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
       <circle cx="54" cy="54" r={RADIUS} fill="none" stroke="#CFE0EA" strokeWidth="12" />
       <circle
         cx="54"
@@ -29,6 +48,7 @@ export function ZielRing({ prozent }: Props) {
         strokeDashoffset={basisOffset}
         strokeLinecap="round"
         transform="rotate(-90 54 54)"
+        filter="url(#ring-glow-blau)"
       />
       {ueberschuss > 0 && (
         <circle
@@ -42,6 +62,7 @@ export function ZielRing({ prozent }: Props) {
           strokeDashoffset={ueberschussOffset}
           strokeLinecap="round"
           transform="rotate(-90 54 54)"
+          filter="url(#ring-glow-rot)"
         />
       )}
     </svg>
