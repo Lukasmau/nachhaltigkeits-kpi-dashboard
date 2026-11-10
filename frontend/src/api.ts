@@ -53,3 +53,31 @@ export async function importiereCsv(datei: File): Promise<ImportErgebnis> {
   }
   return antwort.json()
 }
+
+export type FahrtFehler = { spalte: string; grund: string; tipp: string }
+export type FahrtEingabe = { datum: string; kategorie: string; wert: number; person?: string }
+export type FahrtErgebnis = { gespeichert: true; warnung: string | null }
+
+export class FahrtFehlerAntwort extends Error {
+  fehler: FahrtFehler[]
+  constructor(fehler: FahrtFehler[]) {
+    super('Fahrt ungültig')
+    this.fehler = fehler
+  }
+}
+
+export async function speichereFahrt(eingabe: FahrtEingabe): Promise<FahrtErgebnis> {
+  const antwort = await fetch('/api/fahrt', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(eingabe),
+  })
+  if (antwort.status === 422) {
+    const body = await antwort.json()
+    throw new FahrtFehlerAntwort(body.detail)
+  }
+  if (!antwort.ok) {
+    throw new Error(`API-Fehler: ${antwort.status}`)
+  }
+  return antwort.json()
+}

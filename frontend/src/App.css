@@ -176,6 +176,56 @@
   border-bottom: 1px solid var(--linie);
 }
 
+.fahrt-formular-karte {
+  max-width: 420px;
+}
+
+.fahrt-formular {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.fahrt-formular label {
+  display: block;
+  font-size: 13px;
+  color: var(--gedaempft);
+  margin-bottom: 6px;
+}
+
+.fahrt-formular input,
+.fahrt-formular select {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--karte2);
+  border: 1px solid var(--linie);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  padding: 10px 12px;
+}
+
+.fahrt-formular button {
+  margin-top: 6px;
+  background: var(--akzent);
+  color: var(--hintergrund);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15.2px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.fahrt-formular button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
 @media (max-width: 700px) {
   .layout {
     flex-direction: column;

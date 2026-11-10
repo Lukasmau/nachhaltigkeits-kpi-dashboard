@@ -3,6 +3,7 @@ import './App.css'
 import { holeKpis, holeVerlauf, type KpiAntwort, type VerlaufAntwort } from './api'
 import { AnteilDiagramm } from './components/AnteilDiagramm'
 import { CsvImport } from './components/CsvImport'
+import { FahrtFormular } from './components/FahrtFormular'
 import { KpiKarte } from './components/KpiKarte'
 import { Sidebar, type Seite } from './components/Sidebar'
 import { VerlaufDiagramm } from './components/VerlaufDiagramm'
@@ -59,13 +60,23 @@ function App() {
     )
   }
 
-  if (seite !== 'uebersicht') {
-    const titel = seite === 'fahrt-erfassen' ? 'Fahrt erfassen' : 'Jahresziel'
+  if (seite === 'fahrt-erfassen') {
     return (
       <div className="layout">
         <Sidebar aktuelleSeite={seite} aufSeiteWechseln={setSeite} />
         <div className="layout__inhalt">
-          <BaldVerfuegbar titel={titel} />
+          <FahrtFormular />
+        </div>
+      </div>
+    )
+  }
+
+  if (seite !== 'uebersicht') {
+    return (
+      <div className="layout">
+        <Sidebar aktuelleSeite={seite} aufSeiteWechseln={setSeite} />
+        <div className="layout__inhalt">
+          <BaldVerfuegbar titel="Jahresziel" />
         </div>
       </div>
     )
