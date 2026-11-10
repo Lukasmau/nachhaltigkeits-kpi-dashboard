@@ -103,14 +103,19 @@ def test_veraenderung_zum_vormonat_bewusste_null_ist_ein_echter_ruckgang():
     assert veraenderung_zum_vormonat(0, 100) == -1.0
 
 
-def test_zielerreichung_unter_ziel_wird_auf_100_prozent_gekappt():
-    # Jahresziel 1200 kg -> Monatsziel 100 kg, Ist 80 kg (besser als geplant)
-    assert zielerreichung(ist_kg=80, jahresziel_kg=1200) == 1.0
+def test_zielerreichung_unter_budget_zeigt_kleinen_wert():
+    # Jahresziel 1200 kg -> Monatsziel 100 kg, Ist 80 kg (nur 80 % des Budgets verbraucht)
+    assert zielerreichung(ist_kg=80, jahresziel_kg=1200) == pytest.approx(0.8)
 
 
-def test_zielerreichung_ueber_ziel_zeigt_echten_wert():
-    # Jahresziel 1200 kg -> Monatsziel 100 kg, Ist 125 kg (über dem Ziel)
-    assert zielerreichung(ist_kg=125, jahresziel_kg=1200) == 0.8
+def test_zielerreichung_ueber_budget_ungekappt_ueber_100_prozent():
+    # Jahresziel 1200 kg -> Monatsziel 100 kg, Ist 125 kg (25 % ueber dem Budget)
+    assert zielerreichung(ist_kg=125, jahresziel_kg=1200) == pytest.approx(1.25)
+
+
+def test_zielerreichung_weit_ueber_budget_zeigt_grossen_wert():
+    # Jahresziel 12000 kg -> Monatsziel 1000 kg, Ist 6000 kg (6-faches Budget verbraucht)
+    assert zielerreichung(ist_kg=6000, jahresziel_kg=12000) == pytest.approx(6.0)
 
 
 def test_zielerreichung_ohne_jahresziel_nicht_berechenbar():
@@ -121,8 +126,12 @@ def test_zielerreichung_ohne_messwerte_nicht_berechenbar():
     assert zielerreichung(ist_kg=None, jahresziel_kg=1200) is None
 
 
-def test_zielerreichung_bei_null_emissionen_ist_perfekt():
-    assert zielerreichung(ist_kg=0, jahresziel_kg=1200) == 1.0
+def test_zielerreichung_bei_null_emissionen_ist_null_prozent_budget():
+    assert zielerreichung(ist_kg=0, jahresziel_kg=1200) == 0.0
+
+
+def test_zielerreichung_bei_null_jahresziel_nicht_berechenbar():
+    assert zielerreichung(ist_kg=100, jahresziel_kg=0) is None
 
 
 def test_vergleich_je_kategorie_normalfall():

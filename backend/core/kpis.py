@@ -96,11 +96,15 @@ def vergleich_je_kategorie(
 
 
 def zielerreichung(ist_kg: float | None, jahresziel_kg: float | None) -> float | None:
+    # Budget-Verbrauch, nicht "Ziel erreicht": 100 % = Monatsbudget genau
+    # ausgeschoepft, darueber (ungekappt) heisst ueber dem Budget. Weniger
+    # Emissionen ergeben also einen kleineren Wert, nicht einen groesseren -
+    # umgekehrt zur alten Formel (Ziel/Ist, gekappt auf 100 %).
     if ist_kg is None or jahresziel_kg is None:
         return None
 
-    if ist_kg == 0:
-        return 1.0
-
     monatsziel_kg = jahresziel_kg / 12
-    return min(monatsziel_kg / ist_kg, 1.0)
+    if monatsziel_kg == 0:
+        return None
+
+    return ist_kg / monatsziel_kg

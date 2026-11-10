@@ -46,7 +46,7 @@ Quelle: UBA, Liste "Emissionsfaktoren zur Treibhausgasbilanzierung", Version 2.1
 1. **CO₂e im Monat** = Summe aller Messungen.
 2. **Anteil je Kategorie** = Kategorie / Monatssumme. Exakt rechnen, nur die Anzeige runden.
 3. **Veränderung zum Vormonat** = (aktuell − Vormonat) / Vormonat. `None`, wenn Vormonat fehlt oder 0 ist. Kategorien einzeln kombinierbar, Hinweis, wenn eine Kategorie in einem der Monate fehlt. **Bewusste 0 ≠ nichts angegeben.**
-4. **Zielerreichung** (Stufe 1): Monatsziel = Jahresziel / 12, Ziel/Ist maximal 100 %.
+4. **Zielerreichung** (Stufe 1): Monatsziel = Jahresziel / 12, dann Budget-Verbrauch Ist/Monatsziel (nicht gekappt). **Geändert 11.11.2026 (Lukas):** Richtung umgedreht – vorher Ziel/Ist gekappt auf 100 % ("mehr ist immer gut, nie über 100 % sichtbar"), jetzt 100 % = Budget genau ausgeschöpft, darüber ungedeckelt und in Rot als zweite Ring-Runde (zeigt, wie weit über dem Budget). Weniger Emissionen als geplant ergeben jetzt einen kleineren, nicht größeren Wert.
 - **Randfälle:** leerer Monat → "Keine Werte angegeben" (nicht berechenbar). Lücke im Jahr → Info. Monat nur mit Nullen → Plausibilitätswarnung. Faktor fehlt → Warnung statt stiller 0. Ziel fehlt → nicht berechenbar.
 - Tests: pro KPI ein Normalfall und die Randfälle (ca. 12 bis 15 kleine Tests).
 - **Ausbau (nicht jetzt bauen):** Saison-Sollkurve aus aktuellen Vorjahresanteilen, Übertrag des Restbudgets, Witterungsbereinigung (Gradtagzahlen, BDEW), Live-Daten (Themenblatt schließt Live-Sensordaten als Pflicht aus; Lukas will sie später, die Datenquelle bleibt deshalb austauschbar; Energy-Charts/Fraunhofer ISE hat eine API, Endpunkte und Lizenz vorher prüfen), KI-Tipps.
@@ -74,7 +74,7 @@ Quelle: UBA, Liste "Emissionsfaktoren zur Treibhausgasbilanzierung", Version 2.1
   5. ✅ **Jahresziel-Eingabe** — fertig (`GET`/`POST /api/jahresziel`, Upsert pro Jahr, schließt die Lücke aus dem README)
   6. ✅ **"?" Erklärmodus** — fertig, als Hover-Tooltip statt Klick+Schalter (siehe §8)
   7. ✅ **Vormonat mit kombinierbaren Kategorien und Hinweisen** — fertig als eigene Seite "Vergleichen" (Monat- oder Jahr-Modus, `GET /api/vergleich`), statt Checkboxen in der kleinen KPI-Karte (passte dort nicht ins Bento-Raster)
-  8. ⬜ Export der KPI-Tabelle als CSV
+  8. ✅ **Export der KPI-Tabelle als CSV** — fertig auf Verlauf- (Jahresübersicht aller Kategorien, Anteil je Monat) und Vergleichen-Seite (Detailtabelle). Semikolon + deutsches Komma-Dezimalformat, sonst liest deutsches Excel Zahlen wie "1.2" als Datum. Reine Rohdaten-Sicherung (alles re-importierbar) ist ein eigenes, noch offenes Ausbau-Modul ("Export gesamt").
   9. ⬜ Hellmodus — "nice to have", fällt bei Zeitnot notfalls auf R3
 
   09.11.2026 (Lukas, Umstellung): ursprüngliche Reihenfolge hatte Kernfunktionen (Dateneingabe) hinter Kosmetik (Hellmodus) einsortiert — das war ein Fehler. Kernfunktionen sind wichtiger, Sidebar ist das Werkzeug dafür, nicht nur Optik. Glow bleibt bewusst vorne, weil es Lukas' Haupt-Wunsch-Feature war.

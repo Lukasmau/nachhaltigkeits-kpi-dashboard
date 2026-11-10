@@ -19,7 +19,7 @@ export function ZielerreichungKarte({ titel, prozent, hinweis }: Props) {
       ) : (
         <div className="ziel-karte__inhalt">
           <ZielRing prozent={prozent} />
-          <div className="ziel-karte__wert">
+          <div className={prozent > 100 ? 'ziel-karte__wert ziel-karte__wert--ueber' : 'ziel-karte__wert'}>
             {prozent.toLocaleString('de-DE', { maximumFractionDigits: 0 })}
             <span className="ziel-karte__einheit">%</span>
           </div>

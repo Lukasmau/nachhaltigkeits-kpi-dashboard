@@ -18,9 +18,9 @@
     "quelle": "backend/core/kpis.py, anteil_je_kategorie"
   },
   "zielerreichung": {
-    "text": "Vergleicht das Monatsziel (Jahresziel ÷ 12) mit dem Ist-Wert des Monats. Mehr als 100 % wird auf 100 % gedeckelt.",
-    "formel": "min(Monatsziel / Ist, 100 %)",
-    "beispiel": "Monatsziel 1.000 kg, Ist 800 kg → 1.000 / 800 = 125 % → gedeckelt auf 100 %",
+    "text": "Zeigt, wie viel vom Monatsbudget (Jahresziel ÷ 12) schon verbraucht ist. 100 % heißt genau ausgeschöpft, darüber (rot) heißt über dem Budget – ungedeckelt.",
+    "formel": "Ist / Monatsziel",
+    "beispiel": "Monatsziel 1.000 kg, Ist 1.250 kg → 1.250 / 1.000 = 125 % (25 % über dem Budget)",
     "quelle": "backend/core/kpis.py, zielerreichung"
   },
   "verlauf": {
