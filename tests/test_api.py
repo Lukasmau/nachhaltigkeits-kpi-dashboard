@@ -291,6 +291,73 @@ def test_api_jahresziel_wirkt_sich_auf_verlauf_aus(client):
     assert antwort.json()["monatsziel"] == pytest.approx(1000.0)
 
 
+def test_api_vergleich_monat_normalfall(client):
+    csv_inhalt = (
+        "datum,datenart,kategorie,wert,einheit,person\n"
+        "2026-10-01,verbrauch,Strom,1000,kWh,\n"
+        "2026-09-01,verbrauch,Strom,800,kWh,\n"
+    )
+    client.post("/api/import", files={"datei": ("test.csv", csv_inhalt, "text/csv")})
+
+    antwort = client.get(
+        "/api/vergleich",
+        params={"jahr_a": 2026, "monat_a": 10, "jahr_b": 2026, "monat_b": 9},
+    )
+    daten = antwort.json()
+    assert daten["einheit"] == "kg"
+    strom = daten["kategorien"]["Strom"]
+    assert strom["wert_a"] == pytest.approx(344.0)
+    assert strom["wert_b"] == pytest.approx(275.2)
+    assert strom["hinweis"] is None
+
+
+def test_api_vergleich_monat_meldet_fehlende_kategorie(client):
+    csv_inhalt = "datum,datenart,kategorie,wert,einheit,person\n2026-10-01,verbrauch,Erdgas,500,kWh,\n"
+    client.post("/api/import", files={"datei": ("test.csv", csv_inhalt, "text/csv")})
+
+    antwort = client.get(
+        "/api/vergleich",
+        params={"jahr_a": 2026, "monat_a": 10, "jahr_b": 2026, "monat_b": 9},
+    )
+    erdgas = antwort.json()["kategorien"]["Erdgas"]
+    assert erdgas["wert_b"] is None
+    assert "Zeitraum B" in erdgas["hinweis"]
+
+
+def test_api_vergleich_jahr_modus_ohne_monat(client):
+    csv_inhalt = (
+        "datum,datenart,kategorie,wert,einheit,person\n"
+        "2026-03-01,verbrauch,Strom,1000,kWh,\n"
+        "2026-07-01,verbrauch,Strom,500,kWh,\n"
+        "2025-03-01,verbrauch,Strom,2000,kWh,\n"
+    )
+    client.post("/api/import", files={"datei": ("test.csv", csv_inhalt, "text/csv")})
+
+    antwort = client.get("/api/vergleich", params={"jahr_a": 2026, "jahr_b": 2025})
+    strom = antwort.json()["kategorien"]["Strom"]
+    # Jahr 2026: 1000+500=1500 kWh * 0,344 = 516 kg; Jahr 2025: 2000 kWh * 0,344 = 688 kg
+    assert strom["wert_a"] == pytest.approx(516.0)
+    assert strom["wert_b"] == pytest.approx(688.0)
+
+
+def test_api_vergleich_waehlt_tonnen_wenn_ein_wert_drueber_liegt(client):
+    csv_inhalt = (
+        "datum,datenart,kategorie,wert,einheit,person\n"
+        "2026-10-01,verbrauch,Strom,3000,kWh,\n"
+        "2026-09-01,verbrauch,Strom,500,kWh,\n"
+    )
+    client.post("/api/import", files={"datei": ("test.csv", csv_inhalt, "text/csv")})
+
+    antwort = client.get(
+        "/api/vergleich",
+        params={"jahr_a": 2026, "monat_a": 10, "jahr_b": 2026, "monat_b": 9},
+    )
+    daten = antwort.json()
+    assert daten["einheit"] == "t"
+    # auch der kleinere Wert wird in Tonnen umgerechnet, nicht in kg belassen
+    assert daten["kategorien"]["Strom"]["wert_b"] == pytest.approx(0.172)
+
+
 def test_api_verlauf_waehlt_tonnen_wenn_ein_monat_drueber_liegt(client):
     csv_inhalt = (
         "datum,datenart,kategorie,wert,einheit,person\n"

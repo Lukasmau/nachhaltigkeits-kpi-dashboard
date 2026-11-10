@@ -16,6 +16,7 @@ from backend.db import (
     jahresziel_gesamt,
     letzte_messungen,
     messungen_mit_co2e,
+    messungen_mit_co2e_jahr,
     setze_jahresziel,
     verbindung,
 )
@@ -157,6 +158,54 @@ def api_verlauf(jahr: int, conn: sqlite3.Connection = Depends(get_conn)):
                 monatsergebnisse,
             )
         ],
+    }
+
+
+@app.get("/api/vergleich")
+def api_vergleich(
+    jahr_a: int,
+    jahr_b: int,
+    monat_a: int | None = None,
+    monat_b: int | None = None,
+    conn: sqlite3.Connection = Depends(get_conn),
+):
+    kategorien = list(gueltige_kategorien(conn).keys())
+
+    if monat_a is not None and monat_b is not None:
+        messungen_a = messungen_mit_co2e(conn, jahr_a, monat_a)
+        messungen_b = messungen_mit_co2e(conn, jahr_b, monat_b)
+    else:
+        messungen_a = messungen_mit_co2e_jahr(conn, jahr_a)
+        messungen_b = messungen_mit_co2e_jahr(conn, jahr_b)
+
+    ergebnis_kg = kpis.vergleich_je_kategorie(messungen_a, messungen_b, kategorien)
+
+    # ein Diagramm nutzt nur eine Einheit (CLAUDE.md §4): ueber alle Kategorien
+    # und beide Zeitraeume hinweg einmal bestimmen, nicht pro Kategorie einzeln.
+    alle_werte_kg = [
+        wert
+        for eintrag in ergebnis_kg.values()
+        for wert in (eintrag["wert_a_kg"], eintrag["wert_b_kg"])
+        if wert is not None
+    ]
+    einheit = units.einheit_fuer_reihe(alle_werte_kg)
+
+    def in_einheit(wert_kg):
+        return None if wert_kg is None else units.reihe_in_einheit([wert_kg], einheit)[0]
+
+    return {
+        "einheit": einheit,
+        "zeitraum_a": {"jahr": jahr_a, "monat": monat_a},
+        "zeitraum_b": {"jahr": jahr_b, "monat": monat_b},
+        "kategorien": {
+            kategorie: {
+                "wert_a": in_einheit(eintrag["wert_a_kg"]),
+                "wert_b": in_einheit(eintrag["wert_b_kg"]),
+                "veraenderung": eintrag["veraenderung"],
+                "hinweis": eintrag["hinweis"],
+            }
+            for kategorie, eintrag in ergebnis_kg.items()
+        },
     }
 
 

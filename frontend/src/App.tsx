@@ -8,6 +8,7 @@ import { FahrtFormular } from './components/FahrtFormular'
 import { JahreszielFormular } from './components/JahreszielFormular'
 import { KpiKarte } from './components/KpiKarte'
 import { Sidebar, type Seite } from './components/Sidebar'
+import { VergleichSeite } from './components/VergleichSeite'
 import { VerlaufDiagramm } from './components/VerlaufDiagramm'
 import { ZielerreichungKarte } from './components/ZielerreichungKarte'
 import { monatsLang } from './monate'
@@ -70,6 +71,17 @@ function App() {
         <Sidebar aktuelleSeite={seite} aufSeiteWechseln={setSeite} />
         <div className="layout__inhalt">
           <JahreszielFormular />
+        </div>
+      </div>
+    )
+  }
+
+  if (seite === 'vergleichen') {
+    return (
+      <div className="layout">
+        <Sidebar aktuelleSeite={seite} aufSeiteWechseln={setSeite} />
+        <div className="layout__inhalt">
+          <VergleichSeite />
         </div>
       </div>
     )

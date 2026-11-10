@@ -98,6 +98,35 @@ export async function speichereJahresziel(eingabe: Jahresziel): Promise<void> {
   }
 }
 
+export type VergleichEintrag = {
+  wert_a: number | null
+  wert_b: number | null
+  veraenderung: number | null
+  hinweis: string | null
+}
+export type VergleichAntwort = {
+  einheit: string
+  zeitraum_a: { jahr: number; monat: number | null }
+  zeitraum_b: { jahr: number; monat: number | null }
+  kategorien: Record<string, VergleichEintrag>
+}
+
+export async function holeVergleich(
+  jahrA: number,
+  jahrB: number,
+  monatA?: number,
+  monatB?: number
+): Promise<VergleichAntwort> {
+  const params = new URLSearchParams({ jahr_a: String(jahrA), jahr_b: String(jahrB) })
+  if (monatA !== undefined) params.set('monat_a', String(monatA))
+  if (monatB !== undefined) params.set('monat_b', String(monatB))
+  const antwort = await fetch(`/api/vergleich?${params}`)
+  if (!antwort.ok) {
+    throw new Error(`API-Fehler: ${antwort.status}`)
+  }
+  return antwort.json()
+}
+
 export type FahrtFehler = { spalte: string; grund: string; tipp: string }
 export type FahrtEingabe = { datum: string; kategorie: string; wert: number; person?: string }
 export type FahrtErgebnis = { gespeichert: true; warnung: string | null }

@@ -330,6 +330,153 @@
   font-size: 12px;
 }
 
+/* Vergleichen-Seite: Segment-Umschalter, Auswahlfelder, gruppiertes
+   Balkendiagramm und Legende. */
+.vergleich-auswahl {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.segment {
+  display: inline-flex;
+  background: var(--karte2);
+  border: 1px solid var(--linie);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+  align-self: flex-start;
+}
+
+.segment button {
+  border: none;
+  background: transparent;
+  color: var(--gedaempft);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.segment button.aktiv {
+  background: var(--akzent);
+  color: var(--hintergrund);
+}
+
+.vergleich-auswahl__felder {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  max-width: 480px;
+}
+
+.vergleich-auswahl__felder label {
+  display: block;
+  font-size: 13px;
+  color: var(--gedaempft);
+  margin-bottom: 6px;
+}
+
+.vergleich-auswahl__paar {
+  display: flex;
+  gap: 8px;
+}
+
+.vergleich-auswahl__paar select {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  background: var(--karte2);
+  border: 1px solid var(--linie);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 9px 10px;
+}
+
+.legende {
+  display: flex;
+  gap: 18px;
+  font-size: 13px;
+  color: var(--gedaempft);
+  margin-bottom: 18px;
+}
+
+.legende span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.punkt {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.balken-reihe {
+  display: flex;
+  align-items: flex-end;
+  gap: 28px;
+  height: 220px;
+  padding: 32px 70px 0;
+  overflow-x: auto;
+}
+
+.balken-gruppe {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 70px;
+}
+
+.balken-paar {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 180px;
+}
+
+.balken {
+  width: 34px;
+  border-radius: 6px 6px 0 0;
+  position: relative;
+  transition: height 0.2s ease;
+}
+
+.balken-wert {
+  position: absolute;
+  top: -26px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* Erste Zahl im Paar nach links, zweite nach rechts versetzt, damit sie bei
+   aehnlich hohen Balken nebeneinander Platz haben statt sich zu ueberlappen. */
+.balken--a .balken-wert {
+  right: 100%;
+  margin-right: 6px;
+}
+
+.balken--b .balken-wert {
+  left: 100%;
+  margin-left: 6px;
+}
+
+.balken-label {
+  font-size: 13px;
+  color: var(--gedaempft);
+}
+
 @media (max-width: 700px) {
   .layout {
     flex-direction: column;

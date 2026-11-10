@@ -47,6 +47,54 @@ def veraenderung_zum_vormonat(aktuell_kg, vormonat_kg) -> float | None:
     return veraenderung
 
 
+def vergleich_je_kategorie(
+    messungen_a: list[dict], messungen_b: list[dict], kategorien: list[str]
+) -> dict:
+    def summen_je_kategorie(messungen):
+        vorhanden = set()
+        summen = {}
+        for messung in messungen:
+            kategorie = messung["kategorie"]
+            vorhanden.add(kategorie)
+            co2e_kg = messung["co2e_kg"]
+            if co2e_kg is not None:
+                summen[kategorie] = summen.get(kategorie, 0) + co2e_kg
+        return vorhanden, summen
+
+    vorhanden_a, summen_a = summen_je_kategorie(messungen_a)
+    vorhanden_b, summen_b = summen_je_kategorie(messungen_b)
+
+    ergebnis = {}
+    for kategorie in kategorien:
+        in_a = kategorie in vorhanden_a
+        in_b = kategorie in vorhanden_b
+        wert_a = summen_a.get(kategorie, 0.0) if in_a else None
+        wert_b = summen_b.get(kategorie, 0.0) if in_b else None
+
+        if wert_a is not None and wert_b:
+            veraenderung = (wert_a - wert_b) / wert_b
+        else:
+            veraenderung = None
+
+        if in_a and in_b:
+            hinweis = None
+        elif in_a and not in_b:
+            hinweis = "Keine Messung in Zeitraum B"
+        elif in_b and not in_a:
+            hinweis = "Keine Messung in Zeitraum A"
+        else:
+            hinweis = None
+
+        ergebnis[kategorie] = {
+            "wert_a_kg": wert_a,
+            "wert_b_kg": wert_b,
+            "veraenderung": veraenderung,
+            "hinweis": hinweis,
+        }
+
+    return ergebnis
+
+
 def zielerreichung(ist_kg: float | None, jahresziel_kg: float | None) -> float | None:
     if ist_kg is None or jahresziel_kg is None:
         return None

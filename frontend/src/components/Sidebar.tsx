@@ -1,10 +1,11 @@
-export type Seite = 'uebersicht' | 'csv-import' | 'fahrt-erfassen' | 'jahresziel'
+export type Seite = 'uebersicht' | 'csv-import' | 'fahrt-erfassen' | 'jahresziel' | 'vergleichen'
 
 const EINTRAEGE: { seite: Seite; label: string }[] = [
   { seite: 'uebersicht', label: 'Übersicht' },
   { seite: 'csv-import', label: 'CSV importieren' },
   { seite: 'fahrt-erfassen', label: 'Fahrt erfassen' },
   { seite: 'jahresziel', label: 'Jahresziel' },
+  { seite: 'vergleichen', label: 'Vergleichen' },
 ]
 
 type Props = {

@@ -88,6 +88,19 @@ def letzte_messungen(
     return [dict(row) for row in rows]
 
 
+def messungen_mit_co2e_jahr(conn: sqlite3.Connection, jahr: int) -> list[dict]:
+    rows = conn.execute(
+        """
+        SELECT m.kategorie, m.wert * f.faktor_kg_co2e_pro_einheit AS co2e_kg
+        FROM measurements m
+        LEFT JOIN factors f ON f.kategorie = m.kategorie
+        WHERE substr(m.datum, 1, 4) = ?
+        """,
+        (f"{jahr:04d}",),
+    ).fetchall()
+    return [dict(row) for row in rows]
+
+
 def jahresziel_gesamt(conn: sqlite3.Connection, jahr: int) -> float | None:
     row = conn.execute(
         "SELECT SUM(ziel_kg_co2e) AS summe FROM targets WHERE jahr = ?",

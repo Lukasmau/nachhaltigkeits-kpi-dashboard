@@ -1,7 +1,10 @@
+import pytest
+
 from backend.core.kpis import (
     anteil_je_kategorie,
     co2e_im_monat,
     veraenderung_zum_vormonat,
+    vergleich_je_kategorie,
     zielerreichung,
 )
 
@@ -120,3 +123,67 @@ def test_zielerreichung_ohne_messwerte_nicht_berechenbar():
 
 def test_zielerreichung_bei_null_emissionen_ist_perfekt():
     assert zielerreichung(ist_kg=0, jahresziel_kg=1200) == 1.0
+
+
+def test_vergleich_je_kategorie_normalfall():
+    a = [{"kategorie": "Strom", "co2e_kg": 400.0}]
+    b = [{"kategorie": "Strom", "co2e_kg": 320.0}]
+    ergebnis = vergleich_je_kategorie(a, b, ["Strom"])
+    assert ergebnis["Strom"]["wert_a_kg"] == 400.0
+    assert ergebnis["Strom"]["wert_b_kg"] == 320.0
+    assert ergebnis["Strom"]["veraenderung"] == pytest.approx(0.25)
+    assert ergebnis["Strom"]["hinweis"] is None
+
+
+def test_vergleich_je_kategorie_fehlt_in_zeitraum_b():
+    a = [{"kategorie": "Erdgas", "co2e_kg": 120.0}]
+    b = []
+    ergebnis = vergleich_je_kategorie(a, b, ["Erdgas"])
+    assert ergebnis["Erdgas"]["wert_a_kg"] == 120.0
+    assert ergebnis["Erdgas"]["wert_b_kg"] is None
+    assert ergebnis["Erdgas"]["veraenderung"] is None
+    assert "Zeitraum B" in ergebnis["Erdgas"]["hinweis"]
+
+
+def test_vergleich_je_kategorie_fehlt_in_zeitraum_a():
+    a = []
+    b = [{"kategorie": "Erdgas", "co2e_kg": 120.0}]
+    ergebnis = vergleich_je_kategorie(a, b, ["Erdgas"])
+    assert ergebnis["Erdgas"]["wert_a_kg"] is None
+    assert ergebnis["Erdgas"]["wert_b_kg"] == 120.0
+    assert "Zeitraum A" in ergebnis["Erdgas"]["hinweis"]
+
+
+def test_vergleich_je_kategorie_fehlt_in_beiden_ohne_hinweis():
+    ergebnis = vergleich_je_kategorie([], [], ["Erdgas"])
+    assert ergebnis["Erdgas"]["wert_a_kg"] is None
+    assert ergebnis["Erdgas"]["wert_b_kg"] is None
+    assert ergebnis["Erdgas"]["hinweis"] is None
+
+
+def test_vergleich_je_kategorie_echte_null_zaehlt_nicht_als_fehlt():
+    a = [{"kategorie": "Erdgas", "co2e_kg": 0.0}]
+    b = [{"kategorie": "Erdgas", "co2e_kg": 50.0}]
+    ergebnis = vergleich_je_kategorie(a, b, ["Erdgas"])
+    assert ergebnis["Erdgas"]["wert_a_kg"] == 0.0
+    assert ergebnis["Erdgas"]["hinweis"] is None
+    assert ergebnis["Erdgas"]["veraenderung"] == pytest.approx(-1.0)
+
+
+def test_vergleich_je_kategorie_division_durch_null_ergibt_keine_veraenderung():
+    a = [{"kategorie": "Erdgas", "co2e_kg": 50.0}]
+    b = [{"kategorie": "Erdgas", "co2e_kg": 0.0}]
+    ergebnis = vergleich_je_kategorie(a, b, ["Erdgas"])
+    assert ergebnis["Erdgas"]["veraenderung"] is None
+
+
+def test_vergleich_je_kategorie_mehrere_kategorien_unabhaengig():
+    a = [
+        {"kategorie": "Strom", "co2e_kg": 400.0},
+        {"kategorie": "Dienstreisen Bahn", "co2e_kg": 50.0},
+    ]
+    b = [{"kategorie": "Strom", "co2e_kg": 400.0}]
+    ergebnis = vergleich_je_kategorie(a, b, ["Strom", "Dienstreisen Bahn"])
+    assert ergebnis["Strom"]["veraenderung"] == pytest.approx(0.0)
+    assert ergebnis["Dienstreisen Bahn"]["wert_b_kg"] is None
+    assert "Zeitraum B" in ergebnis["Dienstreisen Bahn"]["hinweis"]
