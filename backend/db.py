@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS measurements (
     kategorie TEXT NOT NULL,
     wert REAL NOT NULL,
     einheit TEXT NOT NULL,
-    person TEXT
+    person TEXT,
+    quelle_datei TEXT
 );
 
 CREATE TABLE IF NOT EXISTS factors (
@@ -42,6 +43,11 @@ def verbindung(db_pfad: str) -> sqlite3.Connection:
 def init_db(db_pfad: str) -> None:
     conn = verbindung(db_pfad)
     conn.executescript(SCHEMA)
+    # Migration fuer Datenbanken, die vor der quelle_datei-Spalte angelegt wurden
+    # (CREATE TABLE IF NOT EXISTS legt keine fehlenden Spalten in bestehenden Tabellen an).
+    spalten = [row["name"] for row in conn.execute("PRAGMA table_info(measurements)").fetchall()]
+    if "quelle_datei" not in spalten:
+        conn.execute("ALTER TABLE measurements ADD COLUMN quelle_datei TEXT")
     conn.commit()
     conn.close()
 
@@ -66,7 +72,7 @@ def letzte_messungen(
     if datenart is None:
         rows = conn.execute(
             """
-            SELECT datum, datenart, kategorie, wert, einheit, person
+            SELECT datum, datenart, kategorie, wert, einheit, person, quelle_datei
             FROM measurements ORDER BY id DESC LIMIT ?
             """,
             (limit,),
@@ -74,7 +80,7 @@ def letzte_messungen(
     else:
         rows = conn.execute(
             """
-            SELECT datum, datenart, kategorie, wert, einheit, person
+            SELECT datum, datenart, kategorie, wert, einheit, person, quelle_datei
             FROM measurements WHERE datenart = ? ORDER BY id DESC LIMIT ?
             """,
             (datenart, limit),

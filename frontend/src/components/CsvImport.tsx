@@ -208,6 +208,7 @@ export function CsvImport() {
                 <th>Kategorie</th>
                 <th>Wert</th>
                 <th>Person</th>
+                <th>Datei</th>
               </tr>
             </thead>
             <tbody>
@@ -220,6 +221,7 @@ export function CsvImport() {
                     {m.wert} {m.einheit}
                   </td>
                   <td>{m.person ?? '–'}</td>
+                  <td>{m.quelle_datei ?? '–'}</td>
                 </tr>
               ))}
             </tbody>

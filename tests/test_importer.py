@@ -281,6 +281,30 @@ def test_importiere_csv_teilimport_gueltige_und_ungueltige_zeilen(conn, tmp_path
     assert gespeichert == 2
 
 
+def test_importiere_csv_speichert_quelle_datei(conn, tmp_path):
+    csv_pfad = tmp_path / "import.csv"
+    csv_pfad.write_text(
+        "datum,datenart,kategorie,wert,einheit,person\n2026-03-01,verbrauch,Strom,1250,kWh,\n",
+        encoding="utf-8",
+    )
+    importiere_csv(conn, str(csv_pfad), quelle_datei="maerz_2026.csv")
+
+    zeile = conn.execute("SELECT quelle_datei FROM measurements").fetchone()
+    assert zeile["quelle_datei"] == "maerz_2026.csv"
+
+
+def test_importiere_csv_ohne_quelle_datei_bleibt_leer(conn, tmp_path):
+    csv_pfad = tmp_path / "import.csv"
+    csv_pfad.write_text(
+        "datum,datenart,kategorie,wert,einheit,person\n2026-03-01,verbrauch,Strom,1250,kWh,\n",
+        encoding="utf-8",
+    )
+    importiere_csv(conn, str(csv_pfad))
+
+    zeile = conn.execute("SELECT quelle_datei FROM measurements").fetchone()
+    assert zeile["quelle_datei"] is None
+
+
 def test_importiere_csv_verbrauch_duplikat_wird_uebersprungen(conn, tmp_path):
     csv_pfad = tmp_path / "import.csv"
     csv_pfad.write_text(

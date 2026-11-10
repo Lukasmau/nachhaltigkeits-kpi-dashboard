@@ -61,6 +61,7 @@ export type LetzteMessung = {
   wert: number
   einheit: string
   person: string | null
+  quelle_datei: string | null
 }
 
 export async function holeLetzteMessungen(

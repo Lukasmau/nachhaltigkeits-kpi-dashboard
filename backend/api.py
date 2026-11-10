@@ -190,6 +190,6 @@ def api_import(datei: UploadFile, conn: sqlite3.Connection = Depends(get_conn)):
         tmp_pfad = tmp.name
 
     try:
-        return importiere_csv(conn, tmp_pfad)
+        return importiere_csv(conn, tmp_pfad, quelle_datei=datei.filename)
     finally:
         Path(tmp_pfad).unlink(missing_ok=True)

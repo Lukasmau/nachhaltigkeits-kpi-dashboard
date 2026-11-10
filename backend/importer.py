@@ -114,7 +114,7 @@ def pruefe_duplikat(conn: sqlite3.Connection, zeile: dict) -> str | None:
     return None
 
 
-def importiere_csv(conn: sqlite3.Connection, csv_pfad: str) -> dict:
+def importiere_csv(conn: sqlite3.Connection, csv_pfad: str, quelle_datei: str | None = None) -> dict:
     kategorien = gueltige_kategorien(conn)
     zeilen = pl.read_csv(csv_pfad, infer_schema_length=0).to_dicts()
 
@@ -148,8 +148,8 @@ def importiere_csv(conn: sqlite3.Connection, csv_pfad: str) -> dict:
 
         conn.execute(
             """
-            INSERT INTO measurements (datum, datenart, kategorie, wert, einheit, person)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO measurements (datum, datenart, kategorie, wert, einheit, person, quelle_datei)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 zeile["datum"],
@@ -158,6 +158,7 @@ def importiere_csv(conn: sqlite3.Connection, csv_pfad: str) -> dict:
                 float(zeile["wert"]),
                 zeile["einheit"],
                 zeile.get("person"),
+                quelle_datei,
             ),
         )
         importiert += 1

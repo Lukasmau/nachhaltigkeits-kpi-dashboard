@@ -230,6 +230,26 @@ def test_api_letzte_messungen_filtert_nach_datenart(client):
     assert daten[0]["datenart"] == "fahrt"
 
 
+def test_api_letzte_messungen_zeigt_quelle_datei_aus_csv_import(client):
+    csv_inhalt = "datum,datenart,kategorie,wert,einheit,person\n2026-03-01,verbrauch,Strom,1000,kWh,\n"
+    client.post(
+        "/api/import", files={"datei": ("maerz_2026.csv", csv_inhalt, "text/csv")}
+    )
+
+    antwort = client.get("/api/messungen/letzte", params={"limit": 1})
+    assert antwort.json()[0]["quelle_datei"] == "maerz_2026.csv"
+
+
+def test_api_letzte_messungen_fahrt_hat_keine_quelle_datei(client):
+    client.post(
+        "/api/fahrt",
+        json={"datum": "2026-03-05", "kategorie": "Dienstreisen Bahn", "wert": 250, "person": "Lukas"},
+    )
+
+    antwort = client.get("/api/messungen/letzte", params={"limit": 1})
+    assert antwort.json()[0]["quelle_datei"] is None
+
+
 def test_api_letzte_messungen_ohne_eintraege_ist_leer(client):
     antwort = client.get("/api/messungen/letzte")
     assert antwort.json() == []
