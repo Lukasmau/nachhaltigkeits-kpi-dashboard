@@ -95,6 +95,24 @@ def test_api_verlauf_hat_zwoelf_monate(client):
     assert daten["monate"][-1]["monat"] == 12
 
 
+def test_api_verlauf_liefert_anteile_je_kategorie_pro_monat(client):
+    csv_inhalt = (
+        "datum,datenart,kategorie,wert,einheit,person\n"
+        "2026-01-01,verbrauch,Strom,1000,kWh,\n"
+        "2026-01-01,verbrauch,Erdgas,500,kWh,\n"
+    )
+    client.post("/api/import", files={"datei": ("test.csv", csv_inhalt, "text/csv")})
+
+    antwort = client.get("/api/verlauf", params={"jahr": 2026})
+    januar = antwort.json()["monate"][0]
+    # 1000 kWh Strom * 0,344 = 344 kg; 500 kWh Erdgas * 0,1833 = 91,65 kg; Summe 435,65 kg
+    assert januar["anteile"]["Strom"] == pytest.approx(344 / 435.65)
+    assert januar["anteile"]["Erdgas"] == pytest.approx(91.65 / 435.65)
+
+    februar = antwort.json()["monate"][1]
+    assert februar["anteile"] == {}
+
+
 def test_api_verlauf_liefert_veraenderung_zielerreichung_und_groesste_kategorie(client):
     csv_inhalt = (
         "datum,datenart,kategorie,wert,einheit,person\n"

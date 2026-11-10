@@ -1,5 +1,6 @@
 import { useEffect, useState, type CSSProperties } from 'react'
 import { holeVergleich, type VergleichAntwort } from '../api'
+import { csvHerunterladen, csvZahl } from '../csvExport'
 import { monatsLang } from '../monate'
 
 // Noch fest verdrahtet, bis es eine Monats-/Jahresauswahl im Frontend gibt (siehe App.tsx).
@@ -217,7 +218,29 @@ export function VergleichSeite() {
             className="app__diagramm"
             style={{ '--glow-farbe': 'var(--akzent)' } as CSSProperties}
           >
-            <h2>Im Detail</h2>
+            <div className="app__diagramm-kopf">
+              <h2>Im Detail</h2>
+              <button
+                type="button"
+                className="export-knopf"
+                onClick={() =>
+                  csvHerunterladen(
+                    `vergleich_${labelA}_${labelB}.csv`.replace(/\s+/g, '_'),
+                    ['Kategorie', labelA, labelB, 'Veränderung (%)'],
+                    zeilen.map((z) => [
+                      z.name,
+                      csvZahl(z.wertA),
+                      csvZahl(z.wertB),
+                      z.veraenderung !== null
+                        ? csvZahl(z.veraenderung * 100)
+                        : (z.hinweis ?? ''),
+                    ])
+                  )
+                }
+              >
+                CSV exportieren
+              </button>
+            </div>
             <table className="letzte-tabelle">
               <thead>
                 <tr>

@@ -1,7 +1,7 @@
 import { useEffect, useState, type CSSProperties } from 'react'
 import './App.css'
-import { holeKpis, holeVerlauf, type KpiAntwort, type VerlaufAntwort } from './api'
-import { AnteilDiagramm } from './components/AnteilDiagramm'
+import { holeKpis, holeVerlauf, type KpiAntwort, type VerlaufAntwort, type VerlaufEintrag } from './api'
+import { AnteilDiagramm, gruppiereDienstreisen } from './components/AnteilDiagramm'
 import { CsvImport } from './components/CsvImport'
 import { ErklaerIcon } from './components/ErklaerIcon'
 import { FahrtFormular } from './components/FahrtFormular'
@@ -11,11 +11,25 @@ import { Sidebar, type Seite } from './components/Sidebar'
 import { VergleichSeite } from './components/VergleichSeite'
 import { VerlaufDiagramm } from './components/VerlaufDiagramm'
 import { ZielerreichungKarte } from './components/ZielerreichungKarte'
+import { csvHerunterladen, csvZahl } from './csvExport'
 import { monatsLang } from './monate'
 
 // Noch fest verdrahtet, bis es eine Monats-/Jahresauswahl im Frontend gibt.
 const JAHR = 2026
 const MONAT = 10
+
+// Feste Reihenfolge fuer bekannte Kategorien, Rest (sollte es ihn geben) alphabetisch hinten an.
+const KATEGORIEN_REIHENFOLGE = ['Strom', 'Erdgas', 'Dienstreisen']
+
+function alleKategorien(monate: VerlaufEintrag[]): string[] {
+  const gefunden = new Set<string>()
+  for (const m of monate) {
+    for (const k of Object.keys(gruppiereDienstreisen(m.anteile))) gefunden.add(k)
+  }
+  const bekannt = KATEGORIEN_REIHENFOLGE.filter((k) => gefunden.has(k))
+  const unbekannt = [...gefunden].filter((k) => !KATEGORIEN_REIHENFOLGE.includes(k)).sort()
+  return [...bekannt, ...unbekannt]
+}
 
 function App() {
   const [seite, setSeite] = useState<Seite>('uebersicht')
@@ -149,10 +163,44 @@ function App() {
                 className="app__diagramm"
                 style={{ '--glow-farbe': 'var(--akzent)' } as CSSProperties}
               >
-                <h2>
-                  Verlauf {JAHR}
-                  <ErklaerIcon schluessel="verlauf" />
-                </h2>
+                <div className="app__diagramm-kopf">
+                  <h2>
+                    Verlauf {JAHR}
+                    <ErklaerIcon schluessel="verlauf" />
+                  </h2>
+                  <button
+                    type="button"
+                    className="export-knopf"
+                    onClick={() => {
+                      const kategorien = alleKategorien(verlauf.monate)
+                      csvHerunterladen(
+                        `verlauf_${JAHR}.csv`,
+                        [
+                          'Monat',
+                          `Gesamt (${verlauf.einheit})`,
+                          'Veränderung (%)',
+                          'Zielerreichung (%)',
+                          ...kategorien.map((k) => `${k} Anteil (%)`),
+                        ],
+                        verlauf.monate.map((m) => {
+                          const gruppiert = gruppiereDienstreisen(m.anteile)
+                          return [
+                            monatsLang[m.monat - 1],
+                            csvZahl(m.wert),
+                            csvZahl(m.veraenderung !== null ? m.veraenderung * 100 : null),
+                            csvZahl(m.zielerreichung !== null ? m.zielerreichung * 100 : null),
+                            ...kategorien.map((k) => {
+                              const anteil = gruppiert[k] ?? null
+                              return csvZahl(anteil !== null ? anteil * 100 : null)
+                            }),
+                          ]
+                        })
+                      )
+                    }}
+                  >
+                    CSV exportieren
+                  </button>
+                </div>
                 <VerlaufDiagramm
                   verlauf={verlauf.monate}
                   einheit={verlauf.einheit}

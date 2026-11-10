@@ -147,15 +147,17 @@ def api_verlauf(jahr: int, conn: sqlite3.Connection = Depends(get_conn)):
                 "veraenderung": veraenderung,
                 "zielerreichung": zielerreichung,
                 "anteil_groesste_kategorie": anteil,
+                "anteile": anteile_ergebnis["anteile"] or {},
                 "warnungen": ergebnis["warnungen"],
             }
-            for monat, wert, veraenderung, zielerreichung, anteil, ergebnis in zip(
+            for monat, wert, veraenderung, zielerreichung, anteil, ergebnis, anteile_ergebnis in zip(
                 range(1, 13),
                 werte,
                 veraenderungen,
                 zielerreichungen,
                 anteile_groesste,
                 monatsergebnisse,
+                anteilsergebnisse,
             )
         ],
     }

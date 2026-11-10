@@ -19,6 +19,7 @@ export type VerlaufEintrag = {
   veraenderung: number | null
   zielerreichung: number | null
   anteil_groesste_kategorie: number | null
+  anteile: Record<string, number>
   warnungen: string[]
 }
 export type VerlaufAntwort = {

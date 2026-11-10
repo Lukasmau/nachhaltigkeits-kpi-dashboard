@@ -5,7 +5,7 @@ type Props = {
 // Fasst alle "Dienstreisen ..."-Kategorien zu einer Sammelkategorie zusammen,
 // nur fuer diese Hauptansicht - die Einzelwerte je Verkehrsmittel bleiben in
 // den Rohdaten fuer eine spaetere Detail-Ansicht erhalten.
-function gruppiereDienstreisen(anteile: Record<string, number>): Record<string, number> {
+export function gruppiereDienstreisen(anteile: Record<string, number>): Record<string, number> {
   const gruppiert: Record<string, number> = {}
   for (const [name, anteil] of Object.entries(anteile)) {
     const gruppenName = name.startsWith('Dienstreisen ') ? 'Dienstreisen' : name
