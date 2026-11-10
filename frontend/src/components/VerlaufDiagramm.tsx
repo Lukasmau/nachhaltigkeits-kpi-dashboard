@@ -1,5 +1,6 @@
 import ReactECharts from 'echarts-for-react'
 import type { VerlaufEintrag } from '../api'
+import { hexZuRgba } from '../farbe'
 import { monatsKurz } from '../monate'
 import { dunkel } from '../tokens'
 
@@ -26,6 +27,8 @@ function formatiereWert(wert: number): string {
 
 export function VerlaufDiagramm({ verlauf: rohVerlauf, einheit, monatsziel }: Props) {
   const verlauf = ohneZukunft(rohVerlauf)
+  const letzterIndex = verlauf.length - 1
+  const letzterWert = letzterIndex >= 0 ? verlauf[letzterIndex].wert : null
 
   const series: Record<string, unknown>[] = [
     {
@@ -33,10 +36,21 @@ export function VerlaufDiagramm({ verlauf: rohVerlauf, einheit, monatsziel }: Pr
       type: 'line',
       data: verlauf.map((v) => v.wert),
       connectNulls: false,
-      lineStyle: { color: dunkel.akzent, width: 2 },
-      itemStyle: { color: dunkel.akzent },
-      areaStyle: { color: dunkel.akzent, opacity: 0.1 },
-      symbolSize: 8,
+      symbol: 'none',
+      lineStyle: { color: dunkel.akzent, width: 3 },
+      areaStyle: {
+        color: {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [
+            { offset: 0, color: hexZuRgba(dunkel.akzent, 0.35) },
+            { offset: 1, color: hexZuRgba(dunkel.akzent, 0) },
+          ],
+        },
+      },
     },
   ]
 
@@ -46,22 +60,31 @@ export function VerlaufDiagramm({ verlauf: rohVerlauf, einheit, monatsziel }: Pr
       type: 'line',
       data: verlauf.map(() => monatsziel),
       lineStyle: { color: dunkel.gut, width: 2, type: 'dashed' },
-      itemStyle: { color: dunkel.gut },
       symbol: 'none',
+    })
+  }
+
+  // Nur der aktuellste Monat bekommt einen Punkt (mit Halo-Rand in der
+  // Kartenfarbe) statt einem Punkt auf jedem Monat - ruhigere Linie.
+  if (letzterWert !== null) {
+    series.push({
+      name: 'Aktueller Monat',
+      type: 'scatter',
+      data: [[letzterIndex, letzterWert]],
+      symbolSize: 11,
+      itemStyle: {
+        color: dunkel.akzent,
+        borderColor: dunkel.karte,
+        borderWidth: 3,
+      },
+      tooltip: { show: false },
+      silent: true,
     })
   }
 
   const option = {
     backgroundColor: 'transparent',
-    grid: { left: 70, right: 20, top: monatsziel !== null ? 50 : 20, bottom: 30 },
-    legend: {
-      show: monatsziel !== null,
-      top: 0,
-      left: 0,
-      textStyle: { color: dunkel.text },
-      itemWidth: 16,
-      itemHeight: 3,
-    },
+    grid: { left: 70, right: 20, top: 20, bottom: 30 },
     xAxis: {
       type: 'category',
       data: verlauf.map((v) => monatsKurz[v.monat - 1]),
@@ -70,6 +93,7 @@ export function VerlaufDiagramm({ verlauf: rohVerlauf, einheit, monatsziel }: Pr
     },
     yAxis: {
       type: 'value',
+      splitNumber: 3,
       axisLabel: {
         color: dunkel.gedaempft,
         formatter: (wert: number) => `${formatiereWert(wert)} ${einheit}`,
@@ -83,5 +107,21 @@ export function VerlaufDiagramm({ verlauf: rohVerlauf, einheit, monatsziel }: Pr
     series,
   }
 
-  return <ReactECharts option={option} style={{ height: 260 }} />
+  return (
+    <>
+      <div className="verlauf-legende">
+        <span className="verlauf-legende__eintrag">
+          <i className="verlauf-legende__strich" style={{ background: dunkel.akzent }} />
+          Gesamt
+        </span>
+        {monatsziel !== null && (
+          <span className="verlauf-legende__eintrag">
+            <i className="verlauf-legende__strich" style={{ background: dunkel.gut }} />
+            Ziel {formatiereWert(monatsziel)} {einheit}
+          </span>
+        )}
+      </div>
+      <ReactECharts option={option} style={{ height: 260 }} />
+    </>
+  )
 }

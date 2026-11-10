@@ -2,7 +2,7 @@ type Props = {
   prozent: number
 }
 
-const RADIUS = 36
+const RADIUS = 46
 const UMFANG = 2 * Math.PI * RADIUS
 
 export function ZielRing({ prozent }: Props) {
@@ -10,19 +10,19 @@ export function ZielRing({ prozent }: Props) {
   const offset = UMFANG - (gefuellt / 100) * UMFANG
 
   return (
-    <svg width="90" height="90" viewBox="0 0 90 90">
-      <circle cx="45" cy="45" r={RADIUS} fill="none" stroke="#CFE0EA" strokeWidth="8" />
+    <svg width="108" height="108" viewBox="0 0 108 108">
+      <circle cx="54" cy="54" r={RADIUS} fill="none" stroke="#CFE0EA" strokeWidth="12" />
       <circle
-        cx="45"
-        cy="45"
+        cx="54"
+        cy="54"
         r={RADIUS}
         fill="none"
         stroke="#0369A1"
-        strokeWidth="8"
+        strokeWidth="12"
         strokeDasharray={UMFANG}
         strokeDashoffset={offset}
         strokeLinecap="round"
-        transform="rotate(-90 45 45)"
+        transform="rotate(-90 54 54)"
       />
     </svg>
   )

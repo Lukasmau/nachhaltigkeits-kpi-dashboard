@@ -4,6 +4,12 @@
   padding: 32px 16px;
 }
 
+.app h1 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
 /* Ein gemeinsames Raster fuer Karten- und Diagramm-Zeile, damit beide
    Zeilen an derselben Kante enden - nicht zwei unabhaengige Flex-Zeilen.
    4 Spalten, Elemente spannen per grid-column so viele Spalten wie noetig.
@@ -12,58 +18,63 @@
 .app__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: 14px;
 }
 
 .app__grid--diagramme {
-  margin-top: 24px;
+  margin-top: 16px;
 }
 
-.kpi-karte {
-  background: var(--karte);
-  border: 1px solid var(--linie);
+/* Glow-Geometrie als eigene Tokens (CLAUDE.md §8: Design-Tokens als einzige
+   Quelle) - nur die Farbe kommt pro Karte ueber --glow-farbe von aussen,
+   Groesse/Position/Deckkraft sind hier zentral an einer Stelle einstellbar. */
+:root {
+  --glow-groesse: 130% 110%;
+  --glow-position: 100% 0%;
+  --glow-deckkraft: 24%;
+  --glow-auslauf: 62%;
+  --glow-rand-deckkraft: 35%;
+}
+
+.kpi-karte,
+.app__diagramm {
+  background:
+    radial-gradient(
+      var(--glow-groesse) at var(--glow-position),
+      color-mix(in srgb, var(--glow-farbe, var(--akzent)) var(--glow-deckkraft), transparent),
+      transparent var(--glow-auslauf)
+    ),
+    var(--karte);
+  border: 1px solid
+    color-mix(in srgb, var(--glow-farbe, var(--akzent)) var(--glow-rand-deckkraft), var(--linie));
   border-radius: 16px;
-  padding: 24px;
-  position: relative;
-  overflow: hidden;
+  padding: 16px;
 }
 
-/* Glow in der Diagrammfarbe (CLAUDE.md §8): color-mix radial-gradient pro
-   Karte, Farbe kommt ueber die --glow-farbe Custom Property von aussen. */
-.kpi-karte::before,
-.app__diagramm::before {
-  content: '';
-  position: absolute;
-  top: -30%;
-  right: -15%;
-  width: 60%;
-  height: 130%;
-  background: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--glow-farbe, var(--akzent)) 35%, transparent) 0%,
-    transparent 70%
-  );
-  pointer-events: none;
-  z-index: 0;
-}
-
-.kpi-karte > *,
-.app__diagramm > * {
-  position: relative;
-  z-index: 1;
+/* Nur die oberen 4 KPI-Karten bekommen ein festes Seitenverhaeltnis (wie im
+   Konfigurator) - ohne das bestimmt nur der Inhalt die Hoehe, und die Karten
+   wirken bei voller Breite (ohne Sidebar) flach gequetscht statt quadratisch.
+   aspect-ratio statt fixer Hoehe, damit es bei jeder Fensterbreite mitskaliert. */
+.kpi-karte,
+.ziel-karte {
+  aspect-ratio: 4 / 3;
+  display: flex;
+  flex-direction: column;
 }
 
 .kpi-karte__titel {
   color: var(--gedaempft);
-  font-size: 14px;
-  margin-bottom: 8px;
+  font-size: 14.4px;
+  margin-bottom: 16px;
 }
 
 .kpi-karte__wert {
   font-family: 'Sora', sans-serif;
-  font-size: 32px;
-  font-weight: 600;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.1;
   color: var(--text);
+  margin-top: 28px;
 }
 
 .kpi-karte__wert--gut {
@@ -92,25 +103,28 @@
   background: #ffffff;
   border: 1px solid #cfe0ea;
   border-radius: 16px;
-  padding: 24px;
+  padding: 16px;
 }
 
 .ziel-karte__titel {
   color: #4b6475;
   font-size: 14px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .ziel-karte__inhalt {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 16px;
+  flex: 1;
 }
 
 .ziel-karte__wert {
   font-family: 'Sora', sans-serif;
-  font-size: 32px;
-  font-weight: 600;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.1;
   color: #0a1f2e;
 }
 
@@ -128,32 +142,22 @@
 
 .sparkline {
   width: 100%;
-  height: 32px;
+  height: 56px;
+  flex: none;
   display: block;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .app__fehler {
   color: var(--abweichung);
 }
 
-.app__diagramm {
-  background: var(--karte);
-  border: 1px solid var(--linie);
-  border-radius: 16px;
-  padding: 24px;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Verlauf nimmt 3 der 4 Rasterspalten, Anteil die letzte - dadurch
-   immer im Verhaeltnis 3:1, exakt auf die Kartenzeile ausgerichtet. */
-.app__diagramm--gross {
-  grid-column: span 3;
-}
-
-.app__diagramm--klein {
-  grid-column: span 1;
+/* Eigenes 2-Spalten-Raster fuer die Diagrammzeile (Verhaeltnis 2:1 wie im
+   Konfigurator) - eigene Spaltenbreiten, aber gleiche Aussenkante wie die
+   4-spaltige Kartenzeile darueber, weil beide Reihen die volle Containerbreite
+   nutzen. */
+.app__grid--diagramme {
+  grid-template-columns: 2fr 1fr;
 }
 
 @media (max-width: 900px) {
@@ -161,21 +165,45 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .app__diagramm--gross,
-  .app__diagramm--klein {
-    grid-column: span 2;
+  .app__grid--diagramme {
+    grid-template-columns: 1fr;
   }
 }
 
+.verlauf-legende {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 14px;
+  color: var(--gedaempft);
+  margin-bottom: 8px;
+}
+
+.verlauf-legende__eintrag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.verlauf-legende__strich {
+  display: inline-block;
+  width: 18px;
+  height: 3px;
+  border-radius: 2px;
+}
+
 .app__diagramm h2 {
-  font-size: 16px;
-  margin: 0 0 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 14.4px;
+  color: var(--gedaempft);
+  margin: 0 0 6px;
 }
 
 .anteil-liste {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
   padding-top: 8px;
 }
 
@@ -183,8 +211,8 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 8px;
-  font-size: 16px;
+  margin-bottom: 6px;
+  font-size: 14.7px;
 }
 
 .anteil-zeile__prozent {
@@ -194,12 +222,12 @@
 
 .anteil-zeile__spur {
   height: 10px;
-  border-radius: 999px;
+  border-radius: 6px;
   background: var(--linie);
   overflow: hidden;
 }
 
 .anteil-zeile__balken {
   height: 100%;
-  border-radius: 999px;
+  border-radius: 6px;
 }

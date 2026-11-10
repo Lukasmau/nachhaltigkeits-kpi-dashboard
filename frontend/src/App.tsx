@@ -38,7 +38,7 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Nachhaltigkeits-KPI-Dashboard</h1>
+      <h1>Übersicht {monatsLang[MONAT - 1]}</h1>
       {fehler && <p className="app__fehler">{fehler}</p>}
       {daten && (
         <div className="app__grid">
@@ -89,7 +89,7 @@ function App() {
       <div className="app__grid app__grid--diagramme">
         {verlauf && (
           <div
-            className="app__diagramm app__diagramm--gross"
+            className="app__diagramm"
             style={{ '--glow-farbe': 'var(--akzent)' } as CSSProperties}
           >
             <h2>Verlauf {JAHR}</h2>
@@ -102,7 +102,7 @@ function App() {
         )}
         {anteile && (
           <div
-            className="app__diagramm app__diagramm--klein"
+            className="app__diagramm"
             style={{ '--glow-farbe': 'var(--gut)' } as CSSProperties}
           >
             <h2>Anteil je Kategorie</h2>

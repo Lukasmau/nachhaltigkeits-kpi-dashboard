@@ -44,7 +44,7 @@ export function KpiKarte({
             })}
             <span className="kpi-karte__einheit">{einheit}</span>
           </div>
-          {sparklineWerte && <Sparkline werte={sparklineWerte} />}
+          {sparklineWerte && <Sparkline werte={sparklineWerte} farbe={GLOW_FARBEN[farbe]} />}
         </>
       )}
     </div>
