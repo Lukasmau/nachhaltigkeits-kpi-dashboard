@@ -1,12 +1,30 @@
-import { useRef, useState, type CSSProperties } from 'react'
-import { importiereCsv, type ImportErgebnis } from '../api'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import {
+  holeLetzteMessungen,
+  importiereCsv,
+  type ImportErgebnis,
+  type LetzteMessung,
+} from '../api'
 
 export function CsvImport() {
   const [ergebnis, setErgebnis] = useState<ImportErgebnis | null>(null)
   const [fehlerText, setFehlerText] = useState<string | null>(null)
   const [laedt, setLaedt] = useState(false)
   const [ziehtUeber, setZiehtUeber] = useState(false)
+  const [letzteMessungen, setLetzteMessungen] = useState<LetzteMessung[]>([])
   const dateiEingabe = useRef<HTMLInputElement>(null)
+
+  async function ladeLetzteMessungen() {
+    try {
+      setLetzteMessungen(await holeLetzteMessungen(5))
+    } catch {
+      // Tabelle bleibt einfach leer, der Import selbst funktioniert trotzdem.
+    }
+  }
+
+  useEffect(() => {
+    ladeLetzteMessungen()
+  }, [])
 
   async function hochladen(datei: File) {
     setLaedt(true)
@@ -14,6 +32,7 @@ export function CsvImport() {
     setErgebnis(null)
     try {
       setErgebnis(await importiereCsv(datei))
+      ladeLetzteMessungen()
     } catch (e) {
       setFehlerText((e as Error).message)
     } finally {
@@ -172,6 +191,41 @@ export function CsvImport() {
                 : (fehlerText ?? 'Hier erscheint das Ergebnis nach dem Hochladen.')}
             </p>
           </>
+        )}
+      </div>
+
+      <div
+        className="app__diagramm"
+        style={{ '--glow-farbe': 'var(--akzent)' } as CSSProperties}
+      >
+        <h2>Zuletzt hinzugefügt</h2>
+        {letzteMessungen.length > 0 ? (
+          <table className="letzte-tabelle">
+            <thead>
+              <tr>
+                <th>Datum</th>
+                <th>Datenart</th>
+                <th>Kategorie</th>
+                <th>Wert</th>
+                <th>Person</th>
+              </tr>
+            </thead>
+            <tbody>
+              {letzteMessungen.map((m, i) => (
+                <tr key={i}>
+                  <td>{m.datum}</td>
+                  <td>{m.datenart}</td>
+                  <td>{m.kategorie}</td>
+                  <td>
+                    {m.wert} {m.einheit}
+                  </td>
+                  <td>{m.person ?? '–'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="app__hinweis-text">Noch keine Daten importiert.</p>
         )}
       </div>
     </div>

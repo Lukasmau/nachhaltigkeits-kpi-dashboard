@@ -1,5 +1,11 @@
-import { useState, type CSSProperties, type FormEvent } from 'react'
-import { FahrtFehlerAntwort, speichereFahrt, type FahrtFehler } from '../api'
+import { useEffect, useState, type CSSProperties, type FormEvent } from 'react'
+import {
+  FahrtFehlerAntwort,
+  holeLetzteMessungen,
+  speichereFahrt,
+  type FahrtFehler,
+  type LetzteMessung,
+} from '../api'
 
 const KATEGORIEN = [
   { wert: 'Dienstreisen Bahn', label: 'Bahn' },
@@ -17,6 +23,19 @@ export function FahrtFormular() {
   const [erfolg, setErfolg] = useState<{ warnung: string | null } | null>(null)
   const [fachfehler, setFachfehler] = useState<FahrtFehler[] | null>(null)
   const [netzwerkfehler, setNetzwerkfehler] = useState<string | null>(null)
+  const [letzteFahrten, setLetzteFahrten] = useState<LetzteMessung[]>([])
+
+  async function ladeLetzteFahrten() {
+    try {
+      setLetzteFahrten(await holeLetzteMessungen(5, 'fahrt'))
+    } catch {
+      // Tabelle bleibt einfach leer, das Formular selbst funktioniert trotzdem.
+    }
+  }
+
+  useEffect(() => {
+    ladeLetzteFahrten()
+  }, [])
 
   async function speichern(e: FormEvent) {
     e.preventDefault()
@@ -35,6 +54,7 @@ export function FahrtFormular() {
       setDatum('')
       setWert('')
       setPerson('')
+      ladeLetzteFahrten()
     } catch (e) {
       if (e instanceof FahrtFehlerAntwort) {
         setFachfehler(e.fehler)
@@ -53,6 +73,7 @@ export function FahrtFormular() {
         Eine einzelne Dienstreise eintragen – nutzt dieselben Prüf-Funktionen wie der CSV-Import.
       </p>
 
+      <div className="fahrt-seite__grid">
       <div
         className="app__diagramm fahrt-formular-karte"
         style={{ '--glow-farbe': 'var(--akzent)' } as CSSProperties}
@@ -125,6 +146,40 @@ export function FahrtFormular() {
             ))}
           </ul>
         )}
+      </div>
+
+      <div
+        className="app__diagramm"
+        style={{ '--glow-farbe': 'var(--gut)' } as CSSProperties}
+      >
+        <h2>Zuletzt erfasste Fahrten</h2>
+        {letzteFahrten.length > 0 ? (
+          <table className="letzte-tabelle">
+            <thead>
+              <tr>
+                <th>Datum</th>
+                <th>Kategorie</th>
+                <th>Wert</th>
+                <th>Person</th>
+              </tr>
+            </thead>
+            <tbody>
+              {letzteFahrten.map((f, i) => (
+                <tr key={i}>
+                  <td>{f.datum}</td>
+                  <td>{f.kategorie}</td>
+                  <td>
+                    {f.wert} {f.einheit}
+                  </td>
+                  <td>{f.person ?? '–'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="app__hinweis-text">Noch keine Fahrt erfasst.</p>
+        )}
+      </div>
       </div>
     </div>
   )

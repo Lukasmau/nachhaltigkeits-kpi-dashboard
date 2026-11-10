@@ -60,6 +60,28 @@ def messungen_mit_co2e(conn: sqlite3.Connection, jahr: int, monat: int) -> list[
     return [dict(row) for row in rows]
 
 
+def letzte_messungen(
+    conn: sqlite3.Connection, limit: int = 5, datenart: str | None = None
+) -> list[dict]:
+    if datenart is None:
+        rows = conn.execute(
+            """
+            SELECT datum, datenart, kategorie, wert, einheit, person
+            FROM measurements ORDER BY id DESC LIMIT ?
+            """,
+            (limit,),
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            """
+            SELECT datum, datenart, kategorie, wert, einheit, person
+            FROM measurements WHERE datenart = ? ORDER BY id DESC LIMIT ?
+            """,
+            (datenart, limit),
+        ).fetchall()
+    return [dict(row) for row in rows]
+
+
 def jahresziel_gesamt(conn: sqlite3.Connection, jahr: int) -> float | None:
     row = conn.execute(
         "SELECT SUM(ziel_kg_co2e) AS summe FROM targets WHERE jahr = ?",

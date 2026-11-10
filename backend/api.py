@@ -10,7 +10,7 @@ from fastapi import Depends, FastAPI, HTTPException, UploadFile
 from pydantic import BaseModel
 
 from backend.core import kpis, units
-from backend.db import init_db, jahresziel_gesamt, messungen_mit_co2e, verbindung
+from backend.db import init_db, jahresziel_gesamt, letzte_messungen, messungen_mit_co2e, verbindung
 from backend.importer import gueltige_kategorien, importiere_csv, pruefe_duplikat, pruefe_zeile
 from backend.seed.faktoren import seed_faktoren
 
@@ -145,6 +145,13 @@ def api_verlauf(jahr: int, conn: sqlite3.Connection = Depends(get_conn)):
             )
         ],
     }
+
+
+@app.get("/api/messungen/letzte")
+def api_letzte_messungen(
+    limit: int = 5, datenart: str | None = None, conn: sqlite3.Connection = Depends(get_conn)
+):
+    return letzte_messungen(conn, limit=limit, datenart=datenart)
 
 
 @app.post("/api/fahrt")

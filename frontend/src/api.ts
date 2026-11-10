@@ -54,6 +54,28 @@ export async function importiereCsv(datei: File): Promise<ImportErgebnis> {
   return antwort.json()
 }
 
+export type LetzteMessung = {
+  datum: string
+  datenart: string
+  kategorie: string
+  wert: number
+  einheit: string
+  person: string | null
+}
+
+export async function holeLetzteMessungen(
+  limit: number,
+  datenart?: string
+): Promise<LetzteMessung[]> {
+  const params = new URLSearchParams({ limit: String(limit) })
+  if (datenart) params.set('datenart', datenart)
+  const antwort = await fetch(`/api/messungen/letzte?${params}`)
+  if (!antwort.ok) {
+    throw new Error(`API-Fehler: ${antwort.status}`)
+  }
+  return antwort.json()
+}
+
 export type FahrtFehler = { spalte: string; grund: string; tipp: string }
 export type FahrtEingabe = { datum: string; kategorie: string; wert: number; person?: string }
 export type FahrtErgebnis = { gespeichert: true; warnung: string | null }

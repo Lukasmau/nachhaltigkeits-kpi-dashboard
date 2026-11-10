@@ -197,6 +197,44 @@ def test_api_fahrt_lehnt_unbekannte_kategorie_ab(client):
     assert antwort.status_code == 422
 
 
+def test_api_letzte_messungen_zeigt_neueste_zuerst(client):
+    client.post(
+        "/api/fahrt",
+        json={"datum": "2026-03-05", "kategorie": "Dienstreisen Bahn", "wert": 250, "person": "Lukas"},
+    )
+    client.post(
+        "/api/fahrt",
+        json={"datum": "2026-03-06", "kategorie": "Dienstreisen Pkw", "wert": 90, "person": "Anna"},
+    )
+
+    antwort = client.get("/api/messungen/letzte", params={"limit": 2})
+    daten = antwort.json()
+
+    assert len(daten) == 2
+    assert daten[0]["kategorie"] == "Dienstreisen Pkw"  # zuletzt hinzugefuegt zuerst
+    assert daten[1]["kategorie"] == "Dienstreisen Bahn"
+
+
+def test_api_letzte_messungen_filtert_nach_datenart(client):
+    client.post(
+        "/api/fahrt",
+        json={"datum": "2026-03-05", "kategorie": "Dienstreisen Bahn", "wert": 250, "person": "Lukas"},
+    )
+    csv_inhalt = "datum,datenart,kategorie,wert,einheit,person\n2026-03-01,verbrauch,Strom,1000,kWh,\n"
+    client.post("/api/import", files={"datei": ("test.csv", csv_inhalt, "text/csv")})
+
+    antwort = client.get("/api/messungen/letzte", params={"datenart": "fahrt"})
+    daten = antwort.json()
+
+    assert len(daten) == 1
+    assert daten[0]["datenart"] == "fahrt"
+
+
+def test_api_letzte_messungen_ohne_eintraege_ist_leer(client):
+    antwort = client.get("/api/messungen/letzte")
+    assert antwort.json() == []
+
+
 def test_api_verlauf_waehlt_tonnen_wenn_ein_monat_drueber_liegt(client):
     csv_inhalt = (
         "datum,datenart,kategorie,wert,einheit,person\n"
