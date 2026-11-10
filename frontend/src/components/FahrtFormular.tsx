@@ -75,7 +75,7 @@ export function FahrtFormular() {
 
       <div className="fahrt-seite__grid">
       <div
-        className="app__diagramm fahrt-formular-karte"
+        className="app__diagramm"
         style={{ '--glow-farbe': 'var(--akzent)' } as CSSProperties}
       >
         <form className="fahrt-formular" onSubmit={speichern}>

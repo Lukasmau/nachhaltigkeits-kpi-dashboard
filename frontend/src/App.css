@@ -178,7 +178,7 @@
 
 .fahrt-seite__grid {
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: minmax(340px, 460px) 1fr;
   gap: 14px;
   align-items: start;
 }
@@ -187,10 +187,6 @@
   .fahrt-seite__grid {
     grid-template-columns: 1fr;
   }
-}
-
-.fahrt-formular-karte {
-  max-width: 560px;
 }
 
 .letzte-tabelle {
