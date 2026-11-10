@@ -2,6 +2,7 @@ import { useEffect, useState, type CSSProperties } from 'react'
 import './App.css'
 import { holeKpis, holeVerlauf, type KpiAntwort, type VerlaufAntwort } from './api'
 import { AnteilDiagramm } from './components/AnteilDiagramm'
+import { CsvImport } from './components/CsvImport'
 import { KpiKarte } from './components/KpiKarte'
 import { Sidebar, type Seite } from './components/Sidebar'
 import { VerlaufDiagramm } from './components/VerlaufDiagramm'
@@ -47,13 +48,19 @@ function App() {
   const alsProzentReihe = (werte: (number | null)[] | undefined) =>
     werte?.map((w) => (w === null ? null : w * 100))
 
+  if (seite === 'csv-import') {
+    return (
+      <div className="layout">
+        <Sidebar aktuelleSeite={seite} aufSeiteWechseln={setSeite} />
+        <div className="layout__inhalt">
+          <CsvImport />
+        </div>
+      </div>
+    )
+  }
+
   if (seite !== 'uebersicht') {
-    const titel =
-      seite === 'csv-import'
-        ? 'CSV importieren'
-        : seite === 'fahrt-erfassen'
-          ? 'Fahrt erfassen'
-          : 'Jahresziel'
+    const titel = seite === 'fahrt-erfassen' ? 'Fahrt erfassen' : 'Jahresziel'
     return (
       <div className="layout">
         <Sidebar aktuelleSeite={seite} aufSeiteWechseln={setSeite} />

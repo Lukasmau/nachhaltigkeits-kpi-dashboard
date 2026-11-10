@@ -64,6 +64,118 @@
   color: var(--gedaempft);
 }
 
+.dropzone {
+  border-style: dashed;
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--gedaempft);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.dropzone--aktiv {
+  border-color: var(--akzent);
+  color: var(--text);
+}
+
+.dropzone__icon {
+  color: var(--akzent);
+  margin-bottom: 4px;
+}
+
+.dropzone__oder {
+  margin: 8px 0;
+}
+
+.dropzone button {
+  background: var(--akzent);
+  color: var(--hintergrund);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15.2px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.import-ergebnis {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.import-ergebnis__kopf {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.import-badge {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.import-badge--gut {
+  background: color-mix(in srgb, var(--gut) 18%, transparent);
+  color: var(--gut);
+}
+
+.import-badge--schlecht {
+  background: color-mix(in srgb, var(--abweichung) 18%, transparent);
+  color: var(--abweichung);
+}
+
+.format-tabelle {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.format-tabelle td {
+  padding: 7px 10px 7px 0;
+  border-bottom: 1px solid var(--linie);
+  font-size: 14px;
+}
+
+.format-tabelle tr:last-child td {
+  border-bottom: 0;
+}
+
+.format-tabelle td:first-child {
+  color: var(--gedaempft);
+  white-space: nowrap;
+}
+
+.import-warnungen {
+  color: var(--gedaempft);
+  padding-left: 20px;
+}
+
+.import-fehler-tabelle {
+  margin-top: 16px;
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 900px;
+  font-size: 14.4px;
+}
+
+.import-fehler-tabelle th {
+  text-align: left;
+  color: var(--gedaempft);
+  font-weight: 500;
+  padding: 6px 10px 8px 0;
+  border-bottom: 1px solid var(--linie);
+}
+
+.import-fehler-tabelle td {
+  padding: 9px 10px 9px 0;
+  border-bottom: 1px solid var(--linie);
+}
+
 @media (max-width: 700px) {
   .layout {
     flex-direction: column;
@@ -121,7 +233,8 @@
 }
 
 .kpi-karte,
-.app__diagramm {
+.app__diagramm,
+.dropzone {
   background:
     radial-gradient(
       var(--glow-groesse) at var(--glow-position),

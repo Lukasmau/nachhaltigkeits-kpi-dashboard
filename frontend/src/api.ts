@@ -35,3 +35,21 @@ export async function holeVerlauf(jahr: number): Promise<VerlaufAntwort> {
   }
   return antwort.json()
 }
+
+export type ImportFehler = { zeile: number; spalte: string; grund: string; tipp: string }
+export type ImportWarnung = { zeile: number; grund: string }
+export type ImportErgebnis = {
+  importiert: number
+  fehler: ImportFehler[]
+  warnungen: ImportWarnung[]
+}
+
+export async function importiereCsv(datei: File): Promise<ImportErgebnis> {
+  const formular = new FormData()
+  formular.append('datei', datei)
+  const antwort = await fetch('/api/import', { method: 'POST', body: formular })
+  if (!antwort.ok) {
+    throw new Error(`API-Fehler: ${antwort.status}`)
+  }
+  return antwort.json()
+}
