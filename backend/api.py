@@ -4,12 +4,26 @@ import tempfile
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import Depends, FastAPI, UploadFile
+from typing import Literal
+
+from fastapi import Depends, FastAPI, HTTPException, UploadFile
+from pydantic import BaseModel
 
 from backend.core import kpis, units
 from backend.db import init_db, jahresziel_gesamt, messungen_mit_co2e, verbindung
-from backend.importer import importiere_csv
+from backend.importer import gueltige_kategorien, importiere_csv, pruefe_duplikat, pruefe_zeile
 from backend.seed.faktoren import seed_faktoren
+
+FAHRT_KATEGORIEN = Literal[
+    "Dienstreisen Pkw", "Dienstreisen Bahn", "Dienstreisen Bus", "Dienstreisen Flug"
+]
+
+
+class FahrtEingabe(BaseModel):
+    datum: str
+    kategorie: FAHRT_KATEGORIEN
+    wert: float
+    person: str | None = None
 
 DB_PFAD = str(Path(__file__).resolve().parent.parent / "dashboard.db")
 
@@ -131,6 +145,35 @@ def api_verlauf(jahr: int, conn: sqlite3.Connection = Depends(get_conn)):
             )
         ],
     }
+
+
+@app.post("/api/fahrt")
+def api_fahrt(eingabe: FahrtEingabe, conn: sqlite3.Connection = Depends(get_conn)):
+    kategorien = gueltige_kategorien(conn)
+    zeile = {
+        "datum": eingabe.datum,
+        "datenart": "fahrt",
+        "kategorie": eingabe.kategorie,
+        "wert": str(eingabe.wert),
+        "einheit": kategorien.get(eingabe.kategorie, ""),
+        "person": eingabe.person,
+    }
+
+    fehler = pruefe_zeile(zeile, kategorien)
+    if fehler:
+        raise HTTPException(status_code=422, detail=fehler)
+
+    warnung = pruefe_duplikat(conn, zeile)
+
+    conn.execute(
+        """
+        INSERT INTO measurements (datum, datenart, kategorie, wert, einheit, person)
+        VALUES (?, 'fahrt', ?, ?, ?, ?)
+        """,
+        (zeile["datum"], zeile["kategorie"], eingabe.wert, zeile["einheit"], eingabe.person),
+    )
+    conn.commit()
+    return {"gespeichert": True, "warnung": warnung}
 
 
 @app.post("/api/import")

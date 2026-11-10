@@ -141,6 +141,62 @@ def test_api_verlauf_monatsziel_ist_jahresziel_durch_zwoelf(tmp_path):
     assert antwort.json()["monatsziel"] == pytest.approx(1000.0)
 
 
+def test_api_fahrt_speichert_eine_fahrt(client):
+    antwort = client.post(
+        "/api/fahrt",
+        json={"datum": "2026-03-05", "kategorie": "Dienstreisen Bahn", "wert": 250, "person": "Lukas"},
+    )
+    assert antwort.status_code == 200
+    daten = antwort.json()
+    assert daten["gespeichert"] is True
+    assert daten["warnung"] is None
+
+    kpi_antwort = client.get("/api/kpis", params={"jahr": 2026, "monat": 3})
+    # 250 Pkm * 0,026 kg/Pkm (Bahn, siehe CLAUDE.md) = 6,5 kg
+    assert kpi_antwort.json()["co2e_im_monat"]["wert"] == pytest.approx(6.5)
+
+
+def test_api_fahrt_meldet_fachfehler_bei_ungueltigem_datum(client):
+    antwort = client.post(
+        "/api/fahrt",
+        json={"datum": "31.02.2026", "kategorie": "Dienstreisen Bahn", "wert": 250, "person": "Lukas"},
+    )
+    assert antwort.status_code == 422
+    assert antwort.json()["detail"][0]["spalte"] == "datum"
+
+
+def test_api_fahrt_lehnt_negativen_wert_ab(client):
+    antwort = client.post(
+        "/api/fahrt",
+        json={"datum": "2026-03-05", "kategorie": "Dienstreisen Bahn", "wert": -10, "person": "Lukas"},
+    )
+    assert antwort.status_code == 422
+    assert antwort.json()["detail"][0]["spalte"] == "wert"
+
+
+def test_api_fahrt_warnt_bei_duplikat_aber_speichert_trotzdem(client):
+    eingabe = {"datum": "2026-03-05", "kategorie": "Dienstreisen Bahn", "wert": 250, "person": "Lukas"}
+    client.post("/api/fahrt", json=eingabe)
+    zweite_antwort = client.post("/api/fahrt", json=eingabe)
+
+    assert zweite_antwort.status_code == 200
+    daten = zweite_antwort.json()
+    assert daten["gespeichert"] is True
+    assert "existiert bereits" in daten["warnung"]
+
+    kpi_antwort = client.get("/api/kpis", params={"jahr": 2026, "monat": 3})
+    # beide Fahrten sind gespeichert (Fahrten werden nie blockiert, siehe CLAUDE.md §7)
+    assert kpi_antwort.json()["co2e_im_monat"]["wert"] == pytest.approx(13.0)
+
+
+def test_api_fahrt_lehnt_unbekannte_kategorie_ab(client):
+    antwort = client.post(
+        "/api/fahrt",
+        json={"datum": "2026-03-05", "kategorie": "Strom", "wert": 250, "person": "Lukas"},
+    )
+    assert antwort.status_code == 422
+
+
 def test_api_verlauf_waehlt_tonnen_wenn_ein_monat_drueber_liegt(client):
     csv_inhalt = (
         "datum,datenart,kategorie,wert,einheit,person\n"
