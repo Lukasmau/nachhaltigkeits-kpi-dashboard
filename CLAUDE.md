@@ -60,7 +60,7 @@ Quelle: UBA, Liste "Emissionsfaktoren zur Treibhausgasbilanzierung", Version 2.1
 - Palette **Tiefsee + Grün.** Dunkel: Hintergrund #06121B, Karte #0C1D29, Karte2 #132B3B, Text #EAF6FB, gedämpft #8FAEBF, Linie #1D3A4D, Akzent #38BDF8, zweite Farbe/gut #34D399, Abweichung #FB7185. Hell: Hintergrund #EFF6FA, Karte #FFFFFF, Karte2 #E1EEF5, Text #0A1F2E, gedämpft #4B6475, Linie #CFE0EA, Akzent #0369A1, zweite Farbe/gut #15803D, Abweichung #BE123C.
 - Schriften: **Sora** (Überschriften) und **DM Sans** (Text). Mindestens ca. 16 px (Beamer).
 - Bento-Karten, Seitenmenü, **Glow in der Diagrammfarbe** (CSS color-mix radial-gradient pro Karte), Dunkel und Hell umschaltbar.
-- Erklärmodus: kleines, gedämpftes **?** an jeder Karte (Klick: Klartext in 1 bis 2 Sätzen, Formel, Zahlenbeispiel, Quelle), dazu ein Schalter für alle Erklärungen (beim ersten Start an). Texte zentral in einer Datei. Kein Dauertext auf der Karte.
+- Erklärmodus: kleines, gedämpftes **?** an jeder Karte (Hover/Fokus: Klartext in 1 bis 2 Sätzen, Formel, Zahlenbeispiel, Quelle). Texte zentral in einer Datei. Kein Dauertext auf der Karte. **Geändert 11.11.2026 (Lukas):** statt Klick + globalem Schalter jetzt reiner Hover-Tooltip, kein Schalter — er erklärt bei der Präsi ohnehin alles selbst, Hover reicht für den Alltag.
 
 ## 9. Releases (feste Reihenfolge, Muss/Soll/Kann)
 - **R0 Kern (Muss, bis So):** `units.py`, `kpis.py` mit allen 4 KPIs, Tests. *Lukas schreibt selbst (begleitet):* KPI "Veränderung zum Vormonat".
@@ -72,7 +72,7 @@ Quelle: UBA, Liste "Emissionsfaktoren zur Treibhausgasbilanzierung", Version 2.1
   3. ✅ **CSV-Upload im Frontend** — fertig (Drag & Drop + Datei wählen). Offener Punkt: Ergebnis-Ansicht zeigt bisher keine Zeile-für-Zeile-Liste der übernommenen Zeilen, nur die Zahl (zurückgestellt)
   4. ✅ **Fahrten-Eingabeformular** — fertig (`POST /api/fahrt`, nutzt `pruefe_zeile`/`pruefe_duplikat` aus `importer.py`, keine doppelte Logik). Dazu gebaut: `GET /api/messungen/letzte` (eine gemeinsame Funktion für "zuletzt hinzugefügt", genutzt von Fahrt-Formular und CSV-Seite, sortiert nach Datenbank-ID = Einfüge-Reihenfolge, nicht nach Datum) sowie die Spalte `measurements.quelle_datei` (CSV-Import schreibt den echten Upload-Dateinamen mit, bei Fahrten bleibt sie leer). Zurückgestellte Ideen (11.11.2026, Lukas): "Von/Nach"-Felder bei Fahrten nur als Text ohne automatische km-Berechnung (eine Distanz-API wäre eine neue Abhängigkeit, nicht ohne Rückfrage); Hin-/Rückfahrt-Checkbox vorerst nicht gebaut.
   5. ✅ **Jahresziel-Eingabe** — fertig (`GET`/`POST /api/jahresziel`, Upsert pro Jahr, schließt die Lücke aus dem README)
-  6. ⬜ "?" Erklärmodus mit Schalter — wichtig für die Präsi, erklärt Formeln dem Publikum
+  6. ✅ **"?" Erklärmodus** — fertig, als Hover-Tooltip statt Klick+Schalter (siehe §8)
   7. ⬜ Vormonat mit kombinierbaren Kategorien und Hinweisen
   8. ⬜ Export der KPI-Tabelle als CSV
   9. ⬜ Hellmodus — "nice to have", fällt bei Zeitnot notfalls auf R3
