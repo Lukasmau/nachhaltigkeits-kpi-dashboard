@@ -121,6 +121,16 @@ def setze_jahresziel(conn: sqlite3.Connection, jahr: int, ziel_kg_co2e: float) -
     conn.commit()
 
 
+def alle_messungen_roh(conn: sqlite3.Connection) -> list[dict]:
+    rows = conn.execute(
+        """
+        SELECT datum, datenart, kategorie, wert, einheit, person
+        FROM measurements ORDER BY datum, id
+        """
+    ).fetchall()
+    return [dict(row) for row in rows]
+
+
 def alle_jahresziele(conn: sqlite3.Connection) -> list[dict]:
     rows = conn.execute(
         "SELECT jahr, SUM(ziel_kg_co2e) AS ziel_kg_co2e FROM targets GROUP BY jahr ORDER BY jahr DESC"

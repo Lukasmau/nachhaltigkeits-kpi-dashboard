@@ -128,6 +128,23 @@ export async function holeVergleich(
   return antwort.json()
 }
 
+export type MessungRoh = {
+  datum: string
+  datenart: string
+  kategorie: string
+  wert: number
+  einheit: string
+  person: string | null
+}
+
+export async function holeAlleMessungen(): Promise<MessungRoh[]> {
+  const antwort = await fetch('/api/messungen/export')
+  if (!antwort.ok) {
+    throw new Error(`API-Fehler: ${antwort.status}`)
+  }
+  return antwort.json()
+}
+
 export type FahrtFehler = { spalte: string; grund: string; tipp: string }
 export type FahrtEingabe = { datum: string; kategorie: string; wert: number; person?: string }
 export type FahrtErgebnis = { gespeichert: true; warnung: string | null }

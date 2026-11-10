@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import {
+  holeAlleMessungen,
   holeLetzteMessungen,
   importiereCsv,
   type ImportErgebnis,
   type LetzteMessung,
 } from '../api'
+import { importCsvHerunterladen } from '../csvExport'
 
 export function CsvImport() {
   const [ergebnis, setErgebnis] = useState<ImportErgebnis | null>(null)
@@ -25,6 +27,15 @@ export function CsvImport() {
   useEffect(() => {
     ladeLetzteMessungen()
   }, [])
+
+  async function alleDatenSichern() {
+    const messungen = await holeAlleMessungen()
+    importCsvHerunterladen(
+      'alle_messungen_backup.csv',
+      ['datum', 'datenart', 'kategorie', 'wert', 'einheit', 'person'],
+      messungen.map((m) => [m.datum, m.datenart, m.kategorie, m.wert, m.einheit, m.person ?? ''])
+    )
+  }
 
   async function hochladen(datei: File) {
     setLaedt(true)
@@ -198,7 +209,18 @@ export function CsvImport() {
         className="app__diagramm"
         style={{ '--glow-farbe': 'var(--akzent)' } as CSSProperties}
       >
-        <h2>Zuletzt hinzugefügt</h2>
+        <div className="app__diagramm-kopf">
+          <h2>Zuletzt hinzugefügt</h2>
+          <button type="button" className="export-knopf" onClick={alleDatenSichern}>
+            Alle Daten sichern
+          </button>
+        </div>
+        <p className="app__hinweis-text" style={{ marginTop: 0, marginBottom: 14 }}>
+          "Alle Daten sichern" lädt alle Messungen in genau dem Format herunter, das der Import
+          oben erwartet – bei Datenverlust einfach wieder hochladen. In eine bereits gefüllte
+          Datenbank zurückgespielt, werden Fahrten dabei doppelt angelegt (nur gewarnt, nicht
+          blockiert), Verbrauchsdaten werden als Duplikat übersprungen.
+        </p>
         {letzteMessungen.length > 0 ? (
           <table className="letzte-tabelle">
             <thead>

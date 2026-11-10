@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 from backend.core import kpis, units
 from backend.db import (
     alle_jahresziele,
+    alle_messungen_roh,
     init_db,
     jahresziel_gesamt,
     letzte_messungen,
@@ -222,6 +223,11 @@ def api_jahresziel_setzen(
 ):
     setze_jahresziel(conn, eingabe.jahr, eingabe.ziel_kg_co2e)
     return {"gespeichert": True}
+
+
+@app.get("/api/messungen/export")
+def api_messungen_export(conn: sqlite3.Connection = Depends(get_conn)):
+    return alle_messungen_roh(conn)
 
 
 @app.get("/api/messungen/letzte")

@@ -215,6 +215,63 @@ def test_api_fahrt_lehnt_unbekannte_kategorie_ab(client):
     assert antwort.status_code == 422
 
 
+def test_api_messungen_export_liefert_rohdaten_im_import_format(client):
+    csv_inhalt = (
+        "datum,datenart,kategorie,wert,einheit,person\n"
+        "2026-03-02,verbrauch,Strom,1000,kWh,\n"
+        "2026-03-01,fahrt,Dienstreisen Bahn,340,Pkm,Lukas\n"
+    )
+    client.post("/api/import", files={"datei": ("test.csv", csv_inhalt, "text/csv")})
+
+    antwort = client.get("/api/messungen/export")
+    daten = antwort.json()
+
+    assert len(daten) == 2
+    # sortiert nach Datum, nicht nach Einfuege-Reihenfolge
+    assert daten[0]["datum"] == "2026-03-01"
+    assert daten[0]["datenart"] == "fahrt"
+    assert daten[0]["kategorie"] == "Dienstreisen Bahn"
+    assert daten[0]["wert"] == 340.0
+    assert daten[0]["einheit"] == "Pkm"
+    assert daten[0]["person"] == "Lukas"
+    assert daten[1]["datum"] == "2026-03-02"
+    assert daten[1]["person"] is None
+
+
+def test_api_messungen_export_ohne_daten_ist_leer(client):
+    assert client.get("/api/messungen/export").json() == []
+
+
+def test_api_messungen_export_ist_wieder_importierbar(client, tmp_path):
+    csv_inhalt = (
+        "datum,datenart,kategorie,wert,einheit,person\n"
+        "2026-03-01,verbrauch,Strom,1000,kWh,\n"
+        "2026-03-02,fahrt,Dienstreisen Bahn,340,Pkm,Lukas\n"
+    )
+    client.post("/api/import", files={"datei": ("test.csv", csv_inhalt, "text/csv")})
+    export = client.get("/api/messungen/export").json()
+
+    # Genau das CSV-Format bauen, das der Export-Button im Frontend erzeugt
+    # (Komma, Punkt-Dezimalzahlen - re-importierbar, anders als die
+    # Semikolon-Report-Exports mit deutschem Komma).
+    zeilen = ["datum,datenart,kategorie,wert,einheit,person"]
+    for m in export:
+        zeilen.append(f"{m['datum']},{m['datenart']},{m['kategorie']},{m['wert']},{m['einheit']},{m['person'] or ''}")
+    csv_pfad = tmp_path / "backup.csv"
+    csv_pfad.write_text("\n".join(zeilen), encoding="utf-8")
+
+    antwort = client.post(
+        "/api/import", files={"datei": ("backup.csv", csv_pfad.read_bytes(), "text/csv")}
+    )
+    ergebnis = antwort.json()
+    # Verbrauch-Zeile ist schon vorhanden -> Duplikat-Fehler, Zeile uebersprungen
+    # (siehe CLAUDE.md §7). Fahrt wird trotzdem nochmal importiert, nur gewarnt.
+    assert len(ergebnis["fehler"]) == 1
+    assert ergebnis["fehler"][0]["spalte"] == "duplikat"
+    assert ergebnis["importiert"] == 1
+    assert len(ergebnis["warnungen"]) == 1
+
+
 def test_api_letzte_messungen_zeigt_neueste_zuerst(client):
     client.post(
         "/api/fahrt",
