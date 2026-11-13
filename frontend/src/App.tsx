@@ -185,7 +185,7 @@ function App() {
           {daten && (
             <div className="app__grid">
               <KpiKarte
-                titel={`CO2e im ${monatsLang[monat - 1]}`}
+                titel={`Emissionen im ${monatsLang[monat - 1]}`}
                 wert={daten.co2e_im_monat.wert}
                 einheit={daten.co2e_im_monat.einheit}
                 hinweis={daten.co2e_im_monat.warnungen[0] ?? 'Keine Werte angegeben'}
@@ -227,7 +227,11 @@ function App() {
                 prozent={
                   daten.zielerreichung === null ? null : daten.zielerreichung * 100
                 }
-                hinweis="Ziel fehlt oder nicht berechenbar"
+                hinweis={
+                  daten.co2e_im_monat.wert === null
+                    ? 'Noch keine Messwerte'
+                    : 'Ziel fehlt oder nicht berechenbar'
+                }
               />
             </div>
           )}
@@ -282,7 +286,7 @@ function App() {
                 />
               </div>
             )}
-            {anteile && (
+            {daten && (
               <div
                 className="app__diagramm"
                 style={{ '--glow-farbe': 'var(--gut)' } as CSSProperties}
@@ -291,7 +295,11 @@ function App() {
                   Anteil je Kategorie
                   <ErklaerIcon schluessel="anteil" />
                 </h2>
-                <AnteilDiagramm anteile={anteile} />
+                {anteile ? (
+                  <AnteilDiagramm anteile={anteile} />
+                ) : (
+                  <p className="app__hinweis-text">Noch keine Daten</p>
+                )}
               </div>
             )}
           </div>

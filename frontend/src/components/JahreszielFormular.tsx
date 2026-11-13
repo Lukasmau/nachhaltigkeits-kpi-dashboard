@@ -4,6 +4,14 @@ import { holeJahresziele, speichereJahresziel, type Jahresziel } from '../api'
 // Noch fest verdrahtet, bis es eine Monats-/Jahresauswahl im Frontend gibt (siehe App.tsx).
 const JAHR = 2026
 
+// Gleiche Einheitenschwelle wie backend/core/units.py (unter 1.000 kg als kg,
+// sonst Tonnen) und deutsches Zahlenformat - hier lokal, weil der Wert aus
+// dem Eingabefeld kommt statt schon fertig formatiert von der API.
+function formatiereKg(kg: number): string {
+  const [wert, einheit] = kg >= 1000 ? [kg / 1000, 't'] : [kg, 'kg']
+  return `${wert.toLocaleString('de-DE', { maximumFractionDigits: 1 })} ${einheit}`
+}
+
 export function JahreszielFormular() {
   const [jahr, setJahr] = useState(String(JAHR))
   const [ziel, setZiel] = useState('')
@@ -71,7 +79,7 @@ export function JahreszielFormular() {
               />
             </div>
             <div>
-              <label htmlFor="j-ziel">Jahresziel (kg CO2e)</label>
+              <label htmlFor="j-ziel">Jahresziel (kg CO₂e)</label>
               <input
                 id="j-ziel"
                 className="eingabe-formular__wert-gross"
@@ -84,7 +92,7 @@ export function JahreszielFormular() {
               />
             </div>
             {monatsziel !== null && (
-              <p className="app__hinweis-text">Monatsziel: {monatsziel.toFixed(1)} kg</p>
+              <p className="app__hinweis-text">Monatsziel: {formatiereKg(monatsziel)}</p>
             )}
             <button type="submit" disabled={speichert}>
               {speichert ? 'Speichert …' : 'Ziel speichern'}
@@ -109,7 +117,7 @@ export function JahreszielFormular() {
                 {ziele.map((z) => (
                   <tr key={z.jahr}>
                     <td>{z.jahr}</td>
-                    <td>{(z.ziel_kg_co2e / 1000).toFixed(1)} t</td>
+                    <td>{formatiereKg(z.ziel_kg_co2e)}</td>
                   </tr>
                 ))}
               </tbody>

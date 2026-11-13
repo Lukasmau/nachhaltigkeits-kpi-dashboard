@@ -61,19 +61,26 @@ export function Sparkline({ werte, farbe = 'var(--akzent)' }: Props) {
           <stop offset="1" style={{ stopColor: farbe, stopOpacity: 0 }} />
         </linearGradient>
       </defs>
-      {segmente.map((segment, i) => (
-        <g key={i}>
-          <path d={flaechenPfad(segment)} fill={`url(#${gradientId})`} stroke="none" />
-          <path
-            d={geradeLinie(segment)}
-            fill="none"
-            stroke={farbe}
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </g>
-      ))}
+      {segmente.map((segment, i) =>
+        // Ein Segment mit nur einem Punkt (Luecke davor und danach) ergibt
+        // bei M-ohne-L keine sichtbare Linie - als Punkt zeichnen statt dass
+        // der Monat einfach verschwindet.
+        segment.length === 1 ? (
+          <circle key={i} cx={segment[0][0]} cy={segment[0][1]} r={2.2} fill={farbe} />
+        ) : (
+          <g key={i}>
+            <path d={flaechenPfad(segment)} fill={`url(#${gradientId})`} stroke="none" />
+            <path
+              d={geradeLinie(segment)}
+              fill="none"
+              stroke={farbe}
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </g>
+        )
+      )}
     </svg>
   )
 }

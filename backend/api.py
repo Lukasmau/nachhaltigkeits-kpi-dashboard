@@ -104,13 +104,16 @@ def api_verlauf(jahr: int, conn: sqlite3.Connection = Depends(get_conn)):
     monatsergebnisse = [kpis.co2e_im_monat(m) for m in alle_messungen]
     anteilsergebnisse = [kpis.anteil_je_kategorie(m) for m in alle_messungen]
 
-    # ein Diagramm nutzt nur eine Einheit (CLAUDE.md §4): die Einheit wird
-    # einmal fuer die ganze Reihe bestimmt, nicht pro Monat einzeln.
-    werte_kg = [ergebnis["wert_kg"] for ergebnis in monatsergebnisse]
-    einheit = units.einheit_fuer_reihe(werte_kg)
-    werte = units.reihe_in_einheit(werte_kg, einheit)
     jahresziel = jahresziel_gesamt(conn, jahr)
     monatsziel_kg = jahresziel / 12 if jahresziel is not None else None
+
+    # ein Diagramm nutzt nur eine Einheit (CLAUDE.md §4): die Einheit wird
+    # einmal fuer die ganze Reihe bestimmt, nicht pro Monat einzeln - die
+    # Ziel-Linie zaehlt dabei mit, sonst bliebe sie ohne Messungen in kg
+    # "stecken", auch wenn das Ziel allein schon ueber der Tonnen-Schwelle liegt.
+    werte_kg = [ergebnis["wert_kg"] for ergebnis in monatsergebnisse]
+    einheit = units.einheit_fuer_reihe(werte_kg + [monatsziel_kg])
+    werte = units.reihe_in_einheit(werte_kg, einheit)
     monatsziel = (
         units.reihe_in_einheit([monatsziel_kg], einheit)[0]
         if monatsziel_kg is not None

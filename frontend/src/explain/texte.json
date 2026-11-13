@@ -1,8 +1,8 @@
 {
   "co2e_im_monat": {
-    "text": "Summiert alle Messungen des Monats, nachdem jeder Wert mit seinem Emissionsfaktor in kg CO2e umgerechnet wurde.",
-    "formel": "CO2e = Σ (Messwert × Faktor)",
-    "beispiel": "1.000 kWh Strom × 0,344 kg CO2/kWh = 344 kg CO2e",
+    "text": "Summiert alle Messungen des Monats, nachdem jeder Wert mit seinem Emissionsfaktor in kg CO₂e umgerechnet wurde. CO₂e (CO₂-Äquivalente): andere Treibhausgase, umgerechnet auf die Wirkung von CO₂.",
+    "formel": "CO₂e = Σ (Messwert × Faktor)",
+    "beispiel": "1.000 kWh Strom × 0,344 kg CO₂/kWh = 344 kg CO₂e",
     "quelle": "Faktoren aus der Tabelle „factors“, Quelle UBA (siehe CLAUDE.md §5)"
   },
   "veraenderung_zum_vormonat": {
@@ -25,7 +25,7 @@
   },
   "verlauf": {
     "text": "Zeigt die Monatssummen des Jahres als Linie, dazu das Monatsziel als gestrichelte Linie. Eine Lücke bedeutet eine fehlende Messung, nicht 0.",
-    "formel": "wie „CO2e im Monat“, einmal je Monat berechnet",
+    "formel": "wie „Emissionen im Monat“, einmal je Monat berechnet",
     "beispiel": "Juni 320 kg, Juli keine Messung (Lücke), August 410 kg",
     "quelle": "backend/core/kpis.py, co2e_im_monat"
   },

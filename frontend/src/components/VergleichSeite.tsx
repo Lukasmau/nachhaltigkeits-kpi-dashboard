@@ -8,6 +8,11 @@ const JAHR = 2026
 const MONAT = 10
 const JAHRE = [2024, 2025, 2026]
 
+// Gleiche "heute"-Grenze wie HEUTE_JAHR in App.tsx (demo-fest auf Oktober
+// 2026): das laufende Jahr hat noch keine 12 Monate Daten, ein Vergleich
+// gegen ein volles Jahr ist dann nicht fair.
+const HEUTE_JAHR = 2026
+
 type Modus = 'monat' | 'jahr'
 
 type GruppenZeile = {
@@ -77,6 +82,9 @@ export function VergleichSeite() {
     modus === 'monat' ? `${monatsLang[monatA - 1]} ${jahrA}` : `${jahrA}`
   const labelB =
     modus === 'monat' ? `${monatsLang[monatB - 1]} ${jahrB}` : `${jahrB}`
+
+  const unvollstaendigesJahr =
+    modus === 'jahr' && (jahrA === HEUTE_JAHR || jahrB === HEUTE_JAHR) ? HEUTE_JAHR : null
 
   return (
     <div className="app">
@@ -154,6 +162,12 @@ export function VergleichSeite() {
         </div>
       </div>
 
+      {unvollstaendigesJahr !== null && (
+        <p className="app__hinweis-text">
+          {unvollstaendigesJahr} ist unvollständig – Vergleich nicht zu 100 % fair.
+        </p>
+      )}
+
       {fehler && <p className="app__fehler">{fehler}</p>}
 
       {daten && (
@@ -163,7 +177,7 @@ export function VergleichSeite() {
             style={{ '--glow-farbe': 'var(--gut)' } as CSSProperties}
           >
             <h2>
-              CO2e je Kategorie, {labelA} gegen {labelB}
+              CO₂e je Kategorie, {labelA} gegen {labelB}
             </h2>
 
             <div className="legende">

@@ -27,6 +27,11 @@ function formatiereWert(wert: number): string {
 
 export function VerlaufDiagramm({ verlauf: rohVerlauf, einheit, monatsziel }: Props) {
   const verlauf = ohneZukunft(rohVerlauf)
+
+  if (verlauf.length === 0) {
+    return <p className="app__hinweis-text">Noch keine Daten</p>
+  }
+
   const letzterIndex = verlauf.length - 1
   const letzterWert = letzterIndex >= 0 ? verlauf[letzterIndex].wert : null
 

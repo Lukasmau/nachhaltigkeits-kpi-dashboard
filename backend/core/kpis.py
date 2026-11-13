@@ -28,10 +28,16 @@ def anteil_je_kategorie(messungen: list[dict]) -> dict:
     if gesamt["wert_kg"] is None or gesamt["wert_kg"] == 0:
         return {"anteile": None, "warnungen": warnungen}
 
+    summen = {}
+    for messung in messungen:
+        co2e_kg = messung["co2e_kg"]
+        if co2e_kg is None:
+            continue
+        kategorie = messung["kategorie"]
+        summen[kategorie] = summen.get(kategorie, 0) + co2e_kg
+
     anteile = {
-        messung["kategorie"]: messung["co2e_kg"] / gesamt["wert_kg"]
-        for messung in messungen
-        if messung["co2e_kg"] is not None
+        kategorie: summe / gesamt["wert_kg"] for kategorie, summe in summen.items()
     }
     return {"anteile": anteile, "warnungen": warnungen}
 

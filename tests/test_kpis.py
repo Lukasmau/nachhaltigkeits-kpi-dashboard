@@ -84,6 +84,20 @@ def test_anteil_je_kategorie_fehlender_faktor_taucht_nicht_im_anteil_auf():
     assert any("Dienstreisen" in warnung for warnung in ergebnis["warnungen"])
 
 
+def test_anteil_je_kategorie_summiert_mehrere_messungen_gleicher_kategorie():
+    # Mehrere Fahrten mit derselben Kategorie im selben Monat (z. B. zwei
+    # Pkw-Dienstreisen) muessen zusammengezaehlt werden, nicht nur die letzte
+    # zaehlen - sonst ergeben die Anteile in Summe nicht 100 %.
+    messungen = [
+        {"kategorie": "Strom", "co2e_kg": 100.0},
+        {"kategorie": "Pkw", "co2e_kg": 30.0},
+        {"kategorie": "Pkw", "co2e_kg": 20.0},
+    ]
+    ergebnis = anteil_je_kategorie(messungen)
+    assert ergebnis["anteile"] == {"Strom": 100 / 150, "Pkw": 50 / 150}
+    assert sum(ergebnis["anteile"].values()) == pytest.approx(1.0)
+
+
 def test_veraenderung_zum_vormonat_normalfall():
     # 120 kg jetzt, 100 kg im Vormonat -> 20 % mehr, also 0.2
     assert veraenderung_zum_vormonat(120, 100) == 0.2

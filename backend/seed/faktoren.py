@@ -5,7 +5,7 @@ FAKTOREN = [
         "kategorie": "Strom",
         "einheit": "kWh",
         "faktor_kg_co2e_pro_einheit": 0.344,
-        "quelle": "UBA, Strommix Deutschland 2025, Schätzung (CO2, nicht CO2e)",
+        "quelle": "UBA, Strommix Deutschland 2025, Schätzung (CO₂, nicht CO₂e)",
         "stand": "23.03.2026",
     },
     {
@@ -61,7 +61,7 @@ FAKTOREN = [
         "quelle": (
             "UBA, Vergleich der durchschnittlichen Emissionen einzelner Verkehrsmittel "
             "im Personenverkehr 2024, TREMOD 6.71B (10/2025), Flugzeug Inland, "
-            "inkl. Nicht-CO2-Effekte (EWF 1,5) und Vorkette; "
+            "inkl. Nicht-CO₂-Effekte (EWF 1,5) und Vorkette; "
             "siehe data/uba_vergleich_personenverkehr_2024.pdf"
         ),
         "stand": "Bezugsjahr 2024",
