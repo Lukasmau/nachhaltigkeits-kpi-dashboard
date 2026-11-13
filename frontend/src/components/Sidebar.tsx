@@ -8,11 +8,11 @@ export type Seite =
 
 const EINTRAEGE: { seite: Seite; label: string }[] = [
   { seite: 'uebersicht', label: 'Übersicht' },
-  { seite: 'csv-import', label: 'CSV importieren' },
+  { seite: 'vergleichen', label: 'Vergleichen' },
   { seite: 'fahrt-erfassen', label: 'Fahrt erfassen' },
+  { seite: 'csv-import', label: 'CSV importieren' },
   { seite: 'jahresziel', label: 'Jahresziel' },
   { seite: 'faktoren', label: 'Faktoren' },
-  { seite: 'vergleichen', label: 'Vergleichen' },
 ]
 
 type Props = {

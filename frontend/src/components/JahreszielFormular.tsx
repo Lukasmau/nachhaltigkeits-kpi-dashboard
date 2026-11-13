@@ -1,5 +1,6 @@
 import { useEffect, useState, type CSSProperties, type FormEvent } from 'react'
 import { holeJahresziele, speichereJahresziel, type Jahresziel } from '../api'
+import { InfoIcon } from './InfoIcon'
 
 // Noch fest verdrahtet, bis es eine Monats-/Jahresauswahl im Frontend gibt (siehe App.tsx).
 const JAHR = 2026
@@ -59,11 +60,10 @@ export function JahreszielFormular() {
 
   return (
     <div className="app">
-      <h1>Jahresziel</h1>
-      <p className="app__hinweis-text">
-        Legt das Gesamt-Jahresziel fest. Das Monatsziel (Jahresziel ÷ 12) steuert die
-        Zielerreichung-Anzeige.
-      </p>
+      <h1>
+        Jahresziel
+        <InfoIcon text="Legt das Gesamt-Jahresziel fest. Das Monatsziel (Jahresziel ÷ 12) steuert die Zielerreichung-Anzeige." />
+      </h1>
 
       <div className="fahrt-seite__grid">
         <div className="app__diagramm" style={{ '--glow-farbe': 'var(--gut)' } as CSSProperties}>

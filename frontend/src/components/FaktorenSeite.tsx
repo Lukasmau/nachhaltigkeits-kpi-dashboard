@@ -23,11 +23,10 @@ export function FaktorenSeite() {
 
   return (
     <div className="app">
-      <h1>Faktoren</h1>
-      <p className="app__hinweis-text">
-        Alle Emissionsfaktoren, mit denen das Dashboard Messwerte in kg CO₂e umrechnet. Nur zur
-        Ansicht – geändert wird im Code, siehe Hinweis unten.
-      </p>
+      <h1>
+        Faktoren
+        <InfoIcon text="Alle Emissionsfaktoren, mit denen das Dashboard Messwerte in kg CO₂e umrechnet. Nur zur Ansicht – geändert wird im Code, siehe Hinweis unten." />
+      </h1>
 
       {fehler && <p className="app__fehler">{fehler}</p>}
 

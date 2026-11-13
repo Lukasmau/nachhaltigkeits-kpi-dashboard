@@ -7,6 +7,7 @@ import {
   type LetzteMessung,
 } from '../api'
 import { importCsvHerunterladen } from '../csvExport'
+import { InfoIcon } from './InfoIcon'
 
 export function CsvImport() {
   const [ergebnis, setErgebnis] = useState<ImportErgebnis | null>(null)
@@ -53,11 +54,10 @@ export function CsvImport() {
 
   return (
     <div className="app">
-      <h1>CSV importieren</h1>
-      <p className="app__hinweis-text">
-        Lade eine CSV-Datei mit Strom-, Erdgas- oder Fahrtdaten hoch. Fehlerhafte Zeilen werden
-        einzeln gemeldet, der Rest wird trotzdem übernommen.
-      </p>
+      <h1>
+        CSV importieren
+        <InfoIcon text="Lade eine CSV-Datei mit Strom-, Erdgas- oder Fahrtdaten hoch. Fehlerhafte Zeilen werden einzeln gemeldet, der Rest wird trotzdem übernommen." />
+      </h1>
 
       <div className="app__grid app__grid--diagramme">
         <div

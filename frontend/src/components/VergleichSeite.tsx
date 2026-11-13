@@ -2,6 +2,7 @@ import { useEffect, useState, type CSSProperties } from 'react'
 import { holeVergleich, type VergleichAntwort } from '../api'
 import { csvHerunterladen, csvZahl } from '../csvExport'
 import { monatsLang } from '../monate'
+import { InfoIcon } from './InfoIcon'
 
 // Noch fest verdrahtet, bis es eine Monats-/Jahresauswahl im Frontend gibt (siehe App.tsx).
 const JAHR = 2026
@@ -88,12 +89,10 @@ export function VergleichSeite() {
 
   return (
     <div className="app">
-      <h1>Vergleichen</h1>
-      <p className="app__hinweis-text">
-        Zwei Zeiträume nebeneinander vergleichen, je Kategorie. Egal ob dahinter eine
-        CSV-Zeile pro Monat oder viele einzelne Fahrten stecken – am Ende zählt nur die
-        Summe pro Kategorie und Zeitraum.
-      </p>
+      <h1>
+        Vergleichen
+        <InfoIcon text="Zwei Zeiträume nebeneinander vergleichen, je Kategorie. Egal ob dahinter eine CSV-Zeile pro Monat oder viele einzelne Fahrten stecken – am Ende zählt nur die Summe pro Kategorie und Zeitraum." />
+      </h1>
 
       <div
         className="app__diagramm vergleich-auswahl"

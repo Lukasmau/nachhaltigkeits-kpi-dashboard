@@ -6,6 +6,7 @@ import {
   type FahrtFehler,
   type LetzteMessung,
 } from '../api'
+import { InfoIcon } from './InfoIcon'
 
 const KATEGORIEN = [
   { wert: 'Dienstreisen Bahn', label: 'Bahn' },
@@ -68,10 +69,10 @@ export function FahrtFormular() {
 
   return (
     <div className="app">
-      <h1>Fahrt erfassen</h1>
-      <p className="app__hinweis-text">
-        Eine einzelne Dienstreise eintragen – nutzt dieselben Prüf-Funktionen wie der CSV-Import.
-      </p>
+      <h1>
+        Fahrt erfassen
+        <InfoIcon text="Eine einzelne Dienstreise eintragen – nutzt dieselben Prüf-Funktionen wie der CSV-Import." />
+      </h1>
 
       <div className="fahrt-seite__grid">
       <div
