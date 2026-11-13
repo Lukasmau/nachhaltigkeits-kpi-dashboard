@@ -89,8 +89,8 @@ export function FaktorenSeite() {
           </p>
           <p className="app__hinweis-text">
             Aktuell gibt es nur einen Faktor für Flug Inland. Eine Flug-Messung mit echter
-            Langstrecke wird damit zu niedrig berechnet – eine bewusste Vereinfachung für diesen
-            Prototyp.
+            Langstrecke wird damit nicht korrekt abgebildet – eine bewusste Vereinfachung für
+            diesen Prototyp.
           </p>
         </div>
       </div>
