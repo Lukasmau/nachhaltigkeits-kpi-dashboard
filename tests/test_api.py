@@ -488,6 +488,23 @@ def test_api_vergleich_waehlt_tonnen_wenn_ein_wert_drueber_liegt(client):
     assert daten["kategorien"]["Strom"]["wert_b"] == pytest.approx(0.172)
 
 
+def test_api_faktoren_liefert_alle_zeilen_mit_pflichtfeldern(client):
+    antwort = client.get("/api/faktoren")
+    assert antwort.status_code == 200
+    zeilen = antwort.json()
+    assert len(zeilen) == 6
+
+    pflichtfelder = {"kategorie", "einheit", "faktor_kg_co2e_pro_einheit", "quelle", "stand"}
+    for zeile in zeilen:
+        assert pflichtfelder <= zeile.keys()
+        assert zeile["kategorie"]
+        assert zeile["faktor_kg_co2e_pro_einheit"] > 0
+
+    strom = next(z for z in zeilen if z["kategorie"] == "Strom")
+    assert strom["einheit"] == "kWh"
+    assert strom["faktor_kg_co2e_pro_einheit"] == pytest.approx(0.344)
+
+
 def test_api_verlauf_waehlt_tonnen_wenn_ein_monat_drueber_liegt(client):
     csv_inhalt = (
         "datum,datenart,kategorie,wert,einheit,person\n"

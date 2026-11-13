@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 
 from backend.core import kpis, units
 from backend.db import (
+    alle_faktoren,
     alle_jahresziele,
     alle_messungen_roh,
     fruehester_monat,
@@ -46,12 +47,13 @@ DB_PFAD = str(Path(__file__).resolve().parent.parent / "dashboard.db")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    neu_angelegt = not Path(DB_PFAD).exists()
     init_db(DB_PFAD)
-    if neu_angelegt:
-        conn = verbindung(DB_PFAD)
-        seed_faktoren(conn)
-        conn.close()
+    # seed_faktoren ist ein Upsert (siehe faktoren.py): bei jedem Start
+    # aufrufen, damit eine Aenderung an FAKTOREN auch in einer schon
+    # bestehenden dashboard.db ankommt, nicht nur bei einer neuen DB.
+    conn = verbindung(DB_PFAD)
+    seed_faktoren(conn)
+    conn.close()
     yield
 
 
@@ -219,6 +221,11 @@ def api_vergleich(
 @app.get("/api/jahresziel")
 def api_jahresziele(conn: sqlite3.Connection = Depends(get_conn)):
     return alle_jahresziele(conn)
+
+
+@app.get("/api/faktoren")
+def api_faktoren(conn: sqlite3.Connection = Depends(get_conn)):
+    return alle_faktoren(conn)
 
 
 @app.post("/api/jahresziel")

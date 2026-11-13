@@ -144,3 +144,11 @@ def alle_jahresziele(conn: sqlite3.Connection) -> list[dict]:
         "SELECT jahr, SUM(ziel_kg_co2e) AS ziel_kg_co2e FROM targets GROUP BY jahr ORDER BY jahr DESC"
     ).fetchall()
     return [dict(row) for row in rows]
+
+
+def alle_faktoren(conn: sqlite3.Connection) -> list[dict]:
+    rows = conn.execute(
+        "SELECT kategorie, einheit, faktor_kg_co2e_pro_einheit, quelle, stand "
+        "FROM factors ORDER BY id"
+    ).fetchall()
+    return [dict(row) for row in rows]

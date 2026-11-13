@@ -78,6 +78,22 @@ export async function holeLetzteMessungen(
   return antwort.json()
 }
 
+export type Faktor = {
+  kategorie: string
+  einheit: string
+  faktor_kg_co2e_pro_einheit: number
+  quelle: string
+  stand: string
+}
+
+export async function holeFaktoren(): Promise<Faktor[]> {
+  const antwort = await fetch('/api/faktoren')
+  if (!antwort.ok) {
+    throw new Error(`API-Fehler: ${antwort.status}`)
+  }
+  return antwort.json()
+}
+
 export type Jahresziel = { jahr: number; ziel_kg_co2e: number }
 
 export async function holeJahresziele(): Promise<Jahresziel[]> {

@@ -12,6 +12,7 @@ import { AnteilDiagramm, gruppiereDienstreisen } from './components/AnteilDiagra
 import { CsvImport } from './components/CsvImport'
 import { ErklaerIcon } from './components/ErklaerIcon'
 import { FahrtFormular } from './components/FahrtFormular'
+import { FaktorenSeite } from './components/FaktorenSeite'
 import { JahreszielFormular } from './components/JahreszielFormular'
 import { KpiKarte } from './components/KpiKarte'
 import { Sidebar, type Seite } from './components/Sidebar'
@@ -137,6 +138,17 @@ function App() {
         <Sidebar aktuelleSeite={seite} aufSeiteWechseln={setSeite} />
         <div className="layout__inhalt">
           <JahreszielFormular />
+        </div>
+      </div>
+    )
+  }
+
+  if (seite === 'faktoren') {
+    return (
+      <div className="layout">
+        <Sidebar aktuelleSeite={seite} aufSeiteWechseln={setSeite} />
+        <div className="layout__inhalt">
+          <FaktorenSeite />
         </div>
       </div>
     )
