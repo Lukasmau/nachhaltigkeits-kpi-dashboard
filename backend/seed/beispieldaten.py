@@ -1,6 +1,6 @@
 """
 Erzeugt Beispieldaten fuer die fiktive "Muster Consulting GmbH" (25 Leute,
-ein Buero, viel Kundenreisen): 24 Monate von November 2024 bis Oktober 2026.
+ein Buero, viel Kundenreisen): 24 Monate von Dezember 2024 bis November 2026.
 
 Muster: Strom nahezu gleichmaessig (leichter Sommer-Zuschlag, Klimaanlage),
 Erdgas stark saisonal (Winter hoch, Sommer niedrig). Dienstreisen 2024/2025
@@ -70,12 +70,19 @@ def phase_fuer(jahr: int, monat: int) -> str:
     return "optimiert"
 
 
+# Aktueller Demo-Monat: Fahrten nur bis zum 12., damit die Beispieldaten keine
+# Werte in der Zukunft enthalten (der Rest des Monats bleibt fuer Live-Eingaben).
+AKTUELLER_MONAT = (2026, 11)
+AKTUELLER_MONAT_LETZTER_TAG = 12
+
+
 def dienstreisen_fuer_monat(jahr: int, monat: int) -> list[dict]:
     gewichte = VERKEHRSMITTEL_GEWICHTE[phase_fuer(jahr, monat)]
+    letzter_tag = AKTUELLER_MONAT_LETZTER_TAG if (jahr, monat) == AKTUELLER_MONAT else 28
     zeilen = []
     for _ in range(random.randint(4, 8)):
         kategorie = random.choices(list(gewichte), weights=list(gewichte.values()))[0]
-        tag = random.randint(1, 28)
+        tag = random.randint(1, letzter_tag)
         wert = random.randint(*PKM_SPANNEN[kategorie])
         zeilen.append(
             {
@@ -91,8 +98,15 @@ def dienstreisen_fuer_monat(jahr: int, monat: int) -> list[dict]:
 
 
 def erzeuge_beispieldaten() -> list[dict]:
+    # Es werden 25 Monate gewuerfelt (ab November 2024), der erste wird aber nicht
+    # ausgegeben. So bleibt die Zufallsfolge fuer alle Monate bis Oktober 2026
+    # unveraendert (Auswertungen und Screenshots gelten weiter) und der November
+    # 2026 kommt hinten dazu - es bleiben 24 Monate.
     zeilen = []
-    for jahr, monat in monate(2024, 11, 24):
+    for nr, (jahr, monat) in enumerate(monate(2024, 11, 25)):
+        if nr == 0:
+            strom_kwh(monat), erdgas_kwh(monat), dienstreisen_fuer_monat(jahr, monat)
+            continue
         zeilen.append(
             {
                 "datum": f"{jahr:04d}-{monat:02d}-05",
@@ -144,7 +158,7 @@ def erzeuge_fehlerdaten() -> list[dict]:
             "person": "",
         },
         {
-            # Datum bewusst ausserhalb Nov 2024 - Okt 2026, damit das
+            # Datum bewusst ausserhalb Dez 2024 - Nov 2026, damit das
             # Duplikat-Paar nicht zufaellig mit echten Beispieldaten
             # kollidiert, egal in welcher Reihenfolge demonstriert wird.
             "datum": "2027-01-01",

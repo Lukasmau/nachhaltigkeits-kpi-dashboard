@@ -64,6 +64,17 @@ Frontend (Drag & Drop oder Datei wählen). Geht auch über die Backend-Doku:
 Die Antwort zeigt, wie viele Zeilen importiert wurden und ob es Fehler oder
 Warnungen gab (siehe `backend/importer.py` für die Prüfregeln).
 
+## Beispieldaten für die Demo
+
+Fiktive Firma, 24 Monate (Dezember 2024 bis November 2026), erzeugt mit
+`python -m backend.seed.beispieldaten`:
+
+- `data/beispieldaten_24_monate.csv`: gültige Daten für den Import
+- `data/beispieldaten_fehler.csv`: absichtliche Fehler für den Import-Test
+
+Mit `python reset_measurements.py` werden alle Messwerte gelöscht (Faktoren und
+Jahresziel bleiben, vorher entsteht eine Sicherung `dashboard.backup-*.db`).
+
 ## Jahresziel setzen
 
 Über die Jahresziel-Seite im Frontend (`GET`/`POST /api/jahresziel`,

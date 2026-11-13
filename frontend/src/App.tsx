@@ -2,6 +2,7 @@ import { useEffect, useState, type CSSProperties } from 'react'
 import './App.css'
 import {
   holeFruehestenMonat,
+  holeSpaetestenMonat,
   holeKpis,
   holeVerlauf,
   type KpiAntwort,
@@ -22,10 +23,12 @@ import { ZielerreichungKarte } from './components/ZielerreichungKarte'
 import { csvHerunterladen, csvZahl } from './csvExport'
 import { monatsLang } from './monate'
 
-// "Heute" in der Demo-Zeitachse - weiter als bis hierher kann man nicht
-// vorblaettern, das waere eine Zukunft, die es noch nicht gibt.
-const HEUTE_JAHR = 2026
-const HEUTE_MONAT = 10
+// Die Uebersicht startet im aktuellen Kalendermonat. Wie weit man vor- und
+// zurueckblaettern kann, bestimmen die echten Daten (fruehester und
+// spaetester Monat in der Datenbank).
+const HEUTE = new Date()
+const START_JAHR = HEUTE.getFullYear()
+const START_MONAT = HEUTE.getMonth() + 1
 
 function naechsterMonat(jahr: number, monat: number): [number, number] {
   return monat === 12 ? [jahr + 1, 1] : [jahr, monat + 1]
@@ -50,13 +53,15 @@ function alleKategorien(monate: VerlaufEintrag[]): string[] {
 
 function App() {
   const [seite, setSeite] = useState<Seite>('uebersicht')
-  const [jahr, setJahr] = useState(HEUTE_JAHR)
-  const [monat, setMonat] = useState(HEUTE_MONAT)
+  const [jahr, setJahr] = useState(START_JAHR)
+  const [monat, setMonat] = useState(START_MONAT)
   const [daten, setDaten] = useState<KpiAntwort | null>(null)
   const [verlauf, setVerlauf] = useState<VerlaufAntwort | null>(null)
   const [fehler, setFehler] = useState<string | null>(null)
   const [fruehestesJahr, setFruehestesJahr] = useState<number | null>(null)
   const [fruehesterMonat, setFruehesterMonat] = useState<number | null>(null)
+  const [spaetestesJahr, setSpaetestesJahr] = useState<number | null>(null)
+  const [spaetesterMonat, setSpaetesterMonat] = useState<number | null>(null)
 
   useEffect(() => {
     holeFruehestenMonat()
@@ -66,6 +71,18 @@ function App() {
       })
       .catch((e: Error) => setFehler(e.message))
   }, [])
+
+  // Beim Wechsel zurueck zur Uebersicht neu laden, damit frisch eingetragene
+  // Messungen (z. B. Fahrt im Folgemonat) den Pfeil nach vorn freischalten.
+  useEffect(() => {
+    if (seite !== 'uebersicht') return
+    holeSpaetestenMonat()
+      .then((s) => {
+        setSpaetestesJahr(s.jahr)
+        setSpaetesterMonat(s.monat)
+      })
+      .catch((e: Error) => setFehler(e.message))
+  }, [seite])
 
   useEffect(() => {
     holeKpis(jahr, monat)
@@ -83,7 +100,10 @@ function App() {
     fruehestesJahr !== null &&
     fruehesterMonat !== null &&
     (jahr > fruehestesJahr || (jahr === fruehestesJahr && monat > fruehesterMonat))
-  const kannVor = jahr < HEUTE_JAHR || (jahr === HEUTE_JAHR && monat < HEUTE_MONAT)
+  const kannVor =
+    spaetestesJahr !== null &&
+    spaetesterMonat !== null &&
+    (jahr < spaetestesJahr || (jahr === spaetestesJahr && monat < spaetesterMonat))
 
   function zurueck() {
     if (!kannZurueck) return
@@ -230,7 +250,15 @@ function App() {
                 einheit="%"
                 hinweis="Keine Werte angegeben"
                 sparklineWerte={alsProzentReihe(
-                  verlauf?.monate.map((m) => m.anteil_groesste_kategorie)
+                  groessterEintrag
+                    ? verlauf?.monate.map((m) =>
+                        // Monat ohne Daten: Luecke. Monat mit Daten, aber ohne diese
+                        // Kategorie: echter Anteil 0 %.
+                        Object.keys(m.anteile).length === 0
+                          ? null
+                          : (m.anteile[groessterEintrag[0]] ?? 0)
+                      )
+                    : undefined
                 )}
                 erklaerung="groesster_posten"
               />

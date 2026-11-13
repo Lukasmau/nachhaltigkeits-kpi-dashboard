@@ -325,6 +325,24 @@ def test_api_fruehester_monat_findet_das_aelteste_datum(client):
     assert antwort.json() == {"jahr": 2024, "monat": 11}
 
 
+def test_api_spaetester_monat_ohne_daten(client):
+    antwort = client.get("/api/messungen/spaetester-monat")
+    assert antwort.json() == {"jahr": None, "monat": None}
+
+
+def test_api_spaetester_monat_findet_das_neueste_datum(client):
+    csv_inhalt = (
+        "datum,datenart,kategorie,wert,einheit,person\n"
+        "2026-03-01,verbrauch,Strom,1000,kWh,\n"
+        "2026-11-07,fahrt,Dienstreisen Flug,7700,Pkm,Lukas\n"
+        "2025-06-01,verbrauch,Erdgas,200,kWh,\n"
+    )
+    client.post("/api/import", files={"datei": ("test.csv", csv_inhalt, "text/csv")})
+
+    antwort = client.get("/api/messungen/spaetester-monat")
+    assert antwort.json() == {"jahr": 2026, "monat": 11}
+
+
 def test_api_letzte_messungen_zeigt_neueste_zuerst(client):
     client.post(
         "/api/fahrt",

@@ -21,6 +21,7 @@ from backend.db import (
     messungen_mit_co2e,
     messungen_mit_co2e_jahr,
     setze_jahresziel,
+    spaetester_monat,
     verbindung,
 )
 from backend.importer import gueltige_kategorien, importiere_csv, pruefe_duplikat, pruefe_zeile
@@ -239,6 +240,15 @@ def api_jahresziel_setzen(
 @app.get("/api/messungen/fruehester-monat")
 def api_fruehester_monat(conn: sqlite3.Connection = Depends(get_conn)):
     ergebnis = fruehester_monat(conn)
+    if ergebnis is None:
+        return {"jahr": None, "monat": None}
+    jahr, monat = ergebnis
+    return {"jahr": jahr, "monat": monat}
+
+
+@app.get("/api/messungen/spaetester-monat")
+def api_spaetester_monat(conn: sqlite3.Connection = Depends(get_conn)):
+    ergebnis = spaetester_monat(conn)
     if ergebnis is None:
         return {"jahr": None, "monat": None}
     jahr, monat = ergebnis

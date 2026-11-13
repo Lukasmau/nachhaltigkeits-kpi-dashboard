@@ -139,6 +139,14 @@ def fruehester_monat(conn: sqlite3.Connection) -> tuple[int, int] | None:
     return int(jahr), int(monat)
 
 
+def spaetester_monat(conn: sqlite3.Connection) -> tuple[int, int] | None:
+    row = conn.execute("SELECT MAX(datum) AS spaeteste FROM measurements").fetchone()
+    if row["spaeteste"] is None:
+        return None
+    jahr, monat = row["spaeteste"].split("-")[:2]
+    return int(jahr), int(monat)
+
+
 def alle_jahresziele(conn: sqlite3.Connection) -> list[dict]:
     rows = conn.execute(
         "SELECT jahr, SUM(ziel_kg_co2e) AS ziel_kg_co2e FROM targets GROUP BY jahr ORDER BY jahr DESC"

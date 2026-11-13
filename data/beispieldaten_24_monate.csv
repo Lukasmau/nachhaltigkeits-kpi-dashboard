@@ -1,11 +1,4 @@
 datum,datenart,kategorie,wert,einheit,person
-2024-11-05,verbrauch,Strom,1834,kWh,
-2024-11-05,verbrauch,Erdgas,2418,kWh,
-2024-11-06,fahrt,Dienstreisen Flug,499,Pkm,Sarah
-2024-11-03,fahrt,Dienstreisen Pkw,157,Pkm,Mia
-2024-11-25,fahrt,Dienstreisen Pkw,86,Pkm,David
-2024-11-24,fahrt,Dienstreisen Pkw,139,Pkm,Lena
-2024-11-16,fahrt,Dienstreisen Pkw,307,Pkm,Mia
 2024-12-05,verbrauch,Strom,1800,kWh,
 2024-12-05,verbrauch,Erdgas,2998,kWh,
 2024-12-06,fahrt,Dienstreisen Bahn,448,Pkm,Felix
@@ -192,3 +185,12 @@ datum,datenart,kategorie,wert,einheit,person
 2026-10-28,fahrt,Dienstreisen Bahn,266,Pkm,Sarah
 2026-10-06,fahrt,Dienstreisen Flug,621,Pkm,Jonas
 2026-10-07,fahrt,Dienstreisen Bahn,204,Pkm,Mia
+2026-11-05,verbrauch,Strom,1782,kWh,
+2026-11-05,verbrauch,Erdgas,2309,kWh,
+2026-11-07,fahrt,Dienstreisen Bahn,391,Pkm,David
+2026-11-10,fahrt,Dienstreisen Bahn,294,Pkm,David
+2026-11-03,fahrt,Dienstreisen Bahn,279,Pkm,Mia
+2026-11-11,fahrt,Dienstreisen Bahn,396,Pkm,Sarah
+2026-11-03,fahrt,Dienstreisen Pkw,281,Pkm,Tobias
+2026-11-11,fahrt,Dienstreisen Bahn,417,Pkm,Mia
+2026-11-11,fahrt,Dienstreisen Bahn,491,Pkm,David

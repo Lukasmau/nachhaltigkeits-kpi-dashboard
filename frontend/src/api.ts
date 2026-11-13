@@ -171,6 +171,14 @@ export async function holeFruehestenMonat(): Promise<FruehesterMonat> {
   return antwort.json()
 }
 
+export async function holeSpaetestenMonat(): Promise<FruehesterMonat> {
+  const antwort = await fetch('/api/messungen/spaetester-monat')
+  if (!antwort.ok) {
+    throw new Error(`API-Fehler: ${antwort.status}`)
+  }
+  return antwort.json()
+}
+
 export type FahrtFehler = { spalte: string; grund: string; tipp: string }
 export type FahrtEingabe = { datum: string; kategorie: string; wert: number; person?: string }
 export type FahrtErgebnis = { gespeichert: true; warnung: string | null }

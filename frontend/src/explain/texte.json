@@ -3,7 +3,7 @@
     "text": "Summiert alle Messungen des Monats, nachdem jeder Wert mit seinem Emissionsfaktor in kg CO₂e umgerechnet wurde. CO₂e (CO₂-Äquivalente): andere Treibhausgase, umgerechnet auf die Wirkung von CO₂.",
     "formel": "CO₂e = Σ (Messwert × Faktor)",
     "beispiel": "1.000 kWh Strom × 0,344 kg CO₂/kWh = 344 kg CO₂e",
-    "quelle": "Faktoren aus der Tabelle „factors“, Quelle UBA (siehe CLAUDE.md §5)"
+    "quelle": "Faktoren aus der Tabelle „factors“, Quelle UBA (siehe Seite „Faktoren“)"
   },
   "veraenderung_zum_vormonat": {
     "text": "Vergleicht die Monatssumme mit der des Vormonats. Fehlt der Vormonat oder ist er 0, lässt sich die Veränderung nicht berechnen.",
