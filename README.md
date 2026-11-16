@@ -8,11 +8,13 @@ stammen aus der UBA-Liste zur Treibhausgasbilanzierung, Version 2.1 (02/2026, Be
 
 ---
 
-<!-- Screenshot einfügen: z. B. docs/screenshot.png -->
-> **Screenshot folgt** — nach einem `git add docs/screenshot.png` hier eintragen:
-> `![Dashboard-Übersicht](docs/screenshot.png)`
+![Dashboard-Übersicht: vier KPI-Karten, Verlauf-Diagramm und Kategorien-Balken](docs/screenshot-uebersicht.jpg)
 
 ---
+
+**Vergleichen-Seite** (Monat- oder Jahresvergleich, kombinierbar nach Kategorie):
+
+![Vergleichen-Seite: Balkendiagramm und Detailtabelle mit Veränderungsrate](docs/screenshot-vergleichen.jpg)
 
 ## Angezeigte KPIs
 
