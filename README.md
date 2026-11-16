@@ -8,13 +8,13 @@ stammen aus der UBA-Liste zur Treibhausgasbilanzierung, Version 2.1 (02/2026, Be
 
 ---
 
-![Dashboard-Übersicht: vier KPI-Karten, Verlauf-Diagramm und Kategorien-Balken](docs/screenshot-uebersicht.jpg)
+![Dashboard-Übersicht: vier KPI-Karten, Verlauf-Diagramm und Kategorien-Balken](docs/screenshot-uebersicht.webp)
 
 ---
 
 **Vergleichen-Seite** (Monat- oder Jahresvergleich, kombinierbar nach Kategorie):
 
-![Vergleichen-Seite: Balkendiagramm und Detailtabelle mit Veränderungsrate](docs/screenshot-vergleichen.jpg)
+![Vergleichen-Seite: Balkendiagramm und Detailtabelle mit Veränderungsrate](docs/screenshot-vergleichen.webp)
 
 ## Angezeigte KPIs
 
